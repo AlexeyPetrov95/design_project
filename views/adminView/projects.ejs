@@ -20,7 +20,7 @@
                 </ul>
             </div>
             <div id="test2" class="col s12">
-                <div id="project_place"  class="row">
+                <div class="row project_place">
                     <% var start = 0, count = projects.length > 12 ? 12 : projects.length ;
                     for (var i = start; i < count; i++) { %>
 
@@ -47,9 +47,8 @@
                 <a class="waves-effect waves-teal btn-flat" align="center" onclick="loadProjects()">More</a>
             </div>
             <div id="test1" class="col s12">
-                <div id="interiors_place"  class="row">
+                <div class="row interiors_place">
                     <% for (var i = start; i < interiors.length; i++) { %>
-
                     <div class="col s12 m6 l4">
                         <div class="card medium">
                             <div class="card-image">
@@ -93,11 +92,11 @@
                         <label>Выберите тип</label>
                     </div>
                     <div id="material" class="input-field col s12" style="display: none;">
-                        <select multiple>
+                        <select id="type_material" multiple>
                             <option value="" disabled selected>Choose your option</option>
-                            <option value="1">Option 1</option>
-                            <option value="2">Option 2</option>
-                            <option value="3">Option 3</option>
+                            <% for (var i = 0; i < type.length; i++) { %>
+                                <option value='<%=type[i].id%>'> <%=type[i].material%> </option>
+                            <% } %>
                         </select>
                         <label>Materialize Multiple Select</label>
                     </div>
@@ -162,7 +161,7 @@
             var number_room = $('[name="number_room"]').val();
 
             if (type == 2) {
-                material = $("#material").val();
+                material = $("#type_material").val();
             }
 
             $.ajax({
