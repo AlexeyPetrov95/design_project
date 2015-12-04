@@ -1,0 +1,198 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title></title>
+        <link rel='stylesheet' href='/css/admin/admin.css' />
+        <link href="http://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+        <link type="text/css" rel="stylesheet" href="/css/materialize.min.css"  media="screen,projection"/>
+        <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    </head>
+
+    <%- include ../template/navigation_admin.ejs %>
+
+    <body>
+        <main>
+            <!-- таблица пользователей !-->
+            <div class="container">
+                <div class="row">
+                    <div class="col s12 m12 l12">
+                        <table class="highlight bordered centered margin-top-30">
+                            <thead>
+                            <tr>
+                                <th data-field="id">id</th>
+                                <th data-field="name">Имя</th>
+                                <th>Сменить пароль</th>
+                                <% if (super_user){ %>
+                                    <th>Удалить пользователя</th>
+                                <% } %>
+
+                            </tr>
+                            </thead>
+
+                            <tbody>
+                            <% for(var i in users) { %>
+                            <tr id="<%= users[i].id%>tr">
+                                <td><%= users[i].id %></td>
+                                <td><%= users[i].name %></td>
+                                <% if (super_user) { %>
+                                    <% if (users[i].id == currentUser) { %>
+                                        <td><a href="#modalUpdate" class="modal-trigger" onclick="getUser(<%=users[i].id%>, <%=users[i].superUser%>)"><i class="material-icons black-text">cached</i></a></td>
+                                        <td></td>
+                                    <% } else { %>
+                                        <td><a href="#modalUpdate" class="modal-trigger" onclick="getUser(<%=users[i].id%>, <%=users[i].superUser%>)"><i class="material-icons black-text">cached</i></a></td>
+                                        <td><a href="#modalDelete" class="modal-trigger" onclick="getUser(<%=users[i].id%>, <%=users[i].superUser%>)"><i class="material-icons red-text">close</i></a></td>
+                                    <% } %>
+                                <% } else { %>
+                                    <% if (users[i].id == currentUser) { %>
+                                         <td><a href="#modalUpdate" class="modal-trigger" onclick="getUser(<%=users[i].id%>, <%=users[i].superUser%>)"><i class="material-icons black-text">cached</i></a></td>
+                                         <td></td>
+                                    <% } else { %>
+                                        <td></td>
+                                        <td></td>
+                                    <% } %>
+                                <% } %>
+                            </tr>
+                            <% } %>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+
+            <!-- кнопка добавления !-->
+            <% if (super_user) { %>
+                <div class="fixed-action-btn" style="bottom: 45px; right: 24px;">
+                  <a class="btn-floating btn-large waves-effect waves-light red modal-trigger" href="#modalAdd"><i class="material-icons">add</i></a>
+                 </div>
+            <%}%>
+
+            <!-- модальные окна !-->
+            <div id="modalAdd" class="modal">
+                <div class="modal-content">
+                    <h4>Новый пользователь</h4>
+                        <div class="row">
+                            <div class="input-field col s12 l12 m12">
+                                <input id="login" name="login" type="text" class="validate">
+                                <label for="login">Login</label>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="input-field col s12 l12 m12">
+                                <input id="password" name="password" type="password" class="validate">
+                                <label for="password">Password</label>
+                            </div>
+                        </div>
+                        <div class="modal-footer">
+                            <a class="modal-action modal-close waves-effect waves-red btn-flat">Отмена</a>
+                            <a id="active" onclick="addUser()" class="modal-action waves-effect waves-green btn-flat">Отправить</a>
+                        </div>
+                </div>
+            </div>
+
+            <div id="modalDelete" class="modal">
+                <div class="modal-content">
+                    <h4>Вы уверены?</h4>
+                    <div class="modal-footer">
+                        <a class="modal-action modal-close waves-effect waves-red btn-flat">Отмена</a>
+                        <a onclick="deleteUser()" class="modal-action modal-close waves-effect waves-green btn-flat ">Отправить</a>
+                    </div>
+                </div>
+            </div>
+
+            <div id="modalUpdate" class="modal">
+                <div class="modal-content">
+                    <h4>Сменить пароль</h4>
+                    <div class="row">
+                        <div class="input-field col s12 l12 m12">
+                            <input id="oldpassword" name="oldpassword" type="password" class="validate">
+                            <label for="oldpassword">Old password</label>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="input-field col s12 l12 m12">
+                            <input id="newpassword" name="newpassword" type="password" class="validate">
+                            <label for="newpassword">New password</label>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <a class="modal-action modal-close waves-effect waves-red btn-flat">Отмена</a>
+                        <a id="active" onclick="changePassword()" class="modal-action waves-effect waves-green btn-flat">Отправить</a>
+                    </div>
+                </div>
+            </div>
+        </main>
+
+
+        <script type="text/javascript" src="https://code.jquery.com/jquery-2.1.4.min.js"></script>
+        <script type="text/javascript" src="/js/materialize.min.js"></script>
+        <script>
+            var user = {id: undefined}
+            function getUser(userID, superUser){
+                user.id = userID;
+                user.superUser = superUser;
+            }
+
+            function changePassword() {
+                var oldPassword = $('[name="oldpassword"]').val();
+                var newPassword = $('[name="newpassword"]').val();
+
+                if (newPassword == "" || oldPassword == ""){
+                    Materialize.toast('Все поля должны быть заполнены', 4000);
+                    return 0;
+                }
+
+                $.ajax({
+                    type:"POST",
+                    url: '/admin/update_password',
+                    data: 'oldpassword='+oldPassword+'&newpassword='+newPassword+'&id='+user.id,
+                    success: function (data) {
+                        if (!data){ Materialize.toast('Неверный пароль', 4000);}
+                        else { window.location.replace("/admin");}
+                    }
+                });
+            }
+
+            function addUser(){
+                var name = $('[name="login"]').val();
+                var password = $('[name="password"]').val();
+
+                if (name == "" || password == ""){
+                    Materialize.toast('Все поля должны быть заполнены', 4000);
+                    return 0;
+                }
+
+                $.ajax({
+                    type:"POST",
+                    url: '/admin/create_new_user',
+                    data: 'login='+name+'&password='+password,
+                    success: function (data) {
+                        if (!data){ Materialize.toast('Такой пользователь уже существует', 4000);}
+                        else { window.location.replace("/admin");}
+                    }
+                });
+            }
+
+            function deleteUser(){
+                alert(user.id);
+                 $.ajax({
+                     type:"DELETE",
+                     url:'/admin/delete_user',
+                     data: "id="+user.id,
+                    success: function(data){
+                        if (data){
+                            $('#'+user.id+"tr").remove();
+                        }
+                    }
+                });
+            }
+        </script>
+        <script>
+            $(document).ready(function(){
+                $(".button-collapse").sideNav();
+                $('.modal-trigger').leanModal();
+                var name = $('[name="login"]').val();
+                var password = $('[name="password"]').val();
+            })
+        </script>
+    </body>
+</html>
