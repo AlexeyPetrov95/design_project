@@ -39,7 +39,7 @@
                             </div>
                             <div class="card-action">
                                 <a href="#">Подробнее</a>
-                                <a class="waves-effect waves-light modal-trigger" onclick="getProject(<%=projects[i].id%>)" href="#modalDelete">Удалить</a>
+                                <a class="waves-effect waves-light" onclick="getProject(<%=projects[i].id%>)" href="#modalDelete">Удалить</a>
                             </div>
                         </div>
                     </div>
@@ -64,7 +64,7 @@
                             </div>
                             <div class="card-action">
                                 <a href="#">Подробнее</a>
-                                <a class="waves-effect waves-light modal-trigger" onclick="getProject(<%=interiors[i].id%>)" href="#modalDelete">Удалить</a>
+                                <a class="waves-effect waves-light" onclick="getProject(<%=interiors[i].id%>)" href="#modalDelete">Удалить</a>
                             </div>
                         </div>
                     </div>
@@ -148,14 +148,21 @@
             $('ul.tabs').tabs();
             $('.modal-trigger').leanModal();
             $('select').material_select();
+
+            var options = [ {selector: '#interiors_place', offset: 100, callback: 'loadInteriors()' },
+                {selector: '#interiors_place', offset: 100, callback: 'loadInteriors()'},
+                {selector: '#interiors_place', offset: 200, callback: 'loadInteriors()'},
+                {selector: '#interiors_place', offset: 300, callback: 'loadInteriors()' },
+                {selector: '#interiors_place', offset: 400, callback: 'loadInteriors()' },]
+            Materialize.scrollFire(options);
         });
     </script>
 
     <script>
         var project = {id: undefined}
         function getProject (projectID){
-            alert("gg");
             project.id = projectID;
+            deleteProject();
         }
 
         function avaliable() {
@@ -218,7 +225,7 @@
                         newcard += '</div>';
                         newcard += '<div class="card-action">';
                         newcard += '<a href="#">Подробнее</a>';
-                        newcard += '<a class="waves-effect waves-light modal-trigger" onclick="getProject('+data.id+')" href="#modalDelete">Удалить</a>';
+                        newcard += '<a class="waves-effect waves-light" onclick="getProject('+data.id+')" href="#modalDelete">Удалить</a>';
                         newcard += '</div>';
                         newcard += '</div>';
                         newcard += '</div>';
@@ -228,7 +235,6 @@
             });
         }
         function deleteProject() {
-            alert("gg2");
             $.ajax({
                 type:"DELETE",
                 url:'/admin/projects/delete',
@@ -267,13 +273,13 @@
                             newcard += '</div>';
                             newcard += '<div class="card-action">';
                             newcard += '<a href="#">Подробнее</a>';
-                            newcard += '<a class="waves-effect waves-light modal-trigger" onclick="getProject('+interiors[i].id+')" href="#modalDelete">Удалить</a>';
+                            newcard += '<a class="waves-effect waves-light" onclick="getProject('+interiors[i].id+')" href="#modalDelete">Удалить</a>';
                             newcard += '</div>';
                             newcard += '</div>';
                             newcard += '</div>';
                             cardplace.innerHTML += newcard;
                         }
-                       // $('.modal-trigger').leanModal();
+                        //$('.modal-trigger1').leanModal();
                     }
                 }
             });
@@ -306,7 +312,7 @@
                             newcard += '</div>';
                             newcard += '<div class="card-action">';
                             newcard += '<a href="#">Подробнее</a>';
-                            newcard += '<a class="waves-effect waves-light modal-trigger" onclick="getProject('+projects[i].id+')"  href="#modalDelete">Удалить</a>';
+                            newcard += '<a class="waves-effect waves-light" onclick="getProject('+projects[i].id+')"  href="#modalDelete">Удалить</a>';
                             newcard += '</div>';
                             newcard += '</div>';
                             newcard += '</div>';
