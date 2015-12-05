@@ -70,23 +70,39 @@ router.delete('/admin/delete_user', function(req, res){
 
 
 //                  ******************** проекты ***********************
+
+// type 1 = интерьеры
+// type 2 = проекты
 router.post('/admin/projects/new_project', function (req, res) {
-    knexSQL().select().from('projects').where({mark: req.body.mark}).then(function (result) {
-        if (result.length == 0) {
-            knexSQL('projects').insert({
-                mark: req.body.mark, name: req.body.name, price: req.body.price, space: req.body.space,
-                number_room: req.body.number_room, type_id: req.body.type
-            }).then(function (check) {
-                if (check) {
-                    res.send(true);
-                }
-                else {
+    async.waterfall([
+        function(callback) {
+            knexSQL().select().from('projects').where({mark: req.body.mark}).then(function (result) {
+                if (result.length == 0) {
+                    callback(null);
+                } else {
                     res.send(false);
                 }
             });
-        } else {
-            res.send(false);
+        }, function (callback) {
+            if (req.body.type == 1){
+                knexSQL('projects').insert({
+                    mark: req.body.mark, name: req.body.name, price: req.body.price, space: req.body.space,number_room: req.body.number_room, type_id: req.body.type
+                }).then(function (check) {
+                    if (check) { res.send(true); }
+                    else { res.send(false); }
+                });
+            } else {
+                callback(null);
+            }
         }
+    ], function(err){
+        knexSQL('projects').insert({
+            mark: req.body.mark, name: req.body.name, price: req.body.price, space: req.body.space,
+            number_room: req.body.number_room, type_id: req.body.type, material: req.body.material
+        }).then(function (check) {
+            if (check) { res.send(true);}
+            else { res.send(false); }
+        });
     });
 });
 
@@ -99,28 +115,37 @@ var count; // количество проектов/интерьеров, выг
 router.get('/admin/projects/', function (req, res) {
     projectOffset = 0;
     interiorsOffset = 0;
-    count = 3;
-    knexSQL('projects').select().where({type_id: 1}).limit(count).offset(projectOffset).then(function (projects){
-        if (!projects) { res.send(500);}
-        else {
-            knexSQL('projects').select().where({type_id: 2}).limit(count).offset(interiorsOffset).then(function (interiors) {
-                if (!interiors) { res.send(500);}
+    count = 6;
+
+    async.waterfall([
+        function(callback){
+            knexSQL('projects').select().where({type_id: 2}).limit(count).offset(projectOffset).then(function (projects){
+                if (!projects) { res.send(500); }
                 else {
-                    interiorsOffset += count;
-                    projectOffset += count;
-                    res.render('adminView/projects.ejs', {
-                        title: "Внешний вид",
-                        projects: projects,
-                        interiors: interiors });
-                }
+                    callback (null, projects); }
+            });
+        }, function (projects, callback){
+            knexSQL('projects').select().where({type_id: 1}).limit(count).offset(interiorsOffset).then(function (interiors) {
+                if (!interiors) { res.send(500);}
+                else { callback(null, projects, interiors); }
             });
         }
+    ], function(err, projects,interiors, type){
+            interiorsOffset += count;
+            projectOffset += count;
+            res.render('adminView/projects.ejs', {
+                title: "Проекты/Интерьеры",
+                projects: projects,
+                interiors: interiors,
+                type: type
+            });
     });
 });
 
 // для ajax-запросов на подгрузку следующей пачки проектов
 router.get('/admin/projects/load_projects', function (req, res) {
-    knexSQL('projects').select().where({type_id: 1}).limit(count).offset(projectOffset).then(function (loaded) {
+    console.log('projects');
+    knexSQL('projects').select().where({type_id: 2}).limit(count).offset(projectOffset).then(function (loaded) {
         if (!loaded){ res.send(500); }
         else {
             projectOffset += count;
@@ -131,7 +156,7 @@ router.get('/admin/projects/load_projects', function (req, res) {
 
 // для ajax-запросов на подгрузку следующей пачки интерьеров
 router.get('/admin/projects/load_interiors', function (req, res) {
-    knexSQL('projects').select().where({type_id: 2}).limit(count).offset(interiorsOffset).then(function (loaded) {
+    knexSQL('projects').select().where({type_id: 1}).limit(count).offset(interiorsOffset).then(function (loaded) {
         if (!loaded){ res.send(500); }
         else {
             interiorsOffset += count;

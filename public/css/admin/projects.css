@@ -23,9 +23,12 @@ main {
     height: 150px;
 }
 
-.card.medium
-{
+.card.medium {
     height: 360px !important;
+}
+
+#interiors_place, #project_place{
+    padding-top: 30px;
 }
 
 .margin-top-30 {  margin-top: 30px;  }
