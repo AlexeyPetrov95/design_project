@@ -27,8 +27,8 @@ main {
     height: 360px !important;
 }
 
-.interiors_place, .project_place{
-    padding-top: 20px;
+#interiors_place, #project_place{
+    padding-top: 30px;
 }
 
 .margin-top-30 {  margin-top: 30px;  }
