@@ -114,7 +114,7 @@ var count; // количество проектов/интерьеров, выг
 router.get('/admin/projects/', function (req, res) {
     projectOffset = 0;
     interiorsOffset = 0;
-    count = 6;
+    count = 12;
 
     async.waterfall([
         function(callback){
@@ -164,5 +164,11 @@ router.get('/admin/projects/load_interiors', function (req, res) {
     });
 });
 
+router.delete('/admin/projects/delete', function(req, res){
+    knexSQL('projects').where('id', req.body.id).del().then(function (check) {
+        if (!check) { res.send(false); }
+        else { res.send(true); }
+    });
+});
 
 module.exports = router;

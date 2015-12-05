@@ -25,7 +25,7 @@
                     for (var i = start; i < count; i++) { %>
 
                     <div class="col s12 m4 l3">
-                        <div class="card medium">
+                        <div class="card medium" id="<%=projects[i].id %>card" >
                             <div class="card-image">
                                 <img src="/images/parallax1.jpg">
                                 <span class="card-title"><%= projects[i].name %></span>
@@ -39,6 +39,7 @@
                             </div>
                             <div class="card-action">
                                 <a href="#">Подробнее</a>
+                                <a class="waves-effect waves-light modal-trigger" onclick="getProject(<%=projects[i].id%>)" href="#modalDelete">Удалить</a>
                             </div>
                         </div>
                     </div>
@@ -50,7 +51,7 @@
                 <div class="row" id="interiors_place">
                     <% for (var i = start; i < interiors.length; i++) { %>
                     <div class="col s12 m4 l3">
-                        <div class="card medium">
+                        <div class="card medium" id="<%=interiors[i].id%>card">
                             <div class="card-image">
                                 <img src="/images/parallax.jpg">
                                 <span class="card-title"><%= interiors[i].name %></span>
@@ -63,6 +64,7 @@
                             </div>
                             <div class="card-action">
                                 <a href="#">Подробнее</a>
+                                <a class="waves-effect waves-light modal-trigger" onclick="getProject(<%=interiors[i].id%>)" href="#modalDelete">Удалить</a>
                             </div>
                         </div>
                     </div>
@@ -74,8 +76,8 @@
         </div>
 
         <div class="fixed-action-btn" style="bottom: 45px; right: 24px;">
-            <a class="btn-floating btn-large waves-effect waves-light red modal-trigger" href="#modalAdd"><i
-                        class="material-icons">add</i></a>
+            <a class="btn-floating btn-large waves-effect waves-light red modal-trigger" href="#modalAdd">
+                <i class="material-icons">add</i></a>
         </div>
 
         <div id="modalAdd" class="modal">
@@ -125,6 +127,17 @@
             </div>
         </div>
 
+        <div id="modalDelete" class="modal">
+            <div class="modal-content">
+                <h4>Вы уверены?</h4>
+                <div class="modal-footer">
+                    <a class="modal-action modal-close waves-effect waves-red btn-flat">Отмена</a>
+                    <a onclick="deleteProject()" class="modal-action modal-close waves-effect waves-green btn-flat ">Отправить</a>
+                </div>
+            </div>
+        </div>
+
+
     </main>
 
 
@@ -139,6 +152,11 @@
     </script>
 
     <script>
+        var project = {id: undefined}
+        function getProject (projectID){
+            project.id = projectID;
+        }
+
         function avaliable() {
             var type = $("#type").val();
             if (type == 2) {
@@ -147,7 +165,6 @@
                 $('#material').css("display", 'none');
             }
         }
-
         function addProject() {
             var material = null;
             var type = $("#type").val();
@@ -168,13 +185,27 @@
                 success: function (data) {
                     if (!data) {
                         Materialize.toast('Неверный пароль', 4000);
-                    }
-                    else {
-                        window.location.replace("/admin");
+                    } else {
+                        $('#modalAdd').closeModal();
                     }
                 }
             });
         }
+
+        function deleteProject() {
+            alert(project.id);
+            $.ajax({
+                type:"DELETE",
+                url:'/admin/projects/delete',
+                data: "id="+project.id,
+                success: function(data){
+                    if (data){
+                        $('#'+project.id+"card").remove();
+                    }
+                }
+            });
+        }
+
     </script>
     <script>
         var loadInteriors = function(){
@@ -188,7 +219,7 @@
                         var newcard = "";  // создать новый тег div
                         for (var i = 0; i < interiors.length; i++){
                             newcard = '<div class="col s12 m4 l3">';
-                            newcard += '<div class="card medium">';
+                            newcard += '<div class="card medium" id="'+interiors[i].id+'card">';
                             newcard += '<div class="card-image">';
                             newcard += '<img src="/images/parallax.jpg">';
                             newcard += '<span class="card-title">'+ interiors[i].name +'</span>';
@@ -201,11 +232,13 @@
                             newcard += '</div>';
                             newcard += '<div class="card-action">';
                             newcard += '<a href="#">Подробнее</a>';
+                            newcard += '<a class="waves-effect waves-light modal-trigger" onclick="getProject('+interiors[i].id+')"  href="#modalDelete">Удалить</a>';
                             newcard += '</div>';
                             newcard += '</div>';
                             newcard += '</div>';
                             cardplace.innerHTML += newcard;
                         }
+                        $('.modal-trigger').leanModal();
                     }
                 }
             });
@@ -224,7 +257,7 @@
                         var newcard = "";  // создать новый тег div
                         for (var i = 0; i < projects.length; i++){
                             newcard = '<div class="col s12 m4 l3">';
-                            newcard += '<div class="card medium">';
+                            newcard += '<div class="card medium" id="'+projects[i].id+'card"';
                             newcard += '<div class="card-image">';
                             newcard += '<img src="/images/parallax1.jpg">';
                             newcard += '<span class="card-title">'+ projects[i].name +'</span>';
@@ -238,11 +271,13 @@
                             newcard += '</div>';
                             newcard += '<div class="card-action">';
                             newcard += '<a href="#">Подробнее</a>';
+                            newcard += '<a class="waves-effect waves-light modal-trigger" onclick="getProject('+projects[i].id+')"  href="#modalDelete">Удалить</a>';
                             newcard += '</div>';
                             newcard += '</div>';
                             newcard += '</div>';
                             cardplace.innerHTML += newcard;
                         }
+                        $('.modal-trigger').leanModal();
                     }
                 }
             });
