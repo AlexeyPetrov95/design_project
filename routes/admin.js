@@ -74,22 +74,27 @@ router.delete('/admin/delete_user', function(req, res){
 // type 1 = интерьеры
 // type 2 = проекты
 router.post('/admin/projects/new_project', function (req, res) {
+
+    //додумать
     async.waterfall([
         function(callback) {
             knexSQL().select().from('projects').where({mark: req.body.mark}).then(function (result) {
                 if (result.length == 0) {
                     callback(null);
                 } else {
-                    res.send(false);
+                    res.send({check: false});
                 }
             });
         }, function (callback) {
             if (req.body.type == 1){
                 knexSQL('projects').insert({
                     mark: req.body.mark, name: req.body.name, price: req.body.price, space: req.body.space,number_room: req.body.number_room, type_id: req.body.type
-                }).then(function (check) {
-                    if (check) { res.send(true); }
-                    else { res.send(false); }
+                }).returning('id').then(function (check) {
+                    if (check.length == 0){
+                        res.send({check: false});
+                    } else {
+                        res.send({id: check, check:true});
+                    }
                 });
             } else {
                 callback(null);
@@ -99,9 +104,12 @@ router.post('/admin/projects/new_project', function (req, res) {
         knexSQL('projects').insert({
             mark: req.body.mark, name: req.body.name, price: req.body.price, space: req.body.space,
             number_room: req.body.number_room, type_id: req.body.type, material: req.body.material
-        }).then(function (check) {
-            if (check) { res.send(true);}
-            else { res.send(false); }
+        }).returning('id').then(function (check) {
+            if (check.length == 0){
+                res.send({check: false});
+            } else {
+                res.send({id: check, check:true});
+            }
         });
     });
 });

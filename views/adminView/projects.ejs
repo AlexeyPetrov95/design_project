@@ -154,6 +154,7 @@
     <script>
         var project = {id: undefined}
         function getProject (projectID){
+            alert("gg");
             project.id = projectID;
         }
 
@@ -183,17 +184,51 @@
                 url: '/admin/projects/new_project',
                 data: 'type=' + type + '&name=' + name + '&mark=' + mark + '&price=' + price + '&space=' + space + '&number_room=' + number_room + '&material=' + material,
                 success: function (data) {
-                    if (!data) {
+                    console.log(data);
+                    if (!data.check) {
                         Materialize.toast('Неверный пароль', 4000);
                     } else {
                         $('#modalAdd').closeModal();
+                        var cardplace;
+                        var materialDiv;
+                        var imageDiv;
+                        if (type == 1){
+                            cardplace = document.getElementById("interiors_place");
+                            materialDiv ="";
+                            imageDiv =  '<img src="/images/parallax.jpg">'
+                        } else {
+                            cardplace = document.getElementById("project_place");
+                            materialDiv = '<div> <b>Материал изделий: </b>'+material+'</div>';
+                            imageDiv =  '<img src="/images/parallax1.jpg">'
+                        }
+
+                        var newcard = "";  // создать новый тег div
+                        newcard = '<div class="col s12 m4 l3">';
+                        newcard += '<div class="card medium" id="'+data.id+'card">';
+                        newcard += '<div class="card-image">';
+                        newcard +=  imageDiv;
+                        newcard += '<span class="card-title">'+ name +'</span>';
+                        newcard += '</div>';
+                        newcard += '<div class="card-content">';
+                        newcard += '<div> <b>Маркировка: </b>'+ mark +'</div>';
+                        newcard += '<div> <b>Цена: </b>'+ price +'</div>';
+                        newcard += '<div> <b>Площадь: </b>'+ space + '</div>';
+                        newcard += '<div> <b>Количество комнат: </b>'+ number_room +'</div>';
+                        newcard += materialDiv;
+                        newcard += '</div>';
+                        newcard += '<div class="card-action">';
+                        newcard += '<a href="#">Подробнее</a>';
+                        newcard += '<a class="waves-effect waves-light modal-trigger" onclick="getProject('+data.id+')" href="#modalDelete">Удалить</a>';
+                        newcard += '</div>';
+                        newcard += '</div>';
+                        newcard += '</div>';
+                        cardplace.innerHTML += newcard;
                     }
                 }
             });
         }
-
         function deleteProject() {
-            alert(project.id);
+            alert("gg2");
             $.ajax({
                 type:"DELETE",
                 url:'/admin/projects/delete',
@@ -232,13 +267,13 @@
                             newcard += '</div>';
                             newcard += '<div class="card-action">';
                             newcard += '<a href="#">Подробнее</a>';
-                            newcard += '<a class="waves-effect waves-light modal-trigger" onclick="getProject('+interiors[i].id+')"  href="#modalDelete">Удалить</a>';
+                            newcard += '<a class="waves-effect waves-light modal-trigger" onclick="getProject('+interiors[i].id+')" href="#modalDelete">Удалить</a>';
                             newcard += '</div>';
                             newcard += '</div>';
                             newcard += '</div>';
                             cardplace.innerHTML += newcard;
                         }
-                        $('.modal-trigger').leanModal();
+                       // $('.modal-trigger').leanModal();
                     }
                 }
             });
@@ -257,7 +292,7 @@
                         var newcard = "";  // создать новый тег div
                         for (var i = 0; i < projects.length; i++){
                             newcard = '<div class="col s12 m4 l3">';
-                            newcard += '<div class="card medium" id="'+projects[i].id+'card"';
+                            newcard += '<div class="card medium" id="'+projects[i].id+'card">';
                             newcard += '<div class="card-image">';
                             newcard += '<img src="/images/parallax1.jpg">';
                             newcard += '<span class="card-title">'+ projects[i].name +'</span>';
@@ -277,7 +312,7 @@
                             newcard += '</div>';
                             cardplace.innerHTML += newcard;
                         }
-                        $('.modal-trigger').leanModal();
+                        //$('.modal-trigger').leanModal();
                     }
                 }
             });
