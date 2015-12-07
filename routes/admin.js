@@ -306,7 +306,7 @@ router.delete('/admin/projects/delete', function(req, res){
         if (!check) { res.send(false); }
         else { res.send(true); }
     });
-}
+});
 
 router.get('/admin/projects/:id', function(req, res){
     var id = req.params.id;

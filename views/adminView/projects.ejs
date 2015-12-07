@@ -12,7 +12,6 @@
 
 <body>
     <main>
-<<<<<<< HEAD
         <div class="container">
             <div class="row">
                 <div class="col s12">
@@ -170,7 +169,6 @@
                 } else {
                     loadProjects();
                 }
-
             }
         };
     </script>
@@ -293,7 +291,7 @@
                             newcard += '<div> <b>Количество комнат: </b>'+ interiors[i].number_room +'</div>';
                             newcard += '</div>';
                             newcard += '<div class="card-action">';
-                            newcard += '<a href="/admin/projects/'+ projects[i].id +'">Подробнее</a>';
+                            newcard += '<a href="/admin/projects/'+ interiors[i].id +'">Подробнее</a>';
                             newcard += '<a class="waves-effect waves-light" onclick="getProject('+interiors[i].id+')" href="#modalDelete">Удалить</a>';
                             newcard += '</div>';
                             newcard += '</div>';
