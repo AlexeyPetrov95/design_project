@@ -317,7 +317,7 @@ router.get('/admin/projects/:id', function(req, res){
             knexSQL('images').select().where({projects_id: id}).then(function(photos){
                 knexSQL('type_images').select().then(function(image_types){
                     res.render('adminView/project_info.ejs', {
-                        title: "Редактирование " + (proj.type_id == 2 ? "проекта" : "интерьера"),
+                        title: "Редактирование " + (proj[0].type_id == 2 ? "проекта" : "интерьера"),
                         project: proj[0],
                         photos: photos,
                         image_types: image_types
