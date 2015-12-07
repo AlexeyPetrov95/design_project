@@ -12,6 +12,7 @@
 
 <body>
     <main>
+<<<<<<< HEAD
         <div class="container">
             <div class="row">
                 <div class="col s12">
@@ -39,7 +40,7 @@
                                     <div> <b>Материал изделий: </b> <%= projects[i].material %> </div>
                                 </div>
                                 <div class="card-action">
-                                    <a href="#">Подробнее</a>
+                                     <a href="/admin/projects/<%= projects[i].id %>">Подробнее</a>
                                     <a class="waves-effect waves-light" onclick="getProject(<%=projects[i].id%>)" href="#modalDelete">Удалить</a>
                                 </div>
                             </div>
@@ -47,6 +48,7 @@
                         <% } %>
                     </div>
                 </div>
+
                 <div id="test1" class="col s12">
                     <div class="row" id="interiors_place">
                         <% for (var i = start; i < interiors.length; i++) { %>
@@ -63,7 +65,7 @@
                                     <div> <b>Количество комнат: </b> <%= interiors[i].number_room %> </div>
                                 </div>
                                 <div class="card-action">
-                                    <a href="#">Подробнее</a>
+                                    <a href="/admin/projects/<%= interiors[i].id %>">Подробнее</a>
                                     <a class="waves-effect waves-light" onclick="getProject(<%=interiors[i].id%>)" href="#modalDelete">Удалить</a>
                                 </div>
                             </div>
@@ -241,7 +243,7 @@
                         newcard += materialDiv;
                         newcard += '</div>';
                         newcard += '<div class="card-action">';
-                        newcard += '<a href="#">Подробнее</a>';
+                          newcard += '<a href="/admin/projects/'+ data.id +'">Подробнее</a>';
                         newcard += '<a class="waves-effect waves-light" onclick="getProject('+data.id+')" href="#modalDelete">Удалить</a>';
                         newcard += '</div>';
                         newcard += '</div>';
@@ -265,6 +267,7 @@
         }
 
     </script>
+    <!-- Подгрузка интерьеров -->
     <script>
         var loadInteriors = function(){
             $.ajax({
@@ -290,7 +293,7 @@
                             newcard += '<div> <b>Количество комнат: </b>'+ interiors[i].number_room +'</div>';
                             newcard += '</div>';
                             newcard += '<div class="card-action">';
-                            newcard += '<a href="#">Подробнее</a>';
+                            newcard += '<a href="/admin/projects/'+ projects[i].id +'">Подробнее</a>';
                             newcard += '<a class="waves-effect waves-light" onclick="getProject('+interiors[i].id+')" href="#modalDelete">Удалить</a>';
                             newcard += '</div>';
                             newcard += '</div>';
@@ -303,6 +306,7 @@
             });
         }
     </script>
+    <!-- Подгрузка проектов -->
     <script>
         var loadProjects = function(){
             $.ajax({
@@ -329,8 +333,10 @@
                             newcard += '<div> <b>Материал изделий: </b>'+ projects[i].material +'</div>';
                             newcard += '</div>';
                             newcard += '<div class="card-action">';
-                            newcard += '<a href="#">Подробнее</a>';
+
+                            newcard += '<a href="/admin/projects/'+ projects[i].id +'">Подробнее</a>';
                             newcard += '<a class="waves-effect waves-light" onclick="getProject('+projects[i].id+')"  href="#modalDelete">Удалить</a>';
+
                             newcard += '</div>';
                             newcard += '</div>';
                             newcard += '</div>';
