@@ -32,7 +32,7 @@
                                     <span class="card-title"><%= projects[i].name %></span>
                                 </div>
                                 <div class="card-content">
-                                    <div> <b>Маркировка: </b> <%= projects[i].mark %> </div>
+                                    <div> <b>Маркировка:</b> <%= projects[i].mark %> </div>
                                     <div> <b>Цена: </b> <%= projects[i].price %> </div>
                                     <div> <b>Площадь: </b> <%= projects[i].space %> </div>
                                     <div> <b>Количество комнат: </b> <%= projects[i].number_room %> </div>
@@ -40,7 +40,7 @@
                                 </div>
                                 <div class="card-action">
                                      <a href="/admin/projects/<%= projects[i].id %>">Подробнее</a>
-                                    <a class="waves-effect waves-light" onclick="getProject(<%=projects[i].id%>)" href="#modalDelete">Удалить</a>
+                                    <a class="waves-effect waves-light" onclick="getProject(<%=projects[i].id%>, '<%= projects[i].mark %>' )" href="#modalDelete">Удалить</a>
                                 </div>
                             </div>
                         </div>
@@ -65,7 +65,7 @@
                                 </div>
                                 <div class="card-action">
                                     <a href="/admin/projects/<%= interiors[i].id %>">Подробнее</a>
-                                    <a class="waves-effect waves-light" onclick="getProject(<%=interiors[i].id%>)" href="#modalDelete">Удалить</a>
+                                    <a class="waves-effect waves-light" onclick="getProject(<%= interiors[i].id%>, '<%= interiors[i].mark %>')" href="#modalDelete">Удалить</a>
                                 </div>
                             </div>
                         </div>
@@ -176,9 +176,10 @@
 
 
     <script>
-        var project = {id: undefined}
-        function getProject (projectID){
+        var project = {id: undefined, name: undefined}
+        function getProject (projectID, projectName){
             project.id = projectID;
+            project.name = projectName;
             deleteProject();
         }
 
@@ -259,6 +260,7 @@
                 success: function(data){
                     if (data){
                         $('#'+project.id+"card").remove();
+                        Materialize.toast('Проект/интерьер: '+ project.name + " был удален", 4000);
                     }
                 }
             });
@@ -311,7 +313,7 @@
                 type:"GET",
                 url: '/admin/projects/load_projects/',
                 success: function (projects) {
-                    if (!projects){ Materialize.toast('Такой пользователь уже существует', 4000);}
+                    if (!projects){ Materialize.toast('Невозможно загрузить проекты', 4000);}
                     else {
                         console.log(projects);
                         var cardplace = document.getElementById("project_place");

@@ -12,109 +12,152 @@
 
 <body>
 <main>
-    <div class="row">
-        <div class="input-field col s12">
-            <select id="type" disabled>
-                <% if (project.type_id == 1) { %>
-                    <option value="1">Интерьеры</option>
-                <% } else { %>
-                    <option value="2">Проекты</option>
-                <% } %>
-            </select>
-            <label>Тип</label>
-        </div>
-        <div class="input-field col s12 l12 m6">
-            <input id="name" name="name" type="text" class="validate" value="<%= project.name %>">
-            <label for="name">Название проекта</label>
-        </div>
-        <% if (project.type_id == 2) { %>
-        <div class="input-field col s12 l12 m6">
-            <input id="material" name="material" type="text" class="validate" value="<%= project.material %>">
-            <label for="material">Материалы</label>
-        </div>
-        <% } %>
-        <div class="input-field col s12 l6 m6">
-            <input id="mark" name="mark" type="text" class="validate" value="<%= project.mark %>">
-            <label for="mark">Маркировка</label>
-        </div>
-        <div class="input-field col s12 l6 m6">
-            <input id="price" name="price" type="text" class="validate" value="<%= project.price %>">
-            <label for="price">Цена</label>
-        </div>
-        <div class="input-field col s12 l6 m6">
-            <input id="space" name="space" type="text" class="validate" value="<%= project.space %>">
-            <label for="space">Площадь</label>
-        </div>
-        <div class="input-field col s12 l6 m6">
-            <input id="number_room" name="number_room" type="text" class="validate" value="<%= project.number_room %>">
-            <label for="number_room">Кол-во комнат</label>
-        </div>
+    <div class="container padding-top-20">
         <div class="row">
-            <form class="col s12">
+            <div class="card-panel">
+                <div class="input-field col s12">
+                    <select id="type" disabled>
+                        <% if (project.type_id == 1) { %>
+                        <option value="1">Интерьеры</option>
+                        <% } else { %>
+                        <option value="2">Проекты</option>
+                        <% } %>
+                    </select>
+                    <label>Тип</label>
+                </div>
+                <div class="input-field col s12 l6 m6">
+                    <input id="name" name="name" type="text" class="validate" value="<%= project.name %>">
+                    <label for="name">Название проекта</label>
+                </div>
+                <div class="input-field col s12 l6 m6">
+                    <input id="mark" name="mark" type="text" class="validate" value="<%= project.mark %>">
+                    <label for="mark">Маркировка</label>
+                </div>
+                <% if (project.type_id == 2) { %>
+                <div class="input-field col s12 l12 m6">
+                    <input id="material" name="material" type="text" class="validate" value="<%= project.material %>">
+                    <label for="material">Материалы</label>
+                </div>
+                <% } %>
+                <div class="input-field col s12 l4 m6">
+                    <input id="price" name="price" type="text" class="validate" value="<%= project.price %>">
+                    <label for="price">Цена</label>
+                </div>
+                <div class="input-field col s12 l4 m6">
+                    <input id="space" name="space" type="text" class="validate" value="<%= project.space %>">
+                    <label for="space">Площадь</label>
+                </div>
+                <div class="input-field col s12 l4 m6">
+                    <input id="number_room" name="number_room" type="text" class="validate" value="<%= project.number_room %>">
+                    <label for="number_room">Кол-во комнат</label>
+                </div>
                 <div class="row">
-                    <div class="input-field col s12">
-                        <textarea id="desc" class="materialize-textarea"><%= project.description %></textarea>
-                        <label for="desc">Описание проекта</label>
+                    <form class="col s12">
+                        <div class="row">
+                            <div class="input-field col s12">
+                                <textarea id="desc" class="materialize-textarea"><%= project.description %></textarea>
+                                <label for="desc">Описание проекта</label>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+                <div class="row">
+                    <div class="col s12">
+                        <a id="active" onclick="replaceProject(<%= project.id %>)" class="waves-effect waves-green btn-flat">Отправить</a>
+                        <a class="waves-effect waves-red btn-flat">Отмена</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="center margin-50"> <h5 class="light-blue-text accent-2 margin-20">ФОТО </h5> <hr> </div>
+
+        <div class="row">
+            <form action="#">
+                <div class="file-field input-field">
+                    <div class="btn">
+                        <span>Upload</span>
+                        <input id="photo_chooser" type="file" onchange="uploadPhoto(<%= project.id %> , 0)">
+                    </div>
+                    <div class="file-path-wrapper">
+                        <input class="file-path validate" type="text">
                     </div>
                 </div>
             </form>
-        </div>
-        <div style="...">
-            <a id="active" onclick="replaceProject(<%= project.id %>)" class="waves-effect waves-green btn-flat">Отправить</a>
-            <a class="waves-effect waves-red btn-flat">Отмена</a>
-        </div>
-    </div>
-    <div class="row center">
-        ФОТО
-    </div>
-    <div class="row">
-        <form action="#">
-            <div class="file-field input-field">
-                <div class="btn">
-                    <span>Upload</span>
-                    <input id="photo_chooser" type="file" onchange="uploadPhoto(<%= project.id %> , 0)">
-                </div>
-                <div class="file-path-wrapper">
-                    <input class="file-path validate" type="text">
-                </div>
-            </div>
-        </form>
-        <div id="main_photo" class="row">
+            <!-- <div id="main_photo" class="row">
 
-            <% for (var i = 0; i < photos.length; i++) { %>
-            <div class="row">
-                <div class="col s3 m3 l3">
-                    <image width="100%" src="/images/uploaded_files/<%= photos[i].image_name %>"></image>
-                </div>
-                <div class="input-field col s6 l6 m6" height="100%">
-                    <textarea id="photo<%= photos[i].id %>desc" name="photo" class="materialize-textarea active"><%= photos[i].image_description %></textarea>
-                    <label for="photo<%= photos[i].id %>desc">Описание фото</label>
-                </div>
-                <div class="input-field col s3 l3 m3">
-                    <div>
-                        <select id="image_type<%= photos[i].id %>">
-
-                            <% for (var j = 0; j < image_types.length; j++) {
-                            if (image_types[j].id == photos[i].type_images_id) { %>
-                            <option value="<%= image_types[j].id %>"><%= image_types[j].type_name %></option>
-                            <%}} %>
-
-                            <% for (var j = 0; j < image_types.length; j++) {
-                            if (image_types[j].id != photos[i].type_images_id) { %>
-                            <option value="<%= image_types[j].id %>"><%= image_types[j].type_name %></option>
-                            <% }} %>
-                        </select>
-                        <label for="image_type<%= photos[i].id %>">Тип</label>
+                <% for (var i = 0; i < photos.length; i++) { %>
+                <div class="row">
+                    <div class="col s3 m3 l3">
+                        <image width="100%" src="/images/uploaded_files/<%= photos[i].image_name %>"></image>
                     </div>
-                    <div>
-                        <a onclick="updatePhotoInfo(<%= photos[i].id %>)" class="waves-effect waves-green btn-flat">Изменить</a>
-                        <a onclick="deletePhoto(<%= photos[i].id %>); loadPhotos(<%= project.id %>);" class="waves-effect waves-red btn-flat">Удалить</a>
+                    <div class="input-field col s6 l6 m6" height="100%">
+                        <textarea id="photo<%= photos[i].id %>desc" name="photo" class="materialize-textarea active"><%= photos[i].image_description %></textarea>
+                        <label for="photo<%= photos[i].id %>desc">Описание фото</label>
+                    </div>
+                    <div class="input-field col s3 l3 m3">
+                        <div>
+                            <select id="image_type<%= photos[i].id %>">
+
+                                <% for (var j = 0; j < image_types.length; j++) {
+                                if (image_types[j].id == photos[i].type_images_id) { %>
+                                <option value="<%= image_types[j].id %>"><%= image_types[j].type_name %></option>
+                                <%}} %>
+
+                                <% for (var j = 0; j < image_types.length; j++) {
+                                if (image_types[j].id != photos[i].type_images_id) { %>
+                                <option value="<%= image_types[j].id %>"><%= image_types[j].type_name %></option>
+                                <% }} %>
+                            </select>
+                            <label for="image_type<%= photos[i].id %>">Тип</label>
+                        </div>
+                        <div>
+                            <a onclick="updatePhotoInfo(<%= photos[i].id %>)" class="waves-effect waves-green btn-flat">Изменить</a>
+                            <a onclick="deletePhoto(<%= photos[i].id %>); loadPhotos(<%= project.id %>);" class="waves-effect waves-red btn-flat">Удалить</a>
+                        </div>
                     </div>
                 </div>
-            </div>
-            <% } %>
+                <% } %>
+            </div> !-->
+            <ul class="collection">
+                <% for (var i = 0; i < photos.length; i++) { %>
+                    <li class="collection-item">
+                        <div class="row">
+                            <div class="col s4">
+                                <img class="responsive-img" src="/images/uploaded_files/<%= photos[i].image_name %>"/>
+                            </div>
+                            <div class="input-field col s8">
+                                <div>
+                                    <select id="image_type<%= photos[i].id %>">
+
+                                        <% for (var j = 0; j < image_types.length; j++) {
+                                        if (image_types[j].id == photos[i].type_images_id) { %>
+                                        <option value="<%= image_types[j].id %>"><%= image_types[j].type_name %></option>
+                                        <%}} %>
+
+                                        <% for (var j = 0; j < image_types.length; j++) {
+                                        if (image_types[j].id != photos[i].type_images_id) { %>
+                                        <option value="<%= image_types[j].id %>"><%= image_types[j].type_name %></option>
+                                        <% }} %>
+                                    </select>
+                                    <label for="image_type<%= photos[i].id %>">Тип</label>
+                                </div>
+                            </div>
+                            <div class="input-field col s8" height="100%">
+                                <textarea id="photo<%= photos[i].id %>desc" name="photo" class="materialize-textarea active"><%= photos[i].image_description %></textarea>
+                                <label for="photo<%= photos[i].id %>desc">Описание фото</label>
+                            </div>
+                            <div class="col s12">
+                                <a onclick="updatePhotoInfo(<%= photos[i].id %>)" class="waves-effect waves-green btn-flat">Изменить</a>
+                                <a onclick="deletePhoto(<%= photos[i].id %>); loadPhotos(<%= project.id %>);" class="waves-effect waves-red btn-flat">Удалить</a>
+                            </div>
+                        </div>
+                    </li>
+                <% } %>
+            </ul>
         </div>
     </div>
+
 </main>
 
 
