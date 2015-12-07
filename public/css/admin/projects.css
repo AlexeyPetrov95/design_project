@@ -4,10 +4,23 @@ header ul li {
     width: 100%;
 }
 
+nav {
+    height: 100px !important;
+}
+
+
 header {
     padding-left: 240px;
 }
 
+.line-height-100 {
+    line-height: 100px !important;
+}
+
+.title {
+    font-size: 22px;
+    line-height: 100px;
+}
 
 .logo {
     height: 120px;
@@ -20,15 +33,24 @@ main {
 }
 
 .card-image {
-    height: 150px;
+    height: 140px;
 }
 
 .card.medium {
-    height: 360px !important;
+    height: 380px !important;
 }
 
 #interiors_place, #project_place{
-    padding-top: 30px;
+    padding-top: 20px;
+}
+
+.active {
+    color: #40c4ff !important;
+}
+
+.button-up {
+    bottom: 45px !important;
+    left: 264px !important;
 }
 
 .margin-top-30 {  margin-top: 30px;  }
@@ -36,5 +58,8 @@ main {
 @media only screen and (max-width : 992px) {
     header, main, footer {
         padding-left: 0;
+    }
+    .button-up {
+        left: 24px !important;
     }
 }

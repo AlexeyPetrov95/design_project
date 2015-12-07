@@ -74,8 +74,6 @@ router.delete('/admin/delete_user', function(req, res){
 // type 1 = интерьеры
 // type 2 = проекты
 router.post('/admin/projects/new_project', function (req, res) {
-
-    //додумать
     async.waterfall([
         function(callback) {
             knexSQL().select().from('projects').where({mark: req.body.mark}).then(function (result) {
