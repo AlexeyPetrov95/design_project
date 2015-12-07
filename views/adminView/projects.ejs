@@ -38,7 +38,7 @@
                                 <div> <b>Материал изделий: </b> <%= projects[i].material %> </div>
                             </div>
                             <div class="card-action">
-                                <a href="#">Подробнее</a>
+                                <a href="/admin/projects/<%= projects[i].id %>">Подробнее</a>
                             </div>
                         </div>
                     </div>
@@ -62,7 +62,7 @@
                                 <div> <b>Количество комнат: </b> <%= interiors[i].number_room %> </div>
                             </div>
                             <div class="card-action">
-                                <a href="#">Подробнее</a>
+                                <a href="/admin/projects/<%= interiors[i].id %>">Подробнее</a>
                             </div>
                         </div>
                     </div>
@@ -169,13 +169,11 @@
                     if (!data) {
                         Materialize.toast('Неверный пароль', 4000);
                     }
-                    else {
-                        window.location.replace("/admin");
-                    }
                 }
             });
         }
     </script>
+    <!-- Подгрузка интерьеров -->
     <script>
         var loadInteriors = function(){
             $.ajax({
@@ -200,7 +198,7 @@
                             newcard += '<div> <b>Количество комнат: </b>'+ interiors[i].number_room +'</div>';
                             newcard += '</div>';
                             newcard += '<div class="card-action">';
-                            newcard += '<a href="#">Подробнее</a>';
+                            newcard += '<a href="/admin/projects/'+ projects[i].id +'">Подробнее</a>';
                             newcard += '</div>';
                             newcard += '</div>';
                             newcard += '</div>';
@@ -211,6 +209,7 @@
             });
         }
     </script>
+    <!-- Подгрузка проектов -->
     <script>
         var loadProjects = function(){
             $.ajax({
@@ -237,7 +236,7 @@
                             newcard += '<div> <b>Материал изделий: </b>'+ projects[i].material +'</div>';
                             newcard += '</div>';
                             newcard += '<div class="card-action">';
-                            newcard += '<a href="#">Подробнее</a>';
+                            newcard += '<a href="/admin/projects/'+ projects[i].id +'">Подробнее</a>';
                             newcard += '</div>';
                             newcard += '</div>';
                             newcard += '</div>';
