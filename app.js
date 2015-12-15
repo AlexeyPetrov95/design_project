@@ -25,6 +25,7 @@ knexSQL = require('knex')({
   }
 });
 
+
 var store = new KnexSessionStore({
   knex: knexSQL,
   tablename: 'sessions'

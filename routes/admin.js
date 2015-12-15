@@ -192,7 +192,6 @@ router.post('/admin/projects/upload_photo', function(req, res) {
     form.parse(req);
 });
 router.post('/admin/projects/load_photo', function(req, res) {
-
     knexSQL('images').select().where({projects_id: req.body.project_id}).then(function(photos){
         knexSQL('type_images').select().then(function(image_types){
             res.send({files: photos, types: image_types});
@@ -215,7 +214,9 @@ router.post('/admin/projects/insert_photo_to_db', function(req, res){
         });
     });
 });
+
 router.post('/admin/projects/update_photo', function(req, res){
+    console.log(req.body.type);
     knexSQL('images').select().where({id: req.body.id}).update({image_description: req.body.description, type_images_id: req.body.type}).then(function(){
         res.send(true);
     });
@@ -237,14 +238,17 @@ router.post('/admin/projects/delete_photo', function(req, res){
 
 var projectOffset; // индекс первого проекта, необходимого для следующей выгрузки
 var interiorsOffset; // индекс первого интерьера, необходимого для следующей выгрузки
+var landscapeOffset;
 var count; // количество проектов/интерьеров, выгружаемых из базы за один запрос.
 
 // выгрузка первой пачки проектов
+
+// подумать о оптимизации в 1 запрос + запросы искать не лоб а поиском сначала по имени, потом получать id только потом выгружать  это дерьмо с id
 router.get('/admin/projects/', function (req, res) {
         projectOffset = 0;
         interiorsOffset = 0;
+        landscapeOffset = 0;
         count = 12;
-
         async.waterfall([
             function (callback) {
                 knexSQL('projects').select().where({type_id: 2}).limit(count).offset(projectOffset).then(function (projects) {
@@ -264,22 +268,34 @@ router.get('/admin/projects/', function (req, res) {
                         callback(null, projects, interiors);
                     }
                 });
+            }, function (projects, interiors, callback){
+                knexSQL('projects').select().where({type_id: 3}).limit(count).offset(landscapeOffset).then(function(landscape){
+                    if (!landscape){
+                        res.send(500);
+                    } else {
+                        callback(null, projects, interiors, landscape);
+                    }
+                });
             }
-        ], function (err, projects, interiors, type) {
+        ], function (err, projects, interiors, landscape, type) {
             interiorsOffset += count;
             projectOffset += count;
             res.render('adminView/projects.ejs', {
                 title: "Проекты/Интерьеры",
                 projects: projects,
                 interiors: interiors,
+                landscape: landscape,
                 type: type
             });
         });
 });
 
+
+
+// убрать тип наифиг, искать по имени!!!!!
+
 // для ajax-запросов на подгрузку следующей пачки проектов
 router.get('/admin/projects/load_projects', function (req, res) {
-    console.log('projects');
     knexSQL('projects').select().where({type_id: 2}).limit(count).offset(projectOffset).then(function (loaded) {
         if (!loaded){ res.send(500); }
         else {
@@ -299,18 +315,34 @@ router.get('/admin/projects/load_interiors', function (req, res) {
         }
     });
 });
+// для ajax-запросов на подгрузку следующей пачки ландшафтов
+router.get('/admin/projects/load_landscape', function (req, res) {
+    knexSQL('projects').select().where({type_id: 3}).limit(count).offset(landscapeOffset).then(function (loaded){
+        if (!loaded){ res.send(500); }
+        else {
+            landscapeOffset += count;
+            res.send(loaded);
+        }
+    });
+});
 
 
 router.delete('/admin/projects/delete', function(req, res){
-    knexSQL('projects').where('id', req.body.id).del().then(function (check) {
-        if (!check) { res.send(false); }
-        else { res.send(true); }
+    knexSQL('images').where({projects_id: req.body.id}).then(function (images) {
+        for (var i = 0; i < images.length; i++){
+            fs.unlinkSync('./public/images/uploaded_files/'+ images[i].image_name);
+        }
+        knexSQL('images').where({projects_id: req.body.id}).del().then(function(x){
+            knexSQL('projects').where('id', req.body.id).del().then(function (check) {
+                if (!check) { res.send(false); }
+                else { res.send(true); }
+            });
+        });
     });
 });
 
 router.get('/admin/projects/:id', function(req, res){
     var id = req.params.id;
-
     knexSQL('projects').select().where({id: id}).then(function(proj){
         if (proj.length == 0) { res.send(404); }
         else {

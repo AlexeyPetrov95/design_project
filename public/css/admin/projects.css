@@ -33,19 +33,31 @@ main {
 }
 
 .card-image {
-    height: 140px;
+    height: 200px;
 }
 
-.card.medium {
+.card .card-title {
+    font-size: 20px !important;
+}
+
+.design {
     height: 380px !important;
+}
+
+.card-content{
+    overflow-y: auto !important;
+}
+
+.card .card-action{
+    padding: 15px !important;
 }
 
 #interiors_place, #project_place{
     padding-top: 20px;
 }
 
-.active {
-    color: #40c4ff !important;
+.tabs .indicator {
+    background-color: #40c4ff !important;
 }
 
 .button-up {
@@ -59,6 +71,10 @@ main {
 .margin-50 { margin: 50px auto;}
 .margin-top-30 {  margin-top: 30px;  }
 .padding-top-20 { padding-top: 20px; }
+
+.btn-flat i{
+    font-size: 2rem !important;
+}
 
 @media only screen and (max-width : 992px) {
     header, main, footer {
