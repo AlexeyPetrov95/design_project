@@ -106,13 +106,15 @@ router.post('/admin/projects/replace_project', function(req, res) {
         description: req.body.description }).then(function(result) { res.send(true); });
 });
 
-router.post('/admin/projects/upload_photo', function(req, res) {
+router.post('/admin/projects/upload_photo/:proj_id', function(req, res) {
     // создаем форму
     var form = new multiparty.Form();
     var uploadFile = {path: '', type: '', size: 0};
     var maxSize = 20 * 1024 * 1024; //20MB
     var supportMimeTypes = ['image/jpg', 'image/jpeg', 'image/png'];
+    var uploadDir = './public/images/uploaded_files/';
     var errors = [];
+    var prefixName = '_upload';
 
     //если произошла ошибка
     form.on('error', function(err){
@@ -122,12 +124,9 @@ router.post('/admin/projects/upload_photo', function(req, res) {
             console.log('error');
         }
     });
-
     form.on('close', function() {
         //если нет ошибок и все хорошо
         if(errors.length == 0) {
-            //сообщаем что все хорошо
-            res.send({status: 200});
         }
         else {
             if(fs.existsSync(uploadFile.path)) {
@@ -138,65 +137,54 @@ router.post('/admin/projects/upload_photo', function(req, res) {
             res.send({status: 'bad', errors: errors});
         }
     });
-
     // при поступление файла
     form.on('part', function(part) {
         //читаем его размер в байтах
 
+        uploadFile.size = part.byteCount;
+        //читаем его тип
+        uploadFile.type = part.headers['content-type'];
+        uploadFile.format = part.filename.slice(part.filename.lastIndexOf("."));
+        //путь для сохранения файла
+        uploadFile.path = uploadDir + prefixName + uploadFile.format;
 
-            console.log(part.length);
-            uploadFile.size = part.byteCount;
-            //читаем его тип
-            uploadFile.type = part.headers['content-type'];
-            //путь для сохранения файла //  заче
-            uploadFile.path = './public/images/uploaded_files/uploaded' + part.filename.slice(part.filename.lastIndexOf("."));
-             console.log(uploadFile.path);
-            //проверяем размер файла, он не должен быть больше максимального размера
-            if (uploadFile.size > maxSize) {
-                errors.push('File size is ' + uploadFile.size + '. Limit is' + (maxSize / 1024 / 1024) + 'MB.');
-            }
+        //проверяем размер файла, он не должен быть больше максимального размера
+        if (uploadFile.size > maxSize) {
+            errors.push('File size is ' + uploadFile.size + '. Limit is' + (maxSize / 1024 / 1024) + 'MB.');
+        }
 
             //проверяем является ли тип поддерживаемым
-            if (supportMimeTypes.indexOf(uploadFile.type) == -1) {
-                errors.push('Unsupported mimetype ' + uploadFile.type);
-            }
+        if (supportMimeTypes.indexOf(uploadFile.type) == -1) {
+            errors.push('Unsupported mimetype ' + uploadFile.type);
+        }
 
             //если нет ошибок то создаем поток для записи файла
-            if (errors.length == 0) {
-                console.log(uploadFile.path);
-                var out = fs.createWriteStream(uploadFile.path);
-                part.pipe(out);
-            }
-            else {
-                //пропускаем
-                //вообще здесь нужно как-то остановить загрузку и перейти к onclose
-                part.resume();
-            }
-
+        if(errors.length == 0) {
+            var out = fs.createWriteStream(uploadFile.path);
+            part.pipe(out);
+        }
+        else {
+            part.resume();
+        }
     });
 
     // парсим форму
     form.parse(req);
+    knexSQL('images').insert({projects_id: req.params.proj_id}).returning('id').then(function (id) {
+        // апдейт имени нового изображения и ренейм файла на серве
+        knexSQL('images').select().where({id: id}).update({image_name: id + uploadFile.format}).then(function () {
+            fs.renameSync(uploadFile.path, uploadDir + id + uploadFile.format);
+            knexSQL('type_images').select().then(function(imgtypes){
+                res.send({photo_id : id, filename: id + uploadFile.format, image_types : imgtypes});
+            });
+        });
+    });
 });
 
 router.post('/admin/projects/load_photo', function(req, res) {
     knexSQL('images').select().where({projects_id: req.body.project_id}).then(function(photos){
         knexSQL('type_images').select().then(function(image_types){
             res.send({files: photos, types: image_types});
-        });
-    });
-});
-router.post('/admin/projects/insert_photo_to_db', function(req, res){
-
-    knexSQL('images').insert({
-        image_description: 'не указано',
-        projects_id: req.body.project_id,
-        type_images_id: req.body.image_type_id
-    }).returning('id').then(function (id) {
-        knexSQL('images').select().where({id: id}).update({image_name: id+ req.body.image_format}).then(function(){
-            fs.renameSync('./public/images/uploaded_files/uploaded' + req.body.image_format,'./public/images/uploaded_files/' + id + req.body.image_format);
-            console.log(id);
-            res.send(id);
         });
     });
 });
@@ -212,7 +200,7 @@ router.post('/admin/projects/delete_photo', function(req, res){
         var path = './public/images/uploaded_files/';
         var files = fs.readdirSync(path);
         for (var i = 0; i < files.length; i++) {
-            console.log(files[i]);
+            //console.log(files[i]);
             if (files[i].indexOf(req.body.id + '.') == 0) {
                 fs.unlinkSync(path + files[i]);
                 break;
