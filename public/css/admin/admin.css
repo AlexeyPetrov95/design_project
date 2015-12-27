@@ -8,10 +8,22 @@ header {
     padding-left: 240px;
 }
 
-
 .logo {
     height: 120px;
     line-height: 120px;
+}
+
+nav {
+    height: 100px !important;
+}
+
+.line-height-100 {
+    line-height: 100px !important;
+}
+
+.title {
+    font-size: 24px;
+    line-height: 100px;
 }
 
 main {
