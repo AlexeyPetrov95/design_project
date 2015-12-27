@@ -123,14 +123,16 @@ router.post('/admin/projects/replace_project', function(req, res) {
         space: req.body.space,
         description: req.body.description }).then(function(result) { res.send(true); });
 });
-router.post('/admin/projects/upload_photo', function(req, res) {
+router.post('/admin/projects/upload_photo/:proj_id', function(req, res) {
 
     // создаем форму
     var form = new multiparty.Form();
     var uploadFile = {path: '', type: '', size: 0};
     var maxSize = 20 * 1024 * 1024; //20MB
     var supportMimeTypes = ['image/jpg', 'image/jpeg', 'image/png'];
+    var uploadDir = './public/images/uploaded_files/';
     var errors = [];
+    var prefixName = '_upload';
 
     //если произошла ошибка
     form.on('error', function(err){
@@ -140,12 +142,9 @@ router.post('/admin/projects/upload_photo', function(req, res) {
             console.log('error');
         }
     });
-
     form.on('close', function() {
         //если нет ошибок и все хорошо
         if(errors.length == 0) {
-            //сообщаем что все хорошо
-            res.send({status: 200});
         }
         else {
             if(fs.existsSync(uploadFile.path)) {
@@ -156,15 +155,15 @@ router.post('/admin/projects/upload_photo', function(req, res) {
             res.send({status: 'bad', errors: errors});
         }
     });
-
     // при поступление файла
     form.on('part', function(part) {
         //читаем его размер в байтах
         uploadFile.size = part.byteCount;
         //читаем его тип
         uploadFile.type = part.headers['content-type'];
+        uploadFile.format = part.filename.slice(part.filename.lastIndexOf("."));
         //путь для сохранения файла
-        uploadFile.path = './public/images/uploaded_files/uploaded'+ part.filename.slice(part.filename.lastIndexOf("."));
+        uploadFile.path = uploadDir + prefixName + uploadFile.format;
 
         //проверяем размер файла, он не должен быть больше максимального размера
         if(uploadFile.size > maxSize) {
@@ -182,14 +181,21 @@ router.post('/admin/projects/upload_photo', function(req, res) {
             part.pipe(out);
         }
         else {
-            //пропускаем
-            //вообще здесь нужно как-то остановить загрузку и перейти к onclose
             part.resume();
         }
     });
 
     // парсим форму
     form.parse(req);
+    knexSQL('images').insert({projects_id: req.params.proj_id}).returning('id').then(function (id) {
+        // апдейт имени нового изображения и ренейм файла на серве
+        knexSQL('images').select().where({id: id}).update({image_name: id + uploadFile.format}).then(function () {
+            fs.renameSync(uploadFile.path, uploadDir + id + uploadFile.format);
+            knexSQL('type_images').select().then(function(imgtypes){
+                res.send({photo_id : id, filename: id + uploadFile.format, image_types : imgtypes});
+            });
+        });
+    });
 });
 router.post('/admin/projects/load_photo', function(req, res) {
     knexSQL('images').select().where({projects_id: req.body.project_id}).then(function(photos){
@@ -198,22 +204,7 @@ router.post('/admin/projects/load_photo', function(req, res) {
         });
     });
 });
-router.post('/admin/projects/insert_photo_to_db', function(req, res){
 
-    console.log(req.body);
-    knexSQL('images').insert({
-        image_description: 'не указано',
-        projects_id: req.body.project_id,
-        type_images_id: req.body.image_type_id
-    }).returning('id').then(function (id) {
-
-        knexSQL('images').select().where({id: id}).update({image_name: id+ req.body.image_format}).then(function(){
-            fs.renameSync('./public/images/uploaded_files/uploaded' + req.body.image_format,'./public/images/uploaded_files/' + id + req.body.image_format);
-            console.log(id);
-            res.send(id);
-        });
-    });
-});
 
 router.post('/admin/projects/update_photo', function(req, res){
     console.log(req.body.type);
@@ -226,7 +217,7 @@ router.post('/admin/projects/delete_photo', function(req, res){
         var path = './public/images/uploaded_files/';
         var files = fs.readdirSync(path);
         for (var i = 0; i < files.length; i++) {
-            console.log(files[i]);
+            //console.log(files[i]);
             if (files[i].indexOf(req.body.id + '.') == 0) {
                 fs.unlinkSync(path + files[i]);
                 break;
@@ -245,49 +236,49 @@ var count; // количество проектов/интерьеров, выг
 
 // подумать о оптимизации в 1 запрос + запросы искать не лоб а поиском сначала по имени, потом получать id только потом выгружать  это дерьмо с id
 router.get('/admin/projects/', function (req, res) {
-        projectOffset = 0;
-        interiorsOffset = 0;
-        landscapeOffset = 0;
-        count = 12;
-        async.waterfall([
-            function (callback) {
-                knexSQL('projects').select().where({type_id: 2}).limit(count).offset(projectOffset).then(function (projects) {
-                    if (!projects) {
-                        res.send(500);
-                    }
-                    else {
-                        callback(null, projects);
-                    }
-                });
-            }, function (projects, callback) {
-                knexSQL('projects').select().where({type_id: 1}).limit(count).offset(interiorsOffset).then(function (interiors) {
-                    if (!interiors) {
-                        res.send(500);
-                    }
-                    else {
-                        callback(null, projects, interiors);
-                    }
-                });
-            }, function (projects, interiors, callback){
-                knexSQL('projects').select().where({type_id: 3}).limit(count).offset(landscapeOffset).then(function(landscape){
-                    if (!landscape){
-                        res.send(500);
-                    } else {
-                        callback(null, projects, interiors, landscape);
-                    }
-                });
-            }
-        ], function (err, projects, interiors, landscape, type) {
-            interiorsOffset += count;
-            projectOffset += count;
-            res.render('adminView/projects.ejs', {
-                title: "Проекты/Интерьеры",
-                projects: projects,
-                interiors: interiors,
-                landscape: landscape,
-                type: type
+    projectOffset = 0;
+    interiorsOffset = 0;
+    landscapeOffset = 0;
+    count = 12;
+    async.waterfall([
+        function (callback) {
+            knexSQL('projects').select().where({type_id: 2}).limit(count).offset(projectOffset).then(function (projects) {
+                if (!projects) {
+                    res.send(500);
+                }
+                else {
+                    callback(null, projects);
+                }
             });
+        }, function (projects, callback) {
+            knexSQL('projects').select().where({type_id: 1}).limit(count).offset(interiorsOffset).then(function (interiors) {
+                if (!interiors) {
+                    res.send(500);
+                }
+                else {
+                    callback(null, projects, interiors);
+                }
+            });
+        }, function (projects, interiors, callback){
+            knexSQL('projects').select().where({type_id: 3}).limit(count).offset(landscapeOffset).then(function(landscape){
+                if (!landscape){
+                    res.send(500);
+                } else {
+                    callback(null, projects, interiors, landscape);
+                }
+            });
+        }
+    ], function (err, projects, interiors, landscape, type) {
+        interiorsOffset += count;
+        projectOffset += count;
+        res.render('adminView/projects.ejs', {
+            title: "Проекты/Интерьеры",
+            projects: projects,
+            interiors: interiors,
+            landscape: landscape,
+            type: type
         });
+    });
 });
 
 
