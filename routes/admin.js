@@ -199,7 +199,7 @@ router.post('/admin/projects/load_photo', function(req, res) {
 
 router.post('/admin/projects/update_photo', function(req, res){
     console.log(req.body.type);
-    knexSQL('images').select().where({id: req.body.id}).update({image_description: req.body.description, type_images_id: req.body.type}).then(function(){
+    knexSQL('images').select().where({id: req.body.id}).update({type_images_id: req.body.type}).then(function(){
         res.send(true);
     });
 });
@@ -360,6 +360,13 @@ router.get('/admin/projects/:id', function(req, res){
             });
         }
     });
+});
+
+
+
+router.get('/logout', function(req, res){
+    req.session.destroy();
+    res.redirect('/');
 });
 
 module.exports = router;

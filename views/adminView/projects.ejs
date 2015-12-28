@@ -12,101 +12,101 @@
 
 <body>
     <main>
-        <div class="container">
+
             <!-- НАВИГАЦИЯ !-->
-            <div class="row">
-                <div class="col s12">
-                    <ul class="tabs z-depth-1">
-                        <% for ( var i = 0; i < type.length; i++) {%>
-                            <% if (i == 0 ) {%>
-                                 <li class="tab col s3"><a id="<%=type[i].type%>Link" class="active light-blue-text accent-2" href="#<%=type[i].type%>"><%=type[i].name%></a></li>
-                            <% } else { %>
-                                   <li class="tab col s3"><a id="<%=type[i].type%>Link" class="light-blue-text accent-2" href="#<%=type[i].type%>"><%=type[i].name%></a></li>
-                            <% } %>
+
+            <div class="col s12">
+                <ul class="tabs z-depth-1">
+                    <% for ( var i = 0; i < type.length; i++) {%>
+                        <% if (i == 0 ) {%>
+                             <li class="tab col s3"><a id="<%=type[i].type%>Link" class="active light-blue-text accent-2" href="#<%=type[i].type%>"><%=type[i].name%></a></li>
+                        <% } else { %>
+                               <li class="tab col s3"><a id="<%=type[i].type%>Link" class="light-blue-text accent-2" href="#<%=type[i].type%>"><%=type[i].name%></a></li>
                         <% } %>
-                    </ul>
-                </div>
-
-
-                <!-- ПРОЕКТЫ !-->
-                <div id="projects" class="col s12">
-                    <div class="row" id="project_place">
-                        <% var start = 0, count = projects.length > 12 ? 12 : projects.length ;
-                        for (var i = start; i < count; i++) { %>
-                        <div class="col s12 m6 l4">
-                            <div class="card medium" id="<%=projects[i].id %>card" >
-                                <div class="card-image">
-                                    <img src="/images/default.jpg">
-                                    <span class="card-title"><%= projects[i].name %></span>
-                                </div>
-                                <div class="card-content">
-                                    <div> <b>Маркировка:</b> <%= projects[i].mark %> </div>
-                                    <div> <b>Цена: </b> <%= projects[i].price %> </div>
-                                    <div> <b>Площадь: </b> <%= projects[i].space %> </div>
-                                    <div> <b>Количество комнат: </b> <%= projects[i].number_room %> </div>
-                                    <div> <b>Материал изделий: </b> <%= projects[i].material %> </div>
-                                </div>
-                                <div class="card-action">
-                                     <a href="/admin/projects/<%= projects[i].id %>">Подробнее</a>
-                                    <a class="waves-effect waves-light" onclick="getProject(<%=projects[i].id%>, '<%= projects[i].mark %>' )" href="#modalDelete">Удалить</a>
-                                </div>
-                            </div>
-                        </div>
-                        <% } %>
-                    </div>
-                </div>
-
-
-                <div id="design" class="col s12">
-                    <div class="row" id="interiors_place">
-                        <% for (var i = start; i < interiors.length; i++) { %>
-                        <div class="col s12 m6 l4">
-                            <div class="card medium" id="<%=interiors[i].id%>card">
-                                <div class="card-image">
-                                    <img src="/images/default.jpg">
-                                    <span class="card-title"><%= interiors[i].name %></span>
-                                </div>
-                                <div class="card-content">
-                                    <div> <b>Маркировка: </b> <%= interiors[i].mark %> </div>
-                                    <div> <b>Цена: </b> <%= interiors[i].price %> </div>
-                                    <div> <b>Площадь: </b> <%= interiors[i].space %> </div>
-                                    <div> <b>Количество комнат: </b> <%= interiors[i].number_room %> </div>
-                                </div>
-                                <div class="card-action">
-                                    <a href="/admin/projects/<%= interiors[i].id %>">Подробнее</a>
-                                    <a class="waves-effect waves-light" onclick="getProject(<%= interiors[i].id%>, '<%= interiors[i].mark %>')" href="#modalDelete">Удалить</a>
-                                </div>
-                            </div>
-                        </div>
-                        <% } %>
-                    </div>
-                </div>
-
-                <div id="landscape" class="col s12">
-                    <div class="row" id="landscape_place">
-                        <% for (var i = start; i < landscape.length; i++) { %>
-                        <div class="col s12 m6 l4">
-                            <div class="card medium" id="<%=landscape[i].id%>card">
-                                <div class="card-image">
-                                    <img src="/images/default.jpg">
-                                    <span class="card-title"><%= landscape[i].name %></span>
-                                </div>
-                                <div class="card-content">
-                                    <div> <b>Маркировка: </b> <%= landscape[i].mark %> </div>
-                                    <div> <b>Цена: </b> <%= landscape[i].price %> </div>
-                                </div>
-                                <div class="card-action">
-                                    <a href="/admin/projects/<%= landscape[i].id %>">Подробнее</a>
-                                    <a class="waves-effect waves-light" onclick="getProject(<%= landscape[i].id%>, '<%= landscape[i].mark %>')" href="#modalDelete">Удалить</a>
-                                </div>
-                            </div>
-                        </div>
-                        <% } %>
-                    </div>
-
-                </div>
+                    <% } %>
+                </ul>
             </div>
-        </div>
+
+            <div class="container">
+            <!-- ПРОЕКТЫ !-->
+                <div class="row">
+                    <div id="projects" class="col s12">
+                        <div class="row" id="project_place">
+                            <% var start = 0, count = projects.length > 12 ? 12 : projects.length ;
+                            for (var i = start; i < count; i++) { %>
+                            <div class="col s12 m6 l4">
+                                <div class="card medium" id="<%=projects[i].id %>card" >
+                                    <div class="card-image">
+                                        <img src="/images/default.jpg">
+                                        <span class="card-title"><%= projects[i].name %></span>
+                                    </div>
+                                    <div class="card-content">
+                                        <div> <b>Маркировка:</b> <%= projects[i].mark %> </div>
+                                        <div> <b>Цена: </b> <%= projects[i].price %> </div>
+                                        <div> <b>Площадь: </b> <%= projects[i].space %> </div>
+                                        <div> <b>Количество комнат: </b> <%= projects[i].number_room %> </div>
+                                        <div> <b>Материал изделий: </b> <%= projects[i].material %> </div>
+                                    </div>
+                                    <div class="card-action">
+                                         <a href="/admin/projects/<%= projects[i].id %>">Подробнее</a>
+                                        <a class="waves-effect waves-light" onclick="getProject(<%=projects[i].id%>, '<%= projects[i].mark %>' )" href="#modalDelete">Удалить</a>
+                                    </div>
+                                </div>
+                            </div>
+                            <% } %>
+                        </div>
+                    </div>
+
+
+                    <div id="design" class="col s12">
+                        <div class="row" id="interiors_place">
+                            <% for (var i = start; i < interiors.length; i++) { %>
+                            <div class="col s12 m6 l4">
+                                <div class="card medium" id="<%=interiors[i].id%>card">
+                                    <div class="card-image">
+                                        <img src="/images/default.jpg">
+                                        <span class="card-title"><%= interiors[i].name %></span>
+                                    </div>
+                                    <div class="card-content">
+                                        <div> <b>Маркировка: </b> <%= interiors[i].mark %> </div>
+                                        <div> <b>Цена: </b> <%= interiors[i].price %> </div>
+                                        <div> <b>Площадь: </b> <%= interiors[i].space %> </div>
+                                        <div> <b>Количество комнат: </b> <%= interiors[i].number_room %> </div>
+                                    </div>
+                                    <div class="card-action">
+                                        <a href="/admin/projects/<%= interiors[i].id %>">Подробнее</a>
+                                        <a class="waves-effect waves-light" onclick="getProject(<%= interiors[i].id%>, '<%= interiors[i].mark %>')" href="#modalDelete">Удалить</a>
+                                    </div>
+                                </div>
+                            </div>
+                            <% } %>
+                        </div>
+                    </div>
+
+                    <div id="landscape" class="col s12">
+                        <div class="row" id="landscape_place">
+                            <% for (var i = start; i < landscape.length; i++) { %>
+                            <div class="col s12 m6 l4">
+                                <div class="card medium" id="<%=landscape[i].id%>card">
+                                    <div class="card-image">
+                                        <img src="/images/default.jpg">
+                                        <span class="card-title"><%= landscape[i].name %></span>
+                                    </div>
+                                    <div class="card-content">
+                                        <div> <b>Маркировка: </b> <%= landscape[i].mark %> </div>
+                                        <div> <b>Цена: </b> <%= landscape[i].price %> </div>
+                                    </div>
+                                    <div class="card-action">
+                                        <a href="/admin/projects/<%= landscape[i].id %>">Подробнее</a>
+                                        <a class="waves-effect waves-light" onclick="getProject(<%= landscape[i].id%>, '<%= landscape[i].mark %>')" href="#modalDelete">Удалить</a>
+                                    </div>
+                                </div>
+                            </div>
+                            <% } %>
+                        </div>
+                    </div>
+                </div>
+             </div>
 
         <!-- КНОПКИ ДОБАВИТЬ И НАВЕРХ !-->
         <div class="fixed-action-btn button-up">
@@ -141,7 +141,7 @@
                     <div id="material" class="input-field col s12" style="display: none;">
                         <div class="input-field col s12">
                             <textarea id="material_text" class="materialize-textarea"></textarea>
-                            <label for="material_text">Textarea</label>
+                            <label for="material_text">Материалы</label>
                         </div>
                     </div>
                     <div class="input-field col s12 l12 m6">

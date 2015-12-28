@@ -29,7 +29,6 @@ header {
 
 main {
     padding-left: 240px;
-    padding-top: 20px;
 }
 
 .card-image {
@@ -52,6 +51,19 @@ main {
     padding: 15px !important;
 }
 
+#main_photo{
+    clear: both !important;
+    overflow: visible !important;
+}
+
+.overflow-none{
+    overflow-y: visible !important;
+}
+
+.btn-flat{
+    padding: 0px 3px !important;
+}
+
 #interiors_place, #project_place, #landscape_place{
     padding-top: 20px;
 }
@@ -71,6 +83,15 @@ main {
 .margin-50 { margin: 50px auto;}
 .margin-top-30 {  margin-top: 30px;  }
 .padding-top-20 { padding-top: 20px; }
+
+ul.card-action-buttons{
+    margin: -26px 10px 0px 0px;
+    text-align: right;
+}
+ul.card-action-buttons li{
+    display: inline-block;
+    padding-left: 5px;
+}
 
 .btn-flat i{
     font-size: 2rem !important;
