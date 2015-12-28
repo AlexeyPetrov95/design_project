@@ -136,6 +136,13 @@ function addDiv(data, type){
         newcard += '</div>';
         cardplace.innerHTML += newcard;
     }
+    $("#material_text").val('')
+    $("#type").val('');
+    $('[name="name"]').val('');
+    $('[name="mark"]').val('');
+    $('[name="price"]').val('');
+    $('[name="space"]').val('');
+    $('[name="number_room"]').val('');
 }
 
 function addProject() {
