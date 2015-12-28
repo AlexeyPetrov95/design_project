@@ -78,17 +78,23 @@
 
         <!-- ЗАГРУЗКА ФОТО !-->
         <div class="row">
-            <form action="#">
+            <form class="col s12 m12 l12" action="#">
                 <div class="file-field input-field">
                     <div class="btn">
                         <span>Upload</span>
-                        <input id="photo_chooser" type="file" multiple onchange="uploadPhoto(<%= project.id %> , 0); $(this).val('')">
+                        <input id="photo_chooser" type="file" style="margin-bottom: 60px;" multiple onchange="uploadPhoto(<%= project.id %> , 0); $(this).val('')">
                     </div>
                     <div class="file-path-wrapper">
                         <input class="file-path validate" type="text">
                     </div>
                 </div>
             </form>
+
+
+            <div  id='preloader' class="progress" style="display: none">
+                <div class="indeterminate"></div>
+            </div>
+
 
             <!-- ВЫГРУЗКА ФОТО !-->
             <ul class="collection" id="main_photo">
@@ -149,7 +155,6 @@
             for (var i = 0; i < files.length; i++){
                 data[i] = new FormData();
                 data[i].append('uploadFile', files[i]);
-                console.log(data);
             }
             var upload = function(index){
                 if (index < data.length){
@@ -160,6 +165,10 @@
                         cache: false,
                         processData: false,
                         contentType: false,
+                        beforeSend: function(){
+                            $('#preloader').css("display", "block");
+                        },
+
                         success: function(res){
                             upload(++index);
                             if (res.status == 'bad'){ Materialize.toast("Ошибка при загрузке", 3000); }
@@ -204,6 +213,7 @@
                         }
                     });
                 } else {
+                    $('#preloader').css("display", "none");
                     Materialize.toast("фотографии загружены на сервер", 3000);
                 }
             }
