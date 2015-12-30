@@ -12,101 +12,101 @@
 
 <body>
     <main>
-       <!-- <div class="container"> !-->
-            <div class="row">
 
-                <!-- НАВИГАЦИЯ !-->
-                <div class="col s12">
-                    <ul class="tabs z-depth-1">
-                        <li class="tab col s3"><a id="designLink" class="active light-blue-text accent-2" href="#test1">Интерьеры</a></li>
-                        <li class="tab col s3"><a id="projects" class="light-blue-text accent-2" href="#test2">Проекты</a></li>
-                        <li class="tab col s3"><a id="projects" class="light-blue-text accent-2" href="#test3">Ландшафты</a></li>
-                    </ul>
-                </div>
+            <!-- НАВИГАЦИЯ !-->
 
-                <!-- ПРОЕКТЫ !-->
-                <div id="test2" class="col s12">
-                    <div class="row" id="project_place">
-                        <% var start = 0, count = projects.length > 12 ? 12 : projects.length ;
-                        for (var i = start; i < count; i++) { %>
-
-                        <div class="col s12 m6 l4">
-                            <div class="card medium" id="<%=projects[i].id %>card" >
-                                <div class="card-image">
-                                    <img src="/images/parallax1.jpg">
-                                    <span class="card-title"><%= projects[i].name %></span>
-                                </div>
-                                <div class="card-content">
-                                    <div> <b>Маркировка:</b> <%= projects[i].mark %> </div>
-                                    <div> <b>Цена: </b> <%= projects[i].price %> </div>
-                                    <div> <b>Площадь: </b> <%= projects[i].space %> </div>
-                                    <div> <b>Количество комнат: </b> <%= projects[i].number_room %> </div>
-                                    <div> <b>Материал изделий: </b> <%= projects[i].material %> </div>
-                                </div>
-                                <div class="card-action">
-                                     <a href="/admin/projects/<%= projects[i].id %>">Подробнее</a>
-                                    <a class="waves-effect waves-light" onclick="getProject(<%=projects[i].id%>, '<%= projects[i].mark %>' )" href="#modalDelete">Удалить</a>
-                                </div>
-                            </div>
-                        </div>
+            <div class="col s12">
+                <ul class="tabs z-depth-1">
+                    <% for ( var i = 0; i < type.length; i++) {%>
+                        <% if (i == 0 ) {%>
+                             <li class="tab col s3"><a id="<%=type[i].type%>Link" class="active light-blue-text accent-2" href="#<%=type[i].type%>"><%=type[i].name%></a></li>
+                        <% } else { %>
+                               <li class="tab col s3"><a id="<%=type[i].type%>Link" class="light-blue-text accent-2" href="#<%=type[i].type%>"><%=type[i].name%></a></li>
                         <% } %>
-                    </div>
-                </div>
-
-                <!-- ИНТЕРЬЕРЫ !-->
-                <div id="test1" class="col s12">
-                    <div class="row" id="interiors_place">
-                        <% for (var i = start; i < interiors.length; i++) { %>
-                        <div class="col s12 m6 l4">
-                            <div class="card medium design" id="<%=interiors[i].id%>card">
-                                <div class="card-image">
-                                    <img src="/images/parallax2.png">
-                                    <span class="card-title"><%= interiors[i].name %></span>
-                                </div>
-                                <div class="card-content">
-                                    <div> <b>Маркировка: </b> <%= interiors[i].mark %> </div>
-                                    <div> <b>Цена: </b> <%= interiors[i].price %> </div>
-                                    <div> <b>Площадь: </b> <%= interiors[i].space %> </div>
-                                    <div> <b>Количество комнат: </b> <%= interiors[i].number_room %> </div>
-                                </div>
-                                <div class="card-action">
-                                    <a href="/admin/projects/<%= interiors[i].id %>">Подробнее</a>
-                                    <a class="waves-effect waves-light" onclick="getProject(<%= interiors[i].id%>, '<%= interiors[i].mark %>')" href="#modalDelete">Удалить</a>
-                                </div>
-                            </div>
-                        </div>
-                        <% } %>
-                    </div>
-                </div>
-
-                <div id="test3" class="col s12">
-                    <div class="row" id="interiors_place">
-                        <% for (var i = start; i < landscape.length; i++) { %>
-                        <div class="col s12 m6 l4">
-                            <div class="card medium design" id="<%=landscape[i].id%>card">
-                                <div class="card-image">
-                                    <img src="/images/parallax2.png">
-                                    <span class="card-title"><%= landscape[i].name %></span>
-                                </div>
-                                <div class="card-content">
-                                    <div> <b>Маркировка: </b> <%= landscape[i].mark %> </div>
-                                    <div> <b>Цена: </b> <%= landscape[i].price %> </div>
-                                    <div> <b>Площадь: </b> <%= landscape[i].space %> </div>
-                                    <div> <b>Количество комнат: </b> <%= landscape[i].number_room %> </div>
-                                </div>
-                                <div class="card-action">
-                                    <a href="/admin/projects/<%= interiors[i].id %>">Подробнее</a>
-                                    <a class="waves-effect waves-light" onclick="getProject(<%= landscape[i].id%>, '<%= landscape[i].mark %>')" href="#modalDelete">Удалить</a>
-                                </div>
-                            </div>
-                        </div>
-                        <% } %>
-                    </div>
-
-                </div>
+                    <% } %>
+                </ul>
             </div>
 
-       <!-- </div> !-->
+            <div class="container">
+            <!-- ПРОЕКТЫ !-->
+                <div class="row">
+                    <div id="projects" class="col s12">
+                        <div class="row" id="project_place">
+                            <% var start = 0, count = projects.length > 12 ? 12 : projects.length ;
+                            for (var i = start; i < count; i++) { %>
+                            <div class="col s12 m6 l4">
+                                <div class="card medium" id="<%=projects[i].id %>card" >
+                                    <div class="card-image">
+                                        <img src="/images/default.jpg">
+                                        <span class="card-title"><%= projects[i].name %></span>
+                                    </div>
+                                    <div class="card-content">
+                                        <div> <b>Маркировка:</b> <%= projects[i].mark %> </div>
+                                        <div> <b>Цена: </b> <%= projects[i].price %> </div>
+                                        <div> <b>Площадь: </b> <%= projects[i].space %> </div>
+                                        <div> <b>Количество комнат: </b> <%= projects[i].number_room %> </div>
+                                        <div> <b>Материал изделий: </b> <%= projects[i].material %> </div>
+                                    </div>
+                                    <div class="card-action">
+                                         <a href="/admin/projects/<%= projects[i].id %>">Подробнее</a>
+                                        <a class="waves-effect waves-light" onclick="getProject(<%=projects[i].id%>, '<%= projects[i].mark %>' )" href="#modalDelete">Удалить</a>
+                                    </div>
+                                </div>
+                            </div>
+                            <% } %>
+                        </div>
+                    </div>
+
+
+                    <div id="design" class="col s12">
+                        <div class="row" id="interiors_place">
+                            <% for (var i = start; i < interiors.length; i++) { %>
+                            <div class="col s12 m6 l4">
+                                <div class="card medium" id="<%=interiors[i].id%>card">
+                                    <div class="card-image">
+                                        <img src="/images/default.jpg">
+                                        <span class="card-title"><%= interiors[i].name %></span>
+                                    </div>
+                                    <div class="card-content">
+                                        <div> <b>Маркировка: </b> <%= interiors[i].mark %> </div>
+                                        <div> <b>Цена: </b> <%= interiors[i].price %> </div>
+                                        <div> <b>Площадь: </b> <%= interiors[i].space %> </div>
+                                        <div> <b>Количество комнат: </b> <%= interiors[i].number_room %> </div>
+                                    </div>
+                                    <div class="card-action">
+                                        <a href="/admin/projects/<%= interiors[i].id %>">Подробнее</a>
+                                        <a class="waves-effect waves-light" onclick="getProject(<%= interiors[i].id%>, '<%= interiors[i].mark %>')" href="#modalDelete">Удалить</a>
+                                    </div>
+                                </div>
+                            </div>
+                            <% } %>
+                        </div>
+                    </div>
+
+                    <div id="landscape" class="col s12">
+                        <div class="row" id="landscape_place">
+                            <% for (var i = start; i < landscape.length; i++) { %>
+                            <div class="col s12 m6 l4">
+                                <div class="card medium" id="<%=landscape[i].id%>card">
+                                    <div class="card-image">
+                                        <img src="/images/default.jpg">
+                                        <span class="card-title"><%= landscape[i].name %></span>
+                                    </div>
+                                    <div class="card-content">
+                                        <div> <b>Маркировка: </b> <%= landscape[i].mark %> </div>
+                                        <div> <b>Цена: </b> <%= landscape[i].price %> </div>
+                                    </div>
+                                    <div class="card-action">
+                                        <a href="/admin/projects/<%= landscape[i].id %>">Подробнее</a>
+                                        <a class="waves-effect waves-light" onclick="getProject(<%= landscape[i].id%>, '<%= landscape[i].mark %>')" href="#modalDelete">Удалить</a>
+                                    </div>
+                                </div>
+                            </div>
+                            <% } %>
+                        </div>
+                    </div>
+                </div>
+             </div>
 
         <!-- КНОПКИ ДОБАВИТЬ И НАВЕРХ !-->
         <div class="fixed-action-btn button-up">
@@ -130,36 +130,38 @@
                 <div class="row">
                     <div class="input-field col s12">
                         <select id="type" onChange="avaliable(this)">
-                            <option value="" disabled selected>Choose your option</option>
-                            <option value="1">Интерьеры</option>
-                            <option value="2">Проекты</option>
+
+                            <option value="" disabled selected>Выберите тип</option>
+                            <% for (var i = 0; i < type.length; i++) { %>
+                                <option value="<%=type[i].type%>"><%= type[i].name %></option>
+                            <% } %>
                         </select>
                         <label>Выберите тип</label>
                     </div>
                     <div id="material" class="input-field col s12" style="display: none;">
                         <div class="input-field col s12">
                             <textarea id="material_text" class="materialize-textarea"></textarea>
-                            <label for="material_text">Textarea</label>
+                            <label for="material_text">Материалы</label>
                         </div>
                     </div>
                     <div class="input-field col s12 l12 m6">
-                        <input id="name" name="name" type="text" class="validate">
+                        <input id="name" name="name" type="text">
                         <label for="name">Название проекта</label>
                     </div>
                     <div class="input-field col s12 l6 m6">
-                        <input id="mark" name="mark" type="text" class="validate">
+                        <input id="mark" name="mark" type="text">
                         <label for="mark">Маркировка</label>
                     </div>
                     <div class="input-field col s12 l6 m6">
-                        <input id="price" name="price" type="text" class="validate">
+                        <input id="price" name="price" type="number">
                         <label for="price">Цена</label>
                     </div>
-                    <div class="input-field col s12 l6 m6">
-                        <input id="space" name="space" type="text" class="validate">
+                    <div id="space" class="input-field col s12 l6 m6" style="display: none;">
+                        <input id="space" name="space" type="number">
                         <label for="space">Площадь</label>
                     </div>
-                    <div class="input-field col s12 l6 m6">
-                        <input id="number_room" name="number_room" type="text" class="validate">
+                    <div id="room" class="input-field col s12 l6 m6" style="display: none;">
+                        <input id="number_room" name="number_room" type="number">
                         <label for="number_room">Кол-во комнат</label>
                     </div>
                 </div>
@@ -186,205 +188,7 @@
 
     <script type="text/javascript" src="https://code.jquery.com/jquery-2.1.4.min.js"></script>
     <script type="text/javascript" src="/js/materialize.min.js"></script>
-    <script>
-        $(document).ready(function(){
-            $('ul.tabs').tabs();
-            $('.modal-trigger').leanModal();
-            $('select').material_select();
-            $(".button-collapse").sideNav();
-        });
+    <script src="/js/admin_project.js"></script>
 
-        window.onscroll = function(){
-            var scrollBottom = $(document).height() - $(window).height() - $(window).scrollTop();
-            if (scrollBottom == 0){
-                if ($('#designLink').hasClass('active')){
-                    loadInteriors();
-                } else {
-                    loadProjects();
-                }
-            }
-        };
-    </script>
-
-
-
-    <script>
-        var project = {id: undefined, name: undefined}
-        function getProject (projectID, projectName){
-            project.id = projectID;
-            project.name = projectName;
-            deleteProject();
-        }
-
-        function avaliable() {
-            var type = $("#type").val();
-            if (type == 2) {
-                $('#material').css("display", 'block');
-            } else {
-                $('#material').css("display", 'none');
-            }
-        }
-        function addProject() {
-            var material = null;
-            var type = $("#type").val();
-            var name = $('[name="name"]').val();
-            var mark = $('[name="mark"]').val();
-            var price = $('[name="price"]').val();
-            var space = $('[name="space"]').val();
-            var number_room = $('[name="number_room"]').val();
-
-            if (type == 2) {
-                material = $("#material_text").val();
-            }
-
-            $.ajax({
-                type: "POST",
-                url: '/admin/projects/new_project',
-                data: 'type=' + type + '&name=' + name + '&mark=' + mark + '&price=' + price + '&space=' + space + '&number_room=' + number_room + '&material=' + material,
-                success: function (data) {
-                    console.log(data);
-                    if (!data.check) {
-                        Materialize.toast('Неверный пароль', 4000);
-                    } else {
-                        $('#modalAdd').closeModal();
-                        var cardplace;
-                        var materialDiv;
-                        var imageDiv;
-                        var designDiv;
-                        if (type == 1){
-                            cardplace = document.getElementById("interiors_place");
-                            materialDiv ="";
-                            imageDiv =  '<img src="/images/parallax.jpg">';
-                            designDiv = '<div class="card medium design" id="'+data.id+'card"> ';
-
-                        } else {
-                            cardplace = document.getElementById("project_place");
-                            materialDiv = '<div> <b>Материал изделий: </b>'+material+'</div>';
-                            imageDiv =  '<img src="/images/parallax1.jpg">';
-                            designDiv = '<div class="card medium" id="'+data.id+'card">';
-                        }
-
-                        var newcard = "";  // создать новый тег div
-                        newcard = '<div class="col s12 m6 l4">';
-                        newcard += designDiv;
-                        newcard += '<div class="card-image">';
-                        newcard +=  imageDiv;
-                        newcard += '<span class="card-title">'+ name +'</span>';
-                        newcard += '</div>';
-                        newcard += '<div class="card-content">';
-                        newcard += '<div> <b>Маркировка: </b>'+ mark +'</div>';
-                        newcard += '<div> <b>Цена: </b>'+ price +'</div>';
-                        newcard += '<div> <b>Площадь: </b>'+ space + '</div>';
-                        newcard += '<div> <b>Количество комнат: </b>'+ number_room +'</div>';
-                        newcard += materialDiv;
-                        newcard += '</div>';
-                        newcard += '<div class="card-action">';
-                        newcard += '<a href="/admin/projects/'+ data.id +'">Подробнее</a>';
-                        newcard += '<a class="waves-effect waves-light" onclick="getProject('+data.id+')" href="#modalDelete">Удалить</a>';
-                        newcard += '</div>';
-                        newcard += '</div>';
-                        newcard += '</div>';
-                        cardplace.innerHTML += newcard;
-                    }
-                }
-            });
-        }
-        function deleteProject() {
-            $.ajax({
-                type:"DELETE",
-                url:'/admin/projects/delete',
-                data: "id="+project.id,
-                success: function(data){
-                    if (data){
-                        $('#'+project.id+"card").remove();
-                        console.log(data);
-                        Materialize.toast('Проект/интерьер был упсешно удален', 4000);
-                    }
-                }
-            });
-        }
-
-    </script>
-    <!-- Подгрузка интерьеров -->
-    <script>
-        var loadInteriors = function(){
-            $.ajax({
-                type:"GET",
-                url: '/admin/projects/load_interiors/',
-                success: function (interiors) {
-                    if (!interiors){ Materialize.toast('Такой пользователь уже существует', 4000);}
-                    else {
-                        var cardplace = document.getElementById("interiors_place");
-                        var newcard = "";  // создать новый тег div
-                        for (var i = 0; i < interiors.length; i++){
-                            newcard = '<div class="col s12 m6 l4">';
-                            newcard += '<div class="card medium design" id="'+interiors[i].id+'card">';
-                            newcard += '<div class="card-image">';
-                            newcard += '<img src="/images/parallax.jpg">';
-                            newcard += '<span class="card-title">'+ interiors[i].name +'</span>';
-                            newcard += '</div>';
-                            newcard += '<div class="card-content">';
-                            newcard += '<div> <b>Маркировка: </b>'+ interiors[i].mark +'</div>';
-                            newcard += '<div> <b>Цена: </b>'+ interiors[i].price +'</div>';
-                            newcard += '<div> <b>Площадь: </b>'+ interiors[i].space + '</div>';
-                            newcard += '<div> <b>Количество комнат: </b>'+ interiors[i].number_room +'</div>';
-                            newcard += '</div>';
-                            newcard += '<div class="card-action">';
-                            newcard += '<a href="/admin/projects/'+ interiors[i].id +'">Подробнее</a>';
-                            newcard += '<a class="waves-effect waves-light" onclick="getProject('+interiors[i].id+')" href="#modalDelete">Удалить</a>';
-                            newcard += '</div>';
-                            newcard += '</div>';
-                            newcard += '</div>';
-                            cardplace.innerHTML += newcard;
-                        }
-                        //$('.modal-trigger1').leanModal();
-                    }
-                }
-            });
-        }
-    </script>
-    <!-- Подгрузка проектов -->
-    <script>
-        var loadProjects = function(){
-            $.ajax({
-                type:"GET",
-                url: '/admin/projects/load_projects/',
-                success: function (projects) {
-                    if (!projects){ Materialize.toast('Невозможно загрузить проекты', 4000);}
-                    else {
-                        console.log(projects);
-                        var cardplace = document.getElementById("project_place");
-                        var newcard = "";  // создать новый тег div
-                        for (var i = 0; i < projects.length; i++){
-                            newcard = '<div class="col s12 m6 l4">';
-                            newcard += '<div class="card medium" id="'+projects[i].id+'card">';
-                            newcard += '<div class="card-image">';
-                            newcard += '<img src="/images/parallax1.jpg">';
-                            newcard += '<span class="card-title">'+ projects[i].name +'</span>';
-                            newcard += '</div>';
-                            newcard += '<div class="card-content">';
-                            newcard += '<div> <b>Маркировка: </b>'+ projects[i].mark +'</div>';
-                            newcard += '<div> <b>Цена: </b>'+ projects[i].price +'</div>';
-                            newcard += '<div> <b>Площадь: </b>'+ projects[i].space + '</div>';
-                            newcard += '<div> <b>Количество комнат: </b>'+ projects[i].number_room +'</div>';
-                            newcard += '<div> <b>Материал изделий: </b>'+ projects[i].material +'</div>';
-                            newcard += '</div>';
-                            newcard += '<div class="card-action">';
-
-                            newcard += '<a href="/admin/projects/'+ projects[i].id +'">Подробнее</a>';
-                            newcard += '<a class="waves-effect waves-light" onclick="getProject('+projects[i].id+')"  href="#modalDelete">Удалить</a>';
-
-                            newcard += '</div>';
-                            newcard += '</div>';
-                            newcard += '</div>';
-                            cardplace.innerHTML += newcard;
-                        }
-                        //$('.modal-trigger').leanModal();
-                    }
-                }
-            });
-        }
-
-    </script>
 </body>
 </html>

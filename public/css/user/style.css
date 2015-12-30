@@ -37,6 +37,11 @@ header{
 
 }
 
+
+.card-image img {
+  height:300px !important;
+}
+
 .vectorSign {
   position: relative;
   overflow: hidden;
