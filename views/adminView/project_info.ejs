@@ -80,7 +80,7 @@
                 <div class="file-field input-field">
                     <div class="btn">
                         <span>Upload</span>
-                        <input id="photo_chooser" type="file" multiple onchange="uploadPhoto(<%= project.id %> , 0)">
+                        <input id="photo_chooser" type="file" multiple onchange="uploadPhoto(<%= project.id %> , 0); $(this).val('');">
                     </div>
                     <div class="file-path-wrapper">
                         <input class="file-path validate" type="text">
@@ -159,50 +159,55 @@
                         processData: false,
                         contentType: false,
                         success: function(res){
-                            upload(++index);
+                            if (res.status == 'bad'){
 
-                            // удаляем обработку select'ов materialize
-                            var selects = document.getElementsByTagName("select");
-                            for (var i = 1; i < selects.length; i++){
-                                selects[i].parentNode.parentNode.insertBefore(selects[i], selects[i].parentNode.parentNode.children[1]);
-                                selects[i].parentNode.removeChild(selects[i].parentNode.children[0]);
+                            } else {
+                                upload(++index);
+
+                                // удаляем обработку select'ов materialize
+                                var selects = document.getElementsByTagName("select");
+                                for (var i = 1; i < selects.length; i++){
+                                    selects[i].parentNode.parentNode.insertBefore(selects[i], selects[i].parentNode.parentNode.children[1]);
+                                    selects[i].parentNode.removeChild(selects[i].parentNode.children[0]);
+                                }
+
+                                // генерим HTML для нового блока фотографии
+                                var photo_item_html = "";
+                                photo_item_html += '<li class="collection-item" id="' + res.photo_id + 'photo">';
+                                photo_item_html += '    <div class="row padding-top-20">';
+                                photo_item_html += '        <div class="col s4">';
+                                photo_item_html += '            <img class="responsive-img" src="/images/uploaded_files/' + res.filename + '"/>';
+                                photo_item_html += '        </div>';
+                                photo_item_html += '        <div class="input-field col s8">';
+                                photo_item_html += '            <div>';
+                                photo_item_html += '                <select id="image_type' + res.photo_id + '">';
+                                for (var j = 0; j < res.image_types.length; j++) {
+                                    photo_item_html += '                <option value="' + res.image_types[j].id + '">' + res.image_types[j].type_name + '</option>';
+                                }
+                                photo_item_html += '                </select>';
+                                photo_item_html += '                <label for="image_type' + res.photo_id + '">Тип</label>';
+                                photo_item_html += '            </div>';
+                                photo_item_html += '        </div>';
+                                photo_item_html += '        <div class="input-field col l8 m8 s12">';
+                                photo_item_html += '            <textarea id="photo' + res.photo_id + 'desc" name="photo" class="materialize-textarea active"></textarea>';
+                                photo_item_html += '            <label for="photo' + res.photo_id + 'desc">Описание фото</label>';
+                                photo_item_html += '        </div>';
+                                photo_item_html += '        <div class="col l12 m12 s12 right-align">';
+                                photo_item_html += '            <a onclick="updatePhotoInfo(' + res.photo_id + ')" class="waves-effect waves-green btn-flat"> <i class="material-icons">cached</i></a>';
+                                photo_item_html += '            <a onclick="deletePhoto(' + res.photo_id + ')" class="waves-effect waves-red btn-flat"> <i class="material-icons red-text">delete</i></a>';
+                                photo_item_html += '        </div>';
+                                photo_item_html += '    </div>';
+                                photo_item_html += '</li>';
+                                document.getElementById("main_photo").innerHTML += photo_item_html;
+
+                                // добавляем materialize обработку на селекты
+                                $('select').material_select();
                             }
-
-                            // генерим HTML для нового блока фотографии
-                            var photo_item_html = "";
-                            photo_item_html += '<li class="collection-item" id="' + res.photo_id + 'photo">';
-                            photo_item_html += '    <div class="row padding-top-20">';
-                            photo_item_html += '        <div class="col s4">';
-                            photo_item_html += '            <img class="responsive-img" src="/images/uploaded_files/' + res.filename + '"/>';
-                            photo_item_html += '        </div>';
-                            photo_item_html += '        <div class="input-field col s8">';
-                            photo_item_html += '            <div>';
-                            photo_item_html += '                <select id="image_type' + res.photo_id + '">';
-                            for (var j = 0; j < res.image_types.length; j++) {
-                                photo_item_html += '                <option value="' + res.image_types[j].id + '">' + res.image_types[j].type_name + '</option>';
-                            }
-                            photo_item_html += '                </select>';
-                            photo_item_html += '                <label for="image_type' + res.photo_id + '">Тип</label>';
-                            photo_item_html += '            </div>';
-                            photo_item_html += '        </div>';
-                            photo_item_html += '        <div class="input-field col l8 m8 s12">';
-                            photo_item_html += '            <textarea id="photo' + res.photo_id + 'desc" name="photo" class="materialize-textarea active"></textarea>';
-                            photo_item_html += '            <label for="photo' + res.photo_id + 'desc">Описание фото</label>';
-                            photo_item_html += '        </div>';
-                            photo_item_html += '        <div class="col l12 m12 s12 right-align">';
-                            photo_item_html += '            <a onclick="updatePhotoInfo(' + res.photo_id + ')" class="waves-effect waves-green btn-flat"> <i class="material-icons">cached</i></a>';
-                            photo_item_html += '            <a onclick="deletePhoto(' + res.photo_id + ')" class="waves-effect waves-red btn-flat"> <i class="material-icons red-text">delete</i></a>';
-                            photo_item_html += '        </div>';
-                            photo_item_html += '    </div>';
-                            photo_item_html += '</li>';
-                            document.getElementById("main_photo").innerHTML += photo_item_html;
-
-                            // добавляем materialize обработку на селекты
-                            $('select').material_select();
                         }
                     });
                 } else {
-                        Materialize.toast(files.length + " фото загружено на сервер", 3000);
+                    document.getElementById("photo_chooser").innerHTML = '';
+                    Materialize.toast(files.length + " фото загружено на сервер", 3000);
                 }
             }
             upload(0);

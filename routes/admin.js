@@ -4,6 +4,8 @@ var passwordHash = require('password-hash');
 var async = require('async');
 var fs = require("fs");
 var multiparty = require('multiparty');
+var im = require('imagemagick');
+
 
 //                  ******************** управление пользователями ***********************
 router.get('/admin', function(req,res){
@@ -145,6 +147,15 @@ router.post('/admin/projects/upload_photo/:proj_id', function(req, res) {
     form.on('close', function() {
         //если нет ошибок и все хорошо
         if(errors.length == 0) {
+            knexSQL('images').insert({projects_id: req.params.proj_id}).returning('id').then(function (id) {
+                // апдейт имени нового изображения и ренейм файла на серве
+                knexSQL('images').select().where({id: id}).update({image_name: id + uploadFile.format}).then(function () {
+                    fs.renameSync(uploadFile.path, uploadDir + id + uploadFile.format);
+                    knexSQL('type_images').select().then(function(imgtypes){
+                        res.send({photo_id : id, filename: id + uploadFile.format, image_types : imgtypes});
+                    });
+                });
+            });
         }
         else {
             if(fs.existsSync(uploadFile.path)) {
@@ -187,15 +198,6 @@ router.post('/admin/projects/upload_photo/:proj_id', function(req, res) {
 
     // парсим форму
     form.parse(req);
-    knexSQL('images').insert({projects_id: req.params.proj_id}).returning('id').then(function (id) {
-        // апдейт имени нового изображения и ренейм файла на серве
-        knexSQL('images').select().where({id: id}).update({image_name: id + uploadFile.format}).then(function () {
-            fs.renameSync(uploadFile.path, uploadDir + id + uploadFile.format);
-            knexSQL('type_images').select().then(function(imgtypes){
-                res.send({photo_id : id, filename: id + uploadFile.format, image_types : imgtypes});
-            });
-        });
-    });
 });
 router.post('/admin/projects/load_photo', function(req, res) {
     knexSQL('images').select().where({projects_id: req.body.project_id}).then(function(photos){
