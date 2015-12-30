@@ -364,6 +364,7 @@ router.get('/admin/projects/:id', function(req, res){
 
 
 
+
 router.get('/logout', function(req, res){
     req.session.destroy();
     res.redirect('/');

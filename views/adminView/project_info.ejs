@@ -98,8 +98,8 @@
                 </form>
 
 
-                <div  id='preloader' class="progress" style="display: none">
-                    <div class="indeterminate"></div>
+                <div  id='preloader' class="progress  blue lighten-5" style="display: none">
+                    <div class="indeterminate blue"></div>
                 </div>
 
 
@@ -111,14 +111,14 @@
                                 <img style="height: 100%" src="/images/uploaded_files/<%= photos[i].image_name %>"/>
                             </div>
                             <ul class="card-action-buttons">
-                                <li><a onclick="deletePhoto(<%= photos[i].id %>);" class="btn-floating waves-effect waves-light red accent-1"><i class="material-icons">close</i></a>
+                                <li><a onclick="deletePhoto(<%= photos[i].id %>);" class="btn-floating waves-effect waves-light red"><i class="material-icons">close</i></a>
                                 </li>
 
                             </ul>
                             <div class="card-content overflow-none">
                                 <div class="input-field">
                                     <div>
-                                        <select id="image_type<%= photos[i].id %>">
+                                        <select onChange="update(this,<%= photos[i].id %>)" id="image_type<%= photos[i].id %>">
                                             <% for (var j = 0; j < image_types.length; j++) {
                                             if (image_types[j].id == photos[i].type_images_id) { %>
                                             <option value="<%= image_types[j].id %>"><%= image_types[j].type_name %></option>
@@ -130,9 +130,6 @@
                                         </select>
                                     </div>
                                 </div>
-                            </div>
-                            <div class="card-action left-align">
-                                <a onclick="updatePhotoInfo(<%= photos[i].id %>)" class="waves-effect waves-green btn-flat icon-btn"> <i class="material-icons">cached</i></a>
                             </div>
                         </div>
                     </div>
@@ -198,21 +195,18 @@
                                 photo_item_html += '            <img style="height: 100%" src="/images/uploaded_files/'+res.filename+'"/>';
                                 photo_item_html += '        </div>';
                                 photo_item_html += '        <ul class="card-action-buttons">';
-                                photo_item_html += '            <li><a onclick="deletePhoto('+res.photo_id+');" class="btn-floating waves-effect waves-light red accent-1"><i class="material-icons">close</i></a></li>';
+                                photo_item_html += '            <li><a onclick="deletePhoto('+res.photo_id+');" class="btn-floating waves-effect waves-light red"><i class="material-icons">close</i></a></li>';
                                 photo_item_html += '        </ul>';
                                 photo_item_html += '        <div class="card-content overflow-none"> ';
                                 photo_item_html += '            <div class="input-field">';
                                 photo_item_html += '                <div>'
-                                photo_item_html += '                <select id="image_type' + res.photo_id + '">';
+                                photo_item_html += '                <select onChange="update(this,'+res.photo_id +')" id="image_type' + res.photo_id + '">';
                                 for (var j = 0; j < res.image_types.length; j++) {
                                     photo_item_html += '                <option value="' + res.image_types[j].id + '">' + res.image_types[j].type_name + '</option>';
                                 }
                                 photo_item_html += '                </select>';
                                 photo_item_html += '                </div>';
                                 photo_item_html += '            </div>';
-                                photo_item_html += '        </div>';
-                                photo_item_html += '        <div class="card-action left-align">';
-                                photo_item_html += '            <a onclick="updatePhotoInfo('+ res.photo_id+ ')" class="waves-effect waves-green btn-flat icon-btn"> <i class="material-icons">cached</i></a>';
                                 photo_item_html += '        </div>';
                                 photo_item_html += '        </div>';
                                 photo_item_html += '    </div>';
@@ -225,29 +219,13 @@
                     });
                 } else {
                     $('#preloader').css("display", "none");
-                    Materialize.toast("фотографии загружены на сервер", 3000);
+                    Materialize.toast("фотографии загружены на сервер", 1000);
                 }
             }
             upload(0);
         }
     }
-    var updatePhotoInfo = function(photo_id){
-        var type = $("#image_type" + photo_id).val();
-        var description = $("#photo" + photo_id + "desc").val();
-        console.log(type);
-        $.ajax({
-            type: "POST",
-            url: '/admin/projects/update_photo/',
-            data: 'id='+ photo_id +'&type=' + type + '&description=' + description,
-            success: function (data) {
-                if (!data) {
-                    Materialize.toast('Не удалось изменить информацию о фото', 3000);
-                } else {
-                    Materialize.toast('Информация о фото изменена', 3000);
-                }
-            }
-        });
-    }
+
     var deletePhoto = function(photo_id){
         $.ajax({
             type: "POST",
@@ -255,10 +233,10 @@
             data: 'id='+ photo_id,
             success: function (data) {
                 if (!data) {
-                    Materialize.toast('Не удалось удалить фото', 3000);
+                    Materialize.toast('Не удалось удалить фото', 1000);
                 } else {
                     $('#'+photo_id+'photo').remove();
-                    Materialize.toast('Фотография удалена', 3000);
+                    Materialize.toast('Фотография удалена', 1000);
                 }
             }
         });
@@ -278,12 +256,23 @@
             data: 'id='+ id +'&type=' + type + '&name=' + name + '&mark=' + mark + '&price=' + price + '&space=' + space + '&number_room=' + number_room + '&material=' + material + '&description=' + description,
             success: function (data) {
                 if (!data) {
-                    Materialize.toast('Не удалось сохранить изменения', 3000);
+                    Materialize.toast('Не удалось сохранить изменения', 1000);
                 } else {
-                    Materialize.toast('Изменения сохранены', 3000);
+                    Materialize.toast('Изменения сохранены', 1000);
                 }
             }
         });
+    }
+    function update(obj, id) {
+        var type = $("#image_type"+id).val();
+        $.ajax({
+            type: "POST",
+            url: '/admin/projects/update_photo',
+            data: 'id='+id+'&type='+type,
+            success: function (data){
+                Materialize.toast('Тип успешно изменен.', 1000);
+            }
+        })
     }
 
 </script>

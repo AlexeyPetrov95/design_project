@@ -85,7 +85,7 @@ main {
 .padding-top-20 { padding-top: 20px; }
 
 ul.card-action-buttons{
-    margin: -26px 10px 0px 0px;
+    margin: -20px 6px 0px 0px;
     text-align: right;
 }
 ul.card-action-buttons li{
