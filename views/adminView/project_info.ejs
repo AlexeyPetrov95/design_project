@@ -87,6 +87,42 @@
                     </div>
                 </div>
             </form>
+            <!-- <div id="main_photo" class="row">
+
+                <% for (var i = 0; i < photos.length; i++) { %>
+                <div class="row">
+                    <div class="col s3 m3 l3">
+                        <image width="100%" src="/images/uploaded_files/<%= photos[i].image_name %>"></image>
+                    </div>
+                    <div class="input-field col s6 l6 m6" height="100%">
+                        <textarea id="photo<%= photos[i].id %>desc" name="photo" class="materialize-textarea active"><%= photos[i].image_description %></textarea>
+                        <label for="photo<%= photos[i].id %>desc">Описание фото</label>
+                    </div>
+                    <div class="input-field col s3 l3 m3">
+                        <div>
+                            <select id="image_type<%= photos[i].id %>">
+
+                                <% for (var j = 0; j < image_types.length; j++) {
+                                if (image_types[j].id == photos[i].type_images_id) { %>
+                                <option value="<%= image_types[j].id %>"><%= image_types[j].type_name %></option>
+                                <%}} %>
+
+                                <% for (var j = 0; j < image_types.length; j++) {
+                                if (image_types[j].id != photos[i].type_images_id) { %>
+                                <option value="<%= image_types[j].id %>"><%= image_types[j].type_name %></option>
+                                <% }} %>
+                            </select>
+                            <label for="image_type<%= photos[i].id %>">Тип</label>
+                        </div>
+                        <div>
+                            <a onclick="updatePhotoInfo(<%= photos[i].id %>)" class="waves-effect waves-green btn-flat">Изменить</a>
+                            <a onclick="deletePhoto(<%= photos[i].id %>); loadPhotos(<%= project.id %>);" class="waves-effect waves-red btn-flat">Удалить</a>
+                        </div>
+                    </div>
+                </div>
+                <% } %>
+            </div> !-->
+
 
             <!-- ВЫГРУЗКА ФОТО !-->
             <ul class="collection" id="main_photo">
@@ -99,10 +135,12 @@
                             <div class="input-field col s8">
                                 <div>
                                     <select id="image_type<%= photos[i].id %>">
+
                                         <% for (var j = 0; j < image_types.length; j++) {
                                         if (image_types[j].id == photos[i].type_images_id) { %>
                                         <option value="<%= image_types[j].id %>"><%= image_types[j].type_name %></option>
-                                        <% }} %>
+                                        <%}} %>
+
                                         <% for (var j = 0; j < image_types.length; j++) {
                                         if (image_types[j].id != photos[i].type_images_id) { %>
                                         <option value="<%= image_types[j].id %>"><%= image_types[j].type_name %></option>
@@ -140,17 +178,22 @@
 
     var uploadPhoto = function(project_id, type){
         var files = document.getElementById("photo_chooser").files;
-        if (!files) { Materialize.toast('Не выбраны файлы для загрузки', 3000); return; }
+        if (!files) { Materialize.toast('No files', 4000); return; }
         else
         {
-            var data = [];
-            for (var i = 0; i < files.length; i++){
-                data[i] = new FormData();
-                data[i].append('uploadFile', files[i]);
-                console.log(data);
-            }
-            var upload = function(index){
-                if (index < data.length){
+            var data = new FormData();
+            //Добавлем туда файл
+            data.append('uploadFile', files[0]);
+
+            $.ajax({
+                type: "POST",
+                url: "/admin/projects/upload_photo/",
+                data: data,
+                cache: false,
+                processData: false,
+                contentType: false,
+                success: function(data) {
+
                     $.ajax({
                         type: "POST",
                         url: "/admin/projects/upload_photo/"+project_id ,
@@ -210,22 +253,21 @@
                     Materialize.toast(files.length + " фото загружено на сервер", 3000);
                 }
             }
-            upload(0);
-        }
+        });
     }
     var updatePhotoInfo = function(photo_id){
         var type = $("#image_type" + photo_id).val();
         var description = $("#photo" + photo_id + "desc").val();
-        console.log(type);
+
         $.ajax({
             type: "POST",
             url: '/admin/projects/update_photo/',
             data: 'id='+ photo_id +'&type=' + type + '&description=' + description,
             success: function (data) {
                 if (!data) {
-                    Materialize.toast('Не удалось изменить информацию о фото', 3000);
+                    Materialize.toast('Не удалось изменить информацию о фото', 4000);
                 } else {
-                    Materialize.toast('Информация о фото изменена', 3000);
+                    Materialize.toast('Информация о фото изменена', 4000);
                 }
             }
         });
@@ -237,10 +279,10 @@
             data: 'id='+ photo_id,
             success: function (data) {
                 if (!data) {
-                    Materialize.toast('Не удалось удалить фото', 3000);
+                    Materialize.toast('Не удалось удалить фото', 4000);
                 } else {
                     $('#'+photo_id+'photo').remove();
-                    Materialize.toast('Фотография удалена', 3000);
+                    Materialize.toast('Фотография удалена', 4000);
                 }
             }
         });
@@ -260,9 +302,9 @@
             data: 'id='+ id +'&type=' + type + '&name=' + name + '&mark=' + mark + '&price=' + price + '&space=' + space + '&number_room=' + number_room + '&material=' + material + '&description=' + description,
             success: function (data) {
                 if (!data) {
-                    Materialize.toast('Не удалось сохранить изменения', 3000);
+                    Materialize.toast('Не удалось сохранить изменения', 4000);
                 } else {
-                    Materialize.toast('Изменения сохранены', 3000);
+                    Materialize.toast('Изменения сохранены', 4000);
                 }
             }
         });
