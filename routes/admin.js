@@ -130,9 +130,6 @@ router.post('/admin/projects/upload_photo/:proj_id', function(req, res) {
                 // апдейт имени нового изображения и ренейм файла на серве
                 knexSQL('images').select().where({id: id}).update({image_name: id + uploadFile.format}).then(function () {
                     fs.renameSync(uploadFile.path, uploadDir + id + uploadFile.format);
-                    knexSQL('type_images').select().then(function(imgtypes){
-                        res.send({photo_id : id, filename: id + uploadFile.format, image_types : imgtypes});
-                    });
                     gm(uploadDir+id+uploadFile.format)
                         .resize(900, 600)
                         .write(uploadDir+id+uploadFile.format, function (err) {
