@@ -91,6 +91,16 @@ nav ul li a:hover, nav ul li.activeCustom{
   width: 600px;
 }
 
+.text-information{
+  font-family: 'Bad Script', cursive;
+  width: 800px;
+  z-index: 50;
+  margin: 0 auto;
+  font-size: 28px;
+  color: white;
+  padding: 20px;
+}
+
 .bottom{
   position: absolute;
   bottom: 0;

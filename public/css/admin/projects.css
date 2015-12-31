@@ -31,10 +31,6 @@ main {
     padding-left: 240px;
 }
 
-.card-image {
-    height: 200px;
-}
-
 .card .card-title {
     font-size: 20px !important;
 }
@@ -78,6 +74,22 @@ main {
     left: 264px !important;
 }
 
+.custom-select{
+    position: relative !important;
+    cursor: pointer !important;
+    border: none !important;
+    background: white !important;
+    border-bottom: 1px solid #9e9e9e !important;
+    outline: none !important;
+    height: 3rem !important;
+    line-height: 3rem !important;
+    width: 100% !important;
+    font-size: 1rem !important;
+    margin: 0 0 15px 0 !important;
+    padding: 0 !important;
+    display: block !important;
+}
+
 .margin-20 { margin: 20px 0;}
 .margin-50 { margin: 50px 0;}
 .margin-50 { margin: 50px auto;}
@@ -87,6 +99,8 @@ main {
 ul.card-action-buttons{
     margin: -20px 6px 0px 0px;
     text-align: right;
+    position: absolute;
+    right: 0;
 }
 ul.card-action-buttons li{
     display: inline-block;

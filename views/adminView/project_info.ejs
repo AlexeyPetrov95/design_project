@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <html>
 <head>
+    <meta charset="utf-8"/>
     <title></title>
     <link rel='stylesheet' href='/css/admin/projects.css' />
     <link href="http://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
@@ -37,32 +38,32 @@
                         <label>Тип</label>
                     </div>
                     <div class="input-field col s12 l6 m6">
-                        <input id="name" name="name" type="text" class="validate" value="<%= project.name %>">
+                        <input id="name" name="name" type="text"  value="<%= project.name %>">
                         <label for="name">Название проекта</label>
                     </div>
                     <div class="input-field col s12 l6 m6">
-                        <input id="mark" name="mark" type="text" class="validate" value="<%= project.mark %>">
+                        <input id="mark" name="mark" type="text"  value="<%= project.mark %>">
                         <label for="mark">Маркировка</label>
                     </div>
                     <% if (type == 'projects') { %>
                     <div class="input-field col s12 l12 m6">
-                        <input id="material" name="material" type="text" class="validate" value="<%= project.material %>">
+                        <input id="material" name="material" type="text" value="<%= project.material %>">
                         <label for="material">Материалы</label>
                     </div>
                     <% } %>
                     <div class="input-field col s12 l4 m6">
-                        <input id="price" name="price" type="text" class="validate" value="<%= project.price %>">
+                        <input id="price" name="price" type="text" value="<%= project.price %>">
                         <label for="price">Цена</label>
                     </div>
                     <% if (type == 'projects' || type == 'design') { %>
                     <div class="input-field col s12 l4 m6">
-                        <input id="space" name="space" type="text" class="validate" value="<%= project.space %>">
+                        <input id="space" name="space" type="text" value="<%= project.space %>">
                         <label for="space">Площадь</label>
                     </div>
                     <% } %>
                     <% if (type == 'projects' || type == 'design') { %>
                     <div class="input-field col s12 l4 m6">
-                        <input id="number_room" name="number_room" type="text" class="validate" value="<%= project.number_room %>">
+                        <input id="number_room" name="number_room" type="text" value="<%= project.number_room %>">
                         <label for="number_room">Кол-во комнат</label>
                     </div>
                     <% } %>
@@ -87,7 +88,7 @@
             <div class="row padding-top-20">
                 <form class="col s12 m12 l12" action="#">
                     <div class="file-field input-field">
-                        <div class="btn">
+                        <div class="btn light-blue accent-2">
                             <span>Upload</span>
                             <input id="photo_chooser" type="file"  multiple onchange="uploadPhoto(<%= project.id %> , 0); $(this).val('')">
                         </div>
@@ -108,7 +109,7 @@
                     <div class="col s12 m6 l4" id="<%= photos[i].id %>photo">
                         <div class="card">
                             <div class="card-image">
-                                <img style="height: 100%" src="/images/uploaded_files/<%= photos[i].image_name %>"/>
+                                <img style="height: 100%" src="/images/uploaded_files/<%= photos[i].mini_name %>"/>
                             </div>
                             <ul class="card-action-buttons">
                                 <li><a onclick="deletePhoto(<%= photos[i].id %>);" class="btn-floating waves-effect waves-light red"><i class="material-icons">close</i></a>
@@ -118,7 +119,7 @@
                             <div class="card-content overflow-none">
                                 <div class="input-field">
                                     <div>
-                                        <select onChange="update(this,<%= photos[i].id %>)" id="image_type<%= photos[i].id %>">
+                                        <select class="browser-default custom-select" onChange="update(this,<%= photos[i].id %>)" id="image_type<%= photos[i].id %>">
                                             <% for (var j = 0; j < image_types.length; j++) {
                                             if (image_types[j].id == photos[i].type_images_id) { %>
                                             <option value="<%= image_types[j].id %>"><%= image_types[j].type_name %></option>
@@ -192,7 +193,7 @@
                                 photo_item_html += '<div class="col s12 m6 l4" id="'+res.photo_id+'photo">';
                                 photo_item_html += '     <div class="card" id="main_photo">';
                                 photo_item_html += '         <div class="card-image">';
-                                photo_item_html += '            <img style="height: 100%" src="/images/uploaded_files/'+res.filename+'"/>';
+                                photo_item_html += '            <img style="height: 100%" src="/images/uploaded_files/'+res.mini_name + '"/>';
                                 photo_item_html += '        </div>';
                                 photo_item_html += '        <ul class="card-action-buttons">';
                                 photo_item_html += '            <li><a onclick="deletePhoto('+res.photo_id+');" class="btn-floating waves-effect waves-light red"><i class="material-icons">close</i></a></li>';
@@ -200,7 +201,7 @@
                                 photo_item_html += '        <div class="card-content overflow-none"> ';
                                 photo_item_html += '            <div class="input-field">';
                                 photo_item_html += '                <div>'
-                                photo_item_html += '                <select onChange="update(this,'+res.photo_id +')" id="image_type' + res.photo_id + '">';
+                                photo_item_html += '                <select class="browser-default custom-select" onChange="update(this,'+res.photo_id +')" id="image_type' + res.photo_id + '">';
                                 for (var j = 0; j < res.image_types.length; j++) {
                                     photo_item_html += '                <option value="' + res.image_types[j].id + '">' + res.image_types[j].type_name + '</option>';
                                 }
