@@ -69,10 +69,7 @@ router.delete('/admin/delete_user', function(req, res){
 });
 
 //                  ******************** управление пользователями ***********************
-
-
 //                  ******************** проекты ***********************
-
 
 // сделать по типам !!!!
 router.post('/admin/projects/new_project', function (req, res) {
@@ -113,10 +110,10 @@ router.post('/admin/projects/upload_photo/:proj_id', function(req, res) {
     var uploadFile = {path: '', type: '', size: 0};
     var maxSize = 10 * 1024 * 1024; //10MB
     var supportMimeTypes = ['image/jpg', 'image/jpeg', 'image/png'];
-    var uploadDir = './public/images/uploaded_files/';
     var errors = [];
-    var prefixName = '_upload';
     var cropSize = {width: 800, height: 500};
+    var uploadDir = 'public/images/uploaded_files/'
+    var prefix = 'uploaded';
 
     //если произошла ошибка
     form.on('error', function(err){
@@ -126,6 +123,7 @@ router.post('/admin/projects/upload_photo/:proj_id', function(req, res) {
             console.log('error');
         }
     });
+
     form.on('close', function() {
         //если нет ошибок и все хорошо
         if(errors.length == 0) {
@@ -181,15 +179,16 @@ router.post('/admin/projects/upload_photo/:proj_id', function(req, res) {
             res.send({status: 'bad', errors: errors});
         }
     });
+
     // при поступление файла
     form.on('part', function(part) {
         //читаем его размер в байтах
         uploadFile.size = part.byteCount;
         //читаем его тип
         uploadFile.type = part.headers['content-type'];
-        uploadFile.format = part.filename.slice(part.filename.lastIndexOf("."));
         //путь для сохранения файла
-        uploadFile.path = uploadDir + prefixName + uploadFile.format;
+        uploadFile.format = part.filename.slice(part.filename.lastIndexOf("."));
+        uploadFile.path = uploadDir + prefix;
 
         //проверяем размер файла, он не должен быть больше максимального размера
         if (uploadFile.size > maxSize) {
@@ -278,7 +277,8 @@ router.get('/admin/projects/', function (req, res) {
                 });
             }, function (projects, interiors, callback){
                 knexSQL('type').select().where({type: 'landscape'}).then(function(type) {
-                    knexSQL('projects').select().where({type_id: type[0].id}).limit(count).offset(landscapeOffset).then(function (landscape) {
+
+                    knexSQL('projects').select().where({type_id: type.id}).limit(count).offset(landscapeOffset).then(function (landscape) {
                         if (!landscape) {
                             res.send(500);
                         } else {
@@ -291,7 +291,7 @@ router.get('/admin/projects/', function (req, res) {
             interiorsOffset += count;
             projectOffset += count;
             landscapeOffset += count;
-            knexSQL().select().from('type').then (function (type) {
+            knexSQL('type').select().then (function (type) {
                 res.render('adminView/projects.ejs', {
                     title: "Проекты/Интерьеры/Ландшафты",
                     projects: projects,
@@ -302,8 +302,6 @@ router.get('/admin/projects/', function (req, res) {
             });
         });
 });
-
-
 
 // убрать тип наифиг, искать по имени!!!!!
 
@@ -320,7 +318,6 @@ router.get('/admin/projects/load_projects', function (req, res) {
        });
    })
 });
-
 
 router.get('/admin/projects/load_landscape', function (req, res) {
     knexSQL().select().from('type').where({type: 'landscape'}).then(function (type) {
@@ -346,8 +343,6 @@ router.get('/admin/projects/load_interiors', function (req, res) {
         });
     })
 });
-
-
 
 router.delete('/admin/projects/delete', function(req, res){
     knexSQL('images').where({projects_id: req.body.id}).then(function (images) {
@@ -387,11 +382,25 @@ router.get('/admin/projects/:id', function(req, res){
 });
 
 
-
-
 router.get('/logout', function(req, res){
     req.session.destroy();
     res.redirect('/');
 });
+
+//        ******* Внешний вид ********
+
+router.get('/admin/view_list/', function (req, res) {
+    knexSQL('type').select().then(function(types){
+        knexSQL('projects').select().then(function (projects) {
+            res.render('adminView/view_list.ejs', {
+               title: "Внешний вид",
+               projects: projects,
+               types: types
+            });
+        });
+    })
+});
+
+
 
 module.exports = router;

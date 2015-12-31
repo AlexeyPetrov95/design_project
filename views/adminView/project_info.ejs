@@ -81,8 +81,6 @@
                 </div>
             </div>
         </div>
-
-
         <!-- РАЗДЕЛ ФОТО !-->
         <div id="photo" class="col s12">
             <div class="row padding-top-20">
@@ -90,7 +88,7 @@
                     <div class="file-field input-field">
                         <div class="btn light-blue accent-2">
                             <span>Upload</span>
-                            <input id="photo_chooser" type="file"  multiple onchange="uploadPhoto(<%= project.id %> , 0); $(this).val('')">
+                            <input id="photo_chooser" type="file"  multiple onchange="uploadPhoto(<%= project.id %> ); $(this).val('')">
                         </div>
                         <div class="file-path-wrapper">
                             <input class="file-path validate" type="text">
@@ -99,10 +97,10 @@
                 </form>
 
 
+
                 <div  id='preloader' class="progress  blue lighten-5" style="display: none">
                     <div class="indeterminate blue"></div>
                 </div>
-
 
                 <div class="row" id="main_photo">
                     <% for (var i = 0; i < photos.length; i++) { %>
@@ -111,6 +109,7 @@
                             <div class="card-image">
                                 <img style="height: 100%" src="/images/uploaded_files/<%= photos[i].mini_name %>"/>
                             </div>
+
                             <ul class="card-action-buttons">
                                 <li><a onclick="deletePhoto(<%= photos[i].id %>);" class="btn-floating waves-effect waves-light red"><i class="material-icons">close</i></a>
                                 </li>
@@ -136,13 +135,9 @@
                     </div>
                     <% } %>
                 </div>
-
             </div>
         </div>
     </div>
-
-
-
 </main>
 
 
@@ -153,11 +148,17 @@
         $('ul.tabs').tabs();
         $('.modal-trigger').leanModal();
         $('select').material_select();
+        var selects = document.getElementsByTagName("select");
+        for (var i = 1; i < selects.length; i++) {
+            selects[i].parentNode.parentNode.insertBefore(selects[i], selects[i].parentNode.parentNode.children[1]);
+            selects[i].parentNode.removeChild(selects[i].parentNode.children[0]);
+        }
+        $('select').material_select();
     });
 
-    var uploadPhoto = function(project_id, type){
+    var uploadPhoto = function(project_id){
         var files = document.getElementById("photo_chooser").files;
-        if (!files) { Materialize.toast('Не выбраны файлы для загрузки', 3000); return; }
+        if (!files) { Materialize.toast('No files', 4000); return; }
         else
         {
             var data = [];
@@ -177,20 +178,17 @@
                         beforeSend: function(){
                             $('#preloader').css("display", "block");
                         },
-
                         success: function(res){
+                            console.log(index);
+
                             upload(++index);
                             if (res.status == 'bad'){ Materialize.toast("Ошибка при загрузке", 3000); }
                             else {
-                                var selects = document.getElementsByTagName("select");
-                                for (var i = 1; i < selects.length; i++){
-                                    selects[i].parentNode.parentNode.insertBefore(selects[i], selects[i].parentNode.parentNode.children[1]);
-                                    selects[i].parentNode.removeChild(selects[i].parentNode.children[0]);
-                                }
-
                                 // генерим HTML для нового блока фотографии
+                                var photo_item = document.createElement("div");
+                                photo_item.className = "col s12 m6 l4";
+                                photo_item.setAttribute("id", res.photo_id+"photo");
                                 var photo_item_html = "";
-                                photo_item_html += '<div class="col s12 m6 l4" id="'+res.photo_id+'photo">';
                                 photo_item_html += '     <div class="card" id="main_photo">';
                                 photo_item_html += '         <div class="card-image">';
                                 photo_item_html += '            <img style="height: 100%" src="/images/uploaded_files/'+res.mini_name + '"/>';
@@ -211,20 +209,20 @@
                                 photo_item_html += '        </div>';
                                 photo_item_html += '        </div>';
                                 photo_item_html += '    </div>';
-                                photo_item_html += '<div>';
-                                document.getElementById("main_photo").innerHTML += photo_item_html;
-                                // добавляем materialize обработку на селекты
-                                $('select').material_select();
+                                photo_item.innerHTML = photo_item_html;
+                                document.getElementById("main_photo").appendChild(photo_item);
                             }
                         }
                     });
                 } else {
+                    // добавляем materialize обработку на селекты
+                    $('select').material_select();
                     $('#preloader').css("display", "none");
                     Materialize.toast("фотографии загружены на сервер", 1000);
                 }
             }
             upload(0);
-        }
+        };
     }
 
     var deletePhoto = function(photo_id){
@@ -277,7 +275,5 @@
     }
 
 </script>
-<!-- Подгрузка интерьеров -->
-
 </body>
 </html>
