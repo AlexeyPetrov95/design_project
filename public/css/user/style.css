@@ -64,22 +64,36 @@ header{
 nav {
   font-family: 'Roboto' sans-serif;
   font-weight: 300;
-  font-size: 13px;
+  font-size: 18px !important;
   z-index: 500 !important;
+  background: rgba(0,0,0,0.6) !important;
 }
 
 nav ul li a {
-  color: black;
+  color: white;
 }
 
-nav ul li a:hover, nav ul li.activeCustom{
-  opacity: 1 !important;
-  background-color: #ffb300;
+nav ul a{
+  font-size: 18px !important;
+  border-bottom: 2px solid transparent;
+}
+
+.right{
+  margin-right: 40px;
+}
+
+nav ul li:hover, nav ul li.active{
+  background: transparent !important;
+}
+
+nav ul li a:hover, nav ul li a.activeCustom{
+  background: transparent !important;
+  border-bottom:  2px solid white;
 }
 
 .side-nav li:hover, .side-nav li.active {
-  opacity: 1 !important;
-  background-color: #ffb300 !important;
+  background: transparent !important;
+  border-bottom:  2px solid white;
 }
 
 .aboutus{

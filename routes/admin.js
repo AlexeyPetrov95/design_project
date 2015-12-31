@@ -277,8 +277,7 @@ router.get('/admin/projects/', function (req, res) {
                 });
             }, function (projects, interiors, callback){
                 knexSQL('type').select().where({type: 'landscape'}).then(function(type) {
-
-                    knexSQL('projects').select().where({type_id: type.id}).limit(count).offset(landscapeOffset).then(function (landscape) {
+                    knexSQL('projects').select().where({type_id: type[0].id}).limit(count).offset(landscapeOffset).then(function (landscape) {
                         if (!landscape) {
                             res.send(500);
                         } else {
@@ -347,7 +346,8 @@ router.get('/admin/projects/load_interiors', function (req, res) {
 router.delete('/admin/projects/delete', function(req, res){
     knexSQL('images').where({projects_id: req.body.id}).then(function (images) {
         for (var i = 0; i < images.length; i++){
-            fs.unlinkSync('./public/images/uploaded_files/'+ images[i].image_name);
+            fs.unlinkSync('./public/images/uploaded_files/'+ images[i].image_name); // асинхронный !
+            fs.unlinkSync('./public/images/uploaded_files/' + images[i].mini_name); // асинхронный !
         }
         knexSQL('images').where({projects_id: req.body.id}).del().then(function(x){
             knexSQL('projects').where('id', req.body.id).del().then(function (check) {
