@@ -35,7 +35,7 @@ function deleteProject() {
             if (data){
                 $('#'+project.id+"card").remove();
                 console.log(data);
-                Materialize.toast('Проект/интерьер был упсешно удален', 4000);
+                Materialize.toast('Проект/интерьер был упсешно удален', 1000);
             }
         }
     });
@@ -68,7 +68,7 @@ function validate (material, type, name, mark, price, space, number_room){
             Materialize.toast('Не все поля заполнены.', 4000);
             return false;
         } else if (!$.isNumeric(price) || !$.isNumeric(space) || !$.isNumeric(number_room)) {
-            Materialize.toast('Неверный формат полей. Цена, плоащадь, кол-во комнат - число!', 4000);
+            Materialize.toast('Неверный формат полей. Цена, плоащадь, кол-во комнат - число!', 1000);
             return false;
         } else { return true; }
     } else if (type == 'projects') {
@@ -76,7 +76,7 @@ function validate (material, type, name, mark, price, space, number_room){
             Materialize.toast('Не все поля заполнены.', 4000);
             return false;
         } else if (!$.isNumeric(price) || !$.isNumeric(space) || !$.isNumeric(number_room)) {
-            Materialize.toast('Неверный формат полей. Цена, плоащадь, кол-во комнат - число!', 4000);
+            Materialize.toast('Неверный формат полей. Цена, плоащадь, кол-во комнат - число!', 1000);
             return false;
         } else { return true; }
     } else if (type == 'landscape') {
@@ -84,7 +84,7 @@ function validate (material, type, name, mark, price, space, number_room){
             Materialize.toast('Не все поля заполнены.', 4000);
             return false;
         } else if (!$.isNumeric(price)) {
-            Materialize.toast('Неверный формат полей. Цена, плоащадь, кол-во комнат - число!', 4000);
+            Materialize.toast('Неверный формат полей. Цена, плоащадь, кол-во комнат - число!', 1000);
             return false;
         } else { return true; }
     }
@@ -179,7 +179,7 @@ function loadInteriors(){
         type:"GET",
         url: '/admin/projects/load_interiors/',
         success: function (interiors) {
-            if (!interiors){ Materialize.toast('Ошибка', 4000);}
+            if (!interiors){ Materialize.toast('Ошибка', 1000);}
             else {
                 addDiv(interiors, 'design');
             }
@@ -192,7 +192,7 @@ function loadProjects(){
         type:"GET",
         url: '/admin/projects/load_projects/',
         success: function (projects) {
-            if (!projects){ Materialize.toast('Невозможно загрузить проекты', 4000);}
+            if (!projects){ Materialize.toast('Невозможно загрузить проекты', 1000);}
             else {
                 addDiv(projects, 'projects');
             }
@@ -206,7 +206,7 @@ function loadLandscape(){
         type:"GET",
         url: '/admin/projects/load_landscape/',
         success: function (landscape) {
-            if (!landscape){ Materialize.toast('Невозможно загрузить проекты', 4000);}
+            if (!landscape){ Materialize.toast('Невозможно загрузить проекты', 1000);}
             else {
                 addDiv(landscape, 'landscape');
             }

@@ -1,11 +1,13 @@
 <!DOCTYPE html>
 <html>
   <head>
+    <meta charset="utf-8"/>
     <title><%= title %></title>
+    <link type="text/css" rel="stylesheet" href="css/materialize.min.css"  media="screen,projection"/>
     <link rel='stylesheet' href='/css/user/style.css' />
     <link href="http://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
-    <link type="text/css" rel="stylesheet" href="css/materialize.min.css"  media="screen,projection"/>
     <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <link href='https://fonts.googleapis.com/css?family=Bad+Script&subset=latin,cyrillic' rel='stylesheet' type='text/css'>
   </head>
 
   <body>
@@ -20,263 +22,168 @@
           <div class="container">
             <div class="row">
               <div class="col l12 m12 s12 hide-on-med-and-down valign-wrapper">
-                <svg class="valign" style="width: 300px; height: 300px; margin: 0 auto;">
+             <!--   <svg class="valign" style="width: 300px; height: 300px; margin: 0 auto;">
                   <path class="path" fill="transparent" stroke="#fff" stroke-width="4" stroke-miterlimit="10" d="M66.039,133.545c0,0-21-57,18-67s49-4,65,8
     s30,41,53,27s66,4,58,32s-5,44,18,57s22,46,0,45s-54-40-68-16s-40,88-83,48s11-61-11-80s-79-7-70-41
     C46.039,146.545,53.039,128.545,66.039,133.545z"/>
-                </svg>
+                </svg> !-->
+                <img src="/images/design/ArtObject.png" class="valign" style="width: 300px; height: 100px; margin: 0 auto; z-index: 50;">
               </div>
           </div>
+            <div class="row">
+              <div class="col l12 m12 s12 hide-on-med-and-down valign-wrapper">
+                <!--   <svg class="valign" style="width: 300px; height: 300px; margin: 0 auto;">
+                     <path class="path" fill="transparent" stroke="#fff" stroke-width="4" stroke-miterlimit="10" d="M66.039,133.545c0,0-21-57,18-67s49-4,65,8
+       s30,41,53,27s66,4,58,32s-5,44,18,57s22,46,0,45s-54-40-68-16s-40,88-83,48s11-61-11-80s-79-7-70-41
+       C46.039,146.545,53.039,128.545,66.039,133.545z"/>
+                   </svg> !-->
+                <div class="valign text-information"> Тут какой то текст о фирме, надо придумать jsakdjsakdjkas ja
+                 sajkdksadjaskdj a
+                 skadjsakdjaksdjskadjska khghhkhdjask jksdjkasjdsakjdkasdjks sjdkj ksjda</div>
+              </div>
+            </div>
+
         </div>
       </div>
 
-        <div class="blurImage grey">
-           <img src="/images/11.jpg">
+        <div class="blurImage grey" style="background: rgba(0,0,0,0.3);">
+           <img src="/images/main.jpg">
         </div>
       </div>
-      <div class="bottom"> <a class="waves-effect waves-light"><img src="/images/bottom.svg"></a> </div>
+      <div class="bottom" id="bottomHref"> <a class="waves-effect waves-light"><img src="/images/bottom.svg"></a> </div>
       <!-- Блок с картинкой и svg анимацией !-->
 
       </header>
       <!-- Блоки !-->
-      <main>
+      <main class="grey lighten-5 row">
         <!-- title !-->
-        <div class="parallax-container mobile">
-          <h1 class="center-align ">Наши проекты</h1>
-          <div class="parallax">
-            <img  src="images/parallax2.png" style="transform: translate3d(-50%, 206px, 0px); display: block;">
+        <div class="row padding-20">
+          <div class="col l4 s4 m4 hide-on-small-only" style="height: 140px;">
+            <div class="line line1 brown lighten-2 right"></div>
+          </div>
+          <div class="col l4 m4 s12 projects">
+            <h1 class="center-align ">Наши проекты</h1>
+          </div>
+          <div class="col l4 s4 m4 hide-on-small-only" style="height: 140px;">
+            <div class="line line2 brown lighten-2"></div>
           </div>
         </div>
+
         <!-- title !-->
 
         <!--  ПРОЕКТЫ CARDS !-->
         <section>
-          <div class="row">
-            <div class="col s12 m6 l4">
-              <div class="card meddium hide-on-small-only">
-                <div class="card-image">
-                  <img src="images/design/1.jpg">
-                  <span class="card-title">Card Title</span>
-                </div>
-                <div class="card-content">
-                  <p>I am a very simple card. I am good at containing small bits of information.
-                    I am convenient because I require little markup to use effectively.</p>
-                </div>
-                <div class="card-action">
-                  <a href="#">This is a link</a>
-                </div>
-              </div>
-            </div>
-
-            <div class="col s12 m6 l4">
-              <div class="card meddium hide-on-small-only hide-on-med-only">
-                <div class="card-image">
-                  <img src="images/design/2.jpg">
-                  <span class="card-title">Card Title</span>
-                </div>
-                <div class="card-content">
-                  <p>I am a very simple card. I am good at containing small bits of information.
-                    I am convenient because I require little markup to use effectively.</p>
-                </div>
-                <div class="card-action">
-                  <a href="#">This is a link</a>
-                </div>
-              </div>
-            </div>
-
-            <div class="col s12 m6 l4">
-              <div class="card meddium hide-on-small-only">
-                <div class="card-image">
-                  <img src="images/design/3.jpg">
-                  <span class="card-title">Card Title</span>
-                </div>
-                <div class="card-content">
-                  <p>I am a very simple card. I am good at containing small bits of information.
-                    I am convenient because I require little markup to use effectively.</p>
-                </div>
-                <div class="card-action">
-                  <a href="#">This is a link</a>
-                </div>
-              </div>
-            </div>
-
-            <div class="col s12 m6 l4">
-              <div class="card meddium hide-on-small-only">
-                <div class="card-image">
-                  <img src="images/design/4.jpg">
-                  <span class="card-title">Card Title</span>
-                </div>
-                <div class="card-content">
-                  <p>I am a very simple card. I am good at containing small bits of information.
-                    I am convenient because I require little markup to use effectively.</p>
-                </div>
-                <div class="card-action">
-                  <a href="#">This is a link</a>
-                </div>
-              </div>
-            </div>
-
-            <div class="col s12 m6 l4">
-              <div class="card meddium hide-on-small-only hide-on-med-only">
-                <div class="card-image">
-                  <img src="images/design/5.jpg">
-                  <span class="card-title">Card Title</span>
-                </div>
-                <div class="card-content">
-                  <p>I am a very simple card. I am good at containing small bits of information.
-                    I am convenient because I require little markup to use effectively.</p>
-                </div>
-                <div class="card-action">
-                  <a href="#">This is a link</a>
-                </div>
-              </div>
-            </div>
-
-              <div class="col s12 m6 l4">
-                <div class="card meddium">
-                  <div class="card-image">
-                    <img src="images/design/6.jpg">
-                    <span class="card-title">Card Title</span>
-                  </div>
-                  <div class="card-content">
-                    <p>I am a very simple card. I am good at containing small bits of information.
-                      I am convenient because I require little markup to use effectively.</p>
-                  </div>
-                  <div class="card-action">
-                    <a href="#">This is a link</a>
-                  </div>
-                </div>
-              </div>
-          </div>
-        </section>
-        <!--  ПРОЕКТЫ CARDS !-->
-
-        <!-- title !-->
-        <div class="parallax-container mobile">
-          <h1 class="center-align ">Мы работаем</h1>
-          <div class="parallax">
-            <img src="images/parallax2.png" style="transform: translate3d(-50%, 206px, 0px); display: block;">
-          </div>
-        </div>
-        <!-- title !-->
-
-        <!--  МОТИВАЦИЯ !-->
-        <section>
-          <div class="row">
-            <div class="col s12 m4 l4">
-              <div class="motivationTitle center-align">ДЕШЕВО</div>
-              <img class="motivation"  src='/images/ru.svg'>
-              <div class="motivationText center-align">  Мы всегда держим низкие цены </div>
-            </div>
-            <div class="col s12 m4 l4">
-              <div class="motivationTitle center-align">НАДЕЖНО</div>
-              <img class="motivation" src='/images/nice.svg'>
-              <div class="motivationText center-align">Мы гарантируем качетсвенную работу</div>
-            </div>
-            <div class="col s12 m4 l4">
-              <div class="motivationTitle center-align">КРЕАТИВНО</div>
-              <img  class="motivation" src='/images/creative.svg'>
-              <div class="motivationText center-align">Мы всегда предлагаем свежие идеи </div>
-            </div>
-          </div>
-          <div class="row">
-            <div class="col s12 m12 l12">
-              <a class="waves-effect waves-light btn z-depth-0 btn-large margin-120">Подробнее</a>
-            </div>
-          </div>
-        </section>
-
-        <div class="parallax-container mobile">
-          <h1 class="center-align ">Мы всегда поддерживаем связь с клиентом</h1>
-          <div class="parallax">
-            <img src="images/parallax2.png" style="transform: translate3d(-50%, 206px, 0px); display: block;">
-          </div>
-        </div>
-        <!--  МОТИВАЦИЯ !-->
-
-        <!-- social !-->
-        <section>
-          <div class="row margin-100">
-            <div class="col s12 m4 l4">
-              <a href='www.twitter.com'><img src="/images/facebook.svg" id="facebook" class="motivation"></a>
-            </div>
-
-            <div class="col s12 m4 l4">
-              <a href='www.twitter.com'><img src="/images/vk.svg" id="vk" class="motivation"></a>
-            </div>
-
-            <div class="col s12 m4 l4">
-              <a href='www.twitter.com'><img src="/images/twitter.svg" id="twitter" class="motivation"></a>
-            </div>
-          </div>
-        </section>
-        <!-- social !-->
-      </main>
-
-      <!-- footer !-->
-      <footer class="page-footer">
-        <div class="container">
-          <div class="row margin-50">
-            <div class="col l6 s12 m6">
-              <h5 class="white-text">Напишите нам!</h5>
-              <div class="row">
-                <form class="col s12">
-                  <div class="row">
-                    <div class="input-field col s6 l6 m6">
-                      <i class="material-icons prefix">account_circle</i>
-                      <input id="icon_prefix" type="text" class="validate">
-                      <label for="icon_prefix">First Name</label>
-                    </div>
-                    <div class="input-field col s6 m6 l6">
-                      <input id="email" type="email" class="validate">
-                      <label for="email" data-error="wrong" data-success="right">Email</label>
-                    </div>
-                  </div>
-                  <div class="row">
-                    <div class="input-field col s12 m12 l12">
-                      <i class="material-icons prefix">mode_edit</i>
-                      <textarea id="icon_prefix2" class="materialize-textarea"></textarea>
-                      <label for="icon_prefix2">Message</label>
-                    </div>
-                  </div>
-                  <div class="row">
-                    <div class="col s12 m12 l12">
-                      <button type="submit" class="btn btn-submit">Отправить </button>
-                    </div>
-                  </div>
-                </form>
-              </div>
-
-            </div>
-            <div class="col l6 s12 m6 padding-left-50">
-              <h5 class="white-text">Наши контакты</h5>
-              <ul class="left-align">
-                <li><a class="grey-text text-lighten-3" href="#!">Телефон</a></li>
-                <li><a class="grey-text text-lighten-3" href="#!">мыло</a></li>
-                <li><a class="grey-text text-lighten-3" href="#!">Link 3</a></li>
-                <li><a class="grey-text text-lighten-3" href="#!">Link 4</a></li>
-              </ul>
-            </div>
-          </div>
-        </div>
-        <div class="footer-copyright">
           <div class="container">
-            © 2015 Design by Alex Petrov
-            <a class="grey-text text-lighten-4 right" href="#!">More Links</a>
+           <div class="row">
+             <% for (var i = 0; i < projects.length; i++) { %>
+               <div id="<%= i+1 %>" class="col s12 m4 l4">
+                   <div class="card medium " onclick="more(<%= projects[i].id%>, <%=i%>)">
+                     <div class="card-image">
+                       <img src="images/uploaded_files/<%=projects[i].mini_name%>" class="responsive-img">
+                       <span class="card-title"><%=projects[i].name%></span>
+                     </div>
+                     <ul class="card-action-buttons">
+                       <li><a class="btn-floating waves-effect waves-light light-blue accent-2"><i class="material-icons">more_horiz</i></a></li>
+                     </ul>
+                     <div class="card-content">
+                       <div> <b>Цена: </b> <%= projects[i].price %> </div>
+                       <% if(projects[i].type == 'design') {%>
+                       <div> <b>Площадь: </b> <%= projects[i].space %> </div>
+                       <div> <b>Количество комнат: </b> <%= projects[i].number_room %> </div>
+                       <% } else if (projects[i].type == 'projects') {%>
+                       <div> <b>Площадь: </b> <%= projects[i].space %> </div>
+                       <div> <b>Количество комнат: </b> <%= projects[i].number_room %> </div>
+                       <div> <b>Материал изделий: </b> <%= projects[i].material %> </div>
+                       <% } %>
+                       <div> <b>Опсиание: </b> <%= projects[i].description%> </div>
+                     </div>
+                   </div>
+               </div>
+             <% } %>
+             <div class="col s12 l12 m12 center-align">
+               <a class="waves-effect waves-light btn brown lighten-2">Подробнее</a>
+             </div>
+           </div>
           </div>
-        </div>
-      </footer>
+        </section>
+      </main>
+        <!--  ПРОЕКТЫ CARDS !-->
+
+
       <!-- footer !-->
 
 
+        <script type="text/javascript" src="https://code.jquery.com/jquery-2.1.4.min.js"></script>
+        <script type="text/javascript" src="js/materialize.min.js"></script>
 
-      <script type="text/javascript" src="https://code.jquery.com/jquery-2.1.4.min.js"></script>
-      <script type="text/javascript" src="js/materialize.min.js"></script>
       <script>
         $( document ).ready(function(){
           $(".button-collapse").sideNav();
           $('.parallax').parallax();
-        })
+        });
+
+        function more(project, i){
+          $('#moreinfo').remove();
+          var row;
+          var offset;
+          if ( (i+1) % 3 == 0 ){
+            row = i + 1;
+            offset = 10;
+          }
+          else {
+            row = ((i+1) + (3 - ((i+1) % 3)));
+            if (row - (i + 1) == 1){ offset = 6; }
+            else { offset = 2; }
+          }
+
+
+
+          $.ajax({
+            type:"GET",
+            url:'/get_project_information/',
+            data: "id="+project,
+            success: function(data){
+              var mainPhoto;
+              var miniPhoto = ''
+              for (var i = 0; i < data.length; i++){
+                if (data[i].type == "main"){
+                  mainPhoto = data[i].image_name;
+                } else {
+                  console.log('df');
+                  miniPhoto += '<div class="col l2 s2 m2"> <img src="images/uploaded_files/'+data[i].mini_name+'" class="responsive-img"> </div>'
+                }
+              }
+              miniPhoto += '</div>';
+              $("#"+row).after('<div class="row '+ row +'" id="moreinfo"> ' +
+                      '<div class="col s12 offset-l'+offset+' offset-m'+offset+'" style="width: 10px; height: 10px; background: darkred"> </div>  ' +
+                      '<div  class="col s12"> ' +
+                      '<img style="width: 100%;" src="images/uploaded_files/'+mainPhoto+'" class="responsive-img">' +
+                      '<div class="row" style="background: darkred;"> ' + miniPhoto + '</div>'+
+                      '</div> ' +
+                      '</div>');
+            }
+          });
+        }
+
+        window.onscroll = function(){
+          var height = $(window).height();
+          if (height < $(window).scrollTop()){
+            $('nav').css('position','fixed');
+            $('nav').css('background', 'rgba(255,255,255,1)');
+            $('nav ul li a ').css('color', 'black');
+            $('nav ul li a:hover, nav ul li a.activeCustom').css('border-bottom','transparent');
+            $( "nav" ).addClass( "z-depth-1" );
+            $( "nav" ).removeClass( "z-depth-0" );
+          } else if(height > $(window).scrollTop()) {
+            $('nav').css('position','absolute');
+            $('nav').css('background', 'transparent');
+            $('nav ul li a ').css('color', 'white');
+            $( "nav" ).removeClass( "z-depth-1" );
+            $( "nav" ).addClass( "z-depth-0" );
+          }
+        };
+
+
       </script>
   </body>
 </html>
