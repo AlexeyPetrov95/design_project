@@ -37,16 +37,12 @@ header{
 
 }
 
-
-.card-image img {
-  height:300px !important;
-}
-
 .vectorSign {
   position: relative;
   overflow: hidden;
   height: 100%;
   margin-top: -64px;
+  width: 100%;
 }
 
 .vectorSign .section {
@@ -61,20 +57,28 @@ header{
 
 .opacity { opacity: 0.9; }
 
+.navbar-fixed nav{
+  position: absolute;
+}
+
 nav {
   font-family: 'Roboto' sans-serif;
   font-weight: 300;
-  font-size: 18px !important;
   z-index: 500 !important;
-  background: rgba(0,0,0,0.6) !important;
+  background: transparent;
+}
+
+.parallax-container{
+  z-index: 0; 
+  height: 610px;
 }
 
 nav ul li a {
   color: white;
 }
 
-nav ul a{
-  font-size: 18px !important;
+nav ul li a{
+  font-size: 16px !important;
   border-bottom: 2px solid transparent;
 }
 
@@ -110,7 +114,7 @@ nav ul li a:hover, nav ul li a.activeCustom{
   width: 800px;
   z-index: 50;
   margin: 0 auto;
-  font-size: 28px;
+  font-size: 24px;
   color: white;
   padding: 20px;
 }
@@ -166,6 +170,10 @@ main .title{
   position: relative;
 }
 
+main {
+  margin-bottom: 0px !important;
+}
+
 .text{
   width: 200px;
   margin: 0 auto;
@@ -173,54 +181,46 @@ main .title{
   text-align: center;
 }
 
-.motivation {
-  height: 150px;
-  width: 150px;
-  margin: 0 auto;
-  display: block;
 
-}
-
-.motivationTitle{
-  margin-top:100px;
-  margin-bottom: 40px;
-  font-family: 'Roboto' sans-serif;
-  font-weight: 400;
-  font-size: 18px;
-}
-
-.motivationText {
-  margin-top: 34px;
-  font-family: 'Roboto' sans-serif;
-  font-weight: 300;
-  font-size: 18px;
-}
-
-.btn{
-  display: block !important;
-  width: 300px !important;
-  background-color: #ffb300 !important;
-}
-
-
-.parallax-container {
-  margin-top: 75px;
-  margin-bottom: 75px;
+.projects {
   height: 140px !important;
 }
 
-.parallax-container h1 {
+.projects h1 {
   font-family: 'Roboto' sans-serif;
   font-weight: 300;
   font-size: 32px;
-  color: white;
+  color: black;
   line-height: 80px;
+}
+
+.line{
+  width: 150px;
+  height: 6px;
+  position: relative;
+  top: 70px;
+}
+
+.line2{
+  right: 0;
+}
+
+ul.card-action-buttons{
+  margin: -20px 6px 0px 0px;
+  text-align: right;
+  position: absolute;
+  right: 0;
 }
 
 .path {
   stroke-dasharray: 1000;
   stroke-dashoffset: 1000;
   animation: dash 5s linear forwards;
+}
+
+.btn{
+  margin: 50px;
+  width: 200px;
 }
 
 @keyframes dash {
@@ -245,6 +245,7 @@ main .title{
 #twitter{
 }
 
+.padding-20{ padding-top: 20px;  padding-bottom: 20px; margin: 0 !important;}
 .padding-left-15{  padding-left:15px;  }
 
 .padding-left-30 { padding-left: 30px; }
@@ -265,9 +266,11 @@ main .title{
   margin-bottom: 100px !important;
 }
 
-footer.page-footer {
-  background-color: #EF6954 !important;
+
+footer.page-footer .footer-copyright{
+  background-color: rgba(0,0,0,0.5);
 }
+
 
 input[type=text], input[type=password], input[type=email], input[type=url], input[type=time], input[type=date], input[type=datetime-local], input[type=tel], input[type=number], input[type=search], textarea.materialize-textarea {
   border-bottom: 1px solid #ffffff !important;
@@ -314,6 +317,7 @@ input[type=text], input[type=password], input[type=email], input[type=url], inpu
     font-size: 28px;
   }
 
+
   main .title{
     width: 370px;
   }
@@ -335,4 +339,9 @@ input[type=text], input[type=password], input[type=email], input[type=url], inpu
   .center {
     display: none;
   }
+}
+
+section h1{
+  margin: 0px !important;
+  padding: 40px;
 }

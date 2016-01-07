@@ -34,7 +34,7 @@
                         <td>
                             <p>
                                 <input type="checkbox" id="<%= projects[i].id %>check"
-                                       onchange="trycheck('<%= i %>');"
+                                       onchange="trycheck('<%= i %>', <%= projects[i].id%>);"
                                     <% if (projects[i].selected == 1) {%>
                                         checked="checked"
                                     <% } %>
@@ -67,14 +67,23 @@
             }
         }
     });
-    var trycheck = function(index){
+    var trycheck = function(index, id){
         if (checkboxes[index].checked) {
             if (checkedCount >= checkedLimit) {
                 checkboxes[index].checked = false;
-                Materialize.toast("full checked", 1000);
+                Materialize.toast("Больше 6 проектов нельзя", 1000);
             } else { checkedCount++; }
         } else { checkedCount--; }
-        console.log(checkedCount);
+        $.ajax({
+            type:"POST",
+            url:'/admin/main_view/update',
+            data: "id="+id + '&selected=' + checkboxes[index].checked,
+            success: function(data){
+                if (data){
+                    Materialize.toast('Главная страница обнавлена.', 1000);
+                }
+            }
+        });
     };
 </script>
 </body>

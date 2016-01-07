@@ -367,6 +367,7 @@ router.get('/admin/projects/:id', function(req, res){
             knexSQL('type').select().where({id: proj[0].type_id}).then(function(type_name){
                 knexSQL('images').select().where({projects_id: id}).then(function(photos){
                     knexSQL('type_images').select().then(function(image_types){
+                        console.log(image_types);
                         res.render('adminView/project_info.ejs', {
                             title: "Редактирование " + type_name[0].name,
                             project: proj[0],
@@ -401,6 +402,18 @@ router.get('/admin/view_list/', function (req, res) {
     })
 });
 
+
+router.post('/admin/main_view/update', function(req, res){
+    var select = 0;
+    if (req.body.selected == 'true'){ select = 1; }
+    else {
+        console.log('asd');
+        select = 0; }// костыль!!!!
+    knexSQL('projects').select().where({id: req.body.id}).update({selected: select}).then(function(data){
+        if (!data){res.send(500);}
+        else { res.send(true);}
+    })
+});
 
 
 module.exports = router;
