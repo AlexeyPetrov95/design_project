@@ -127,24 +127,30 @@ router.post('/admin/projects/upload_photo/:proj_id', function(req, res) {
     form.on('close', function() {
         //если нет ошибок и все хорошо
         if(errors.length == 0) {
+            console.log('point one');
             async.waterfall([
                 function (callback) {
-                    knexSQL('images').insert({projects_id: req.params.proj_id}).returning('id').then(function (id) {
+                    console.log('point two');
+                    knexSQL('images').insert({projects_id: req.params.proj_id, type_images_id: 0}).returning('id').then(function (id) {
+                        console.log('point three');
                         fs.rename(uploadFile.path, uploadDir + id + uploadFile.format,  function (err) {
+                            console.log('point four');
                             if (err) { throw err; res.send(500); }
                             callback(null, id);
                         });
                     });
                 }, function (id, callback){
                     knexSQL('images').select().where({id: id}).update({image_name: id + uploadFile.format, mini_name: id + '_mini' + uploadFile.format}).then(function () {
+                        console.log('point five');
                         gm(uploadDir + id + uploadFile.format)
                             .resize(900, 600)
                             .write(uploadDir + id + uploadFile.format, function (err) {
-                                if (err) { throw err; res.send(500); };
-                                callback(null, id);
+                                if (err) { throw err; res.send(500); }; */
+                                callback(null, id); 
                             });
                     });
                 }, function (id, callback){
+                    console.log('point six');
                     gm(uploadDir + id + uploadFile.format)
                         .gravity('Center')
                         .crop(800, 500)
@@ -152,13 +158,15 @@ router.post('/admin/projects/upload_photo/:proj_id', function(req, res) {
                             if (err) {
                                 console.log (err);
                                 res.send(500);
-                            } else {
+                            } else { */
                                 callback(null, id);
                             }
                         })
                 }
             ], function(err , id){
+                console.log('point seven');
                 knexSQL('type_images').select().then(function (imgtypes) {
+                    console.log('point eight');
                     res.send({
                         photo_id: id,
                         filename: id + uploadFile.format,
@@ -189,7 +197,7 @@ router.post('/admin/projects/upload_photo/:proj_id', function(req, res) {
         //путь для сохранения файла
         uploadFile.format = part.filename.slice(part.filename.lastIndexOf("."));
         uploadFile.path = uploadDir + prefix;
-
+        
         //проверяем размер файла, он не должен быть больше максимального размера
         if (uploadFile.size > maxSize) {
             errors.push('File size is ' + uploadFile.size + '. Limit is' + (maxSize / 1024 / 1024) + 'MB.');
@@ -276,26 +284,36 @@ router.get('/admin/projects/', function (req, res) {
                     });
                 });
             }, function (projects, interiors, callback){
+                knexSQL('images').select().where({type_images_id: 1}).then(function(photos) {
+                    if (!photos) {
+                        res.send(500);
+                    } else {
+                        callback(null, photos, projects, interiors);
+                    }
+                });
+            }, function (photos, projects, interiors, callback){
                 knexSQL('type').select().where({type: 'landscape'}).then(function(type) {
                     knexSQL('projects').select().where({type_id: type[0].id}).limit(count).offset(landscapeOffset).then(function (landscape) {
                         if (!landscape) {
                             res.send(500);
                         } else {
-                            callback(null, projects, interiors, landscape);
+                            callback(null, photos, projects, interiors, landscape);
                         }
                     });
                 });
             }
-        ], function (err, projects, interiors, landscape) {
+        ], function (err, photos, projects, interiors, landscape) {
             interiorsOffset += count;
             projectOffset += count;
             landscapeOffset += count;
+            console.log(photos);
             knexSQL('type').select().then (function (type) {
                 res.render('adminView/projects.ejs', {
                     title: "Проекты/Интерьеры/Ландшафты",
                     projects: projects,
                     interiors: interiors,
                     landscape: landscape,
+                    pictures: photos,
                     type: type
                 });
             });
@@ -367,9 +385,9 @@ router.get('/admin/projects/:id', function(req, res){
             knexSQL('type').select().where({id: proj[0].type_id}).then(function(type_name){
                 knexSQL('images').select().where({projects_id: id}).then(function(photos){
                     knexSQL('type_images').select().then(function(image_types){
-                        console.log(image_types);
+                        //console.log(image_types);
                         res.render('adminView/project_info.ejs', {
-                            title: "Редактирование " + type_name[0].name,
+                            title: "Редактирование " + type_name[0].type_name,
                             project: proj[0],
                             photos: photos,
                             image_types: image_types,
