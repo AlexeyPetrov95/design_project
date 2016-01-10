@@ -127,30 +127,24 @@ router.post('/admin/projects/upload_photo/:proj_id', function(req, res) {
     form.on('close', function() {
         //если нет ошибок и все хорошо
         if(errors.length == 0) {
-            console.log('point one');
             async.waterfall([
                 function (callback) {
-                    console.log('point two');
                     knexSQL('images').insert({projects_id: req.params.proj_id, type_images_id: 0}).returning('id').then(function (id) {
-                        console.log('point three');
                         fs.rename(uploadFile.path, uploadDir + id + uploadFile.format,  function (err) {
-                            console.log('point four');
                             if (err) { throw err; res.send(500); }
                             callback(null, id);
                         });
                     });
                 }, function (id, callback){
                     knexSQL('images').select().where({id: id}).update({image_name: id + uploadFile.format, mini_name: id + '_mini' + uploadFile.format}).then(function () {
-                        console.log('point five');
                         gm(uploadDir + id + uploadFile.format)
                             .resize(900, 600)
                             .write(uploadDir + id + uploadFile.format, function (err) {
-                                if (err) { throw err; res.send(500); }; */
+                                if (err) { throw err; res.send(500); }; 
                                 callback(null, id); 
                             });
                     });
                 }, function (id, callback){
-                    console.log('point six');
                     gm(uploadDir + id + uploadFile.format)
                         .gravity('Center')
                         .crop(800, 500)
@@ -158,7 +152,7 @@ router.post('/admin/projects/upload_photo/:proj_id', function(req, res) {
                             if (err) {
                                 console.log (err);
                                 res.send(500);
-                            } else { */
+                            } else { 
                                 callback(null, id);
                             }
                         })
@@ -385,7 +379,6 @@ router.get('/admin/projects/:id', function(req, res){
             knexSQL('type').select().where({id: proj[0].type_id}).then(function(type_name){
                 knexSQL('images').select().where({projects_id: id}).then(function(photos){
                     knexSQL('type_images').select().then(function(image_types){
-                        //console.log(image_types);
                         res.render('adminView/project_info.ejs', {
                             title: "Редактирование " + type_name[0].type_name,
                             project: proj[0],

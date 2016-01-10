@@ -107,8 +107,7 @@
                     <div class="col s12 m6 l4" id="<%= photos[i].id %>photo">
                         <div class="card">
                             <div class="card-image">
-                                <!--img style="height: 100%" src="/images/uploaded_files/<%= photos[i].mini_name %>"/-->
-                                <img style="height: 100%" src="/images/uploaded_files/<%= photos[i].image_name %>"/>
+                                <img style="height: 100%" src="/images/uploaded_files/<%= photos[i].mini_name %>"/>
                             </div>
 
                             <ul class="card-action-buttons">
@@ -119,7 +118,7 @@
                             <div class="card-content overflow-none">
                                 <div class="input-field">
                                     <div>
-                                        <select class="browser-default custom-select" onChange="update(this,<%= photos[i].id %>)" id="image_type<%= photos[i].id %>">
+                                        <select class="browser-default custom-select" onChange="update(<%= photos[i].id %>)" id="image_type<%= photos[i].id %>">
                                             <% for (var j = 0; j < image_types.length; j++) {
                                             if (image_types[j].id == photos[i].type_images_id) { %>
                                             <option value="<%= image_types[j].id %>"><%= image_types[j].type_name %></option>
@@ -145,21 +144,11 @@
 <script type="text/javascript" src="https://code.jquery.com/jquery-2.1.4.min.js"></script>
 <script type="text/javascript" src="/js/materialize.min.js"></script>
 <script>
-    var hasMainPhoto;
     
     $(document).ready(function(){
         $('ul.tabs').tabs();
         $('.modal-trigger').leanModal();
         $('select').material_select();
-        $('select').material_select();
-        var selects = $('select');
-        hasMainPhoto = false;
-        for (var i = 1; i < selects.length; i++) {
-            if (selects[i].value == 1){
-                hasMainPhoto = true;
-                break;
-            }
-        };
     });
     
     function uploadPhoto(project_id){
@@ -185,7 +174,6 @@
                             $('#preloader').css("display", "block");
                         },
                         success: function(res){
-                            console.log(index);
 
                             upload(++index);
                             if (res.status == 'bad'){ Materialize.toast("Ошибка при загрузке", 3000); }
@@ -205,7 +193,7 @@
                                 photo_item_html += '        <div class="card-content overflow-none"> ';
                                 photo_item_html += '            <div class="input-field">';
                                 photo_item_html += '                <div>'
-                                photo_item_html += '                <select class="browser-default custom-select" onChange="update(this,'+res.photo_id +')" id="image_type' + res.photo_id + '">';
+                                photo_item_html += '                <select class="browser-default custom-select" onChange="update('+res.photo_id +')" id="image_type' + res.photo_id + '">';
                                 for (var j = 0; j < res.image_types.length; j++) {
                                     photo_item_html += '                <option value="' + res.image_types[j].id + '">' + res.image_types[j].type_name + '</option>';
                                 }
@@ -267,10 +255,10 @@
             }
         });
     }
-    function update(obj, id) {
+    function update(id) {
         // id нового выбранного типа (0 = дефолт (не укзаано), 1 = главная, 2..inf = остальные)
         var type = $("#image_type"+id).val();
-        var selects = $('select');
+        var selects = $('select').slice(1);
         // ajax - апдейт фотки в бд
         var update_type = function(id, type){
             $.ajax({
@@ -281,18 +269,18 @@
         };
         // если уже было выбрано главное фото, то
         if (type == 1){
-            if (hasMainPhoto){
-                for (var i = 1; i < selects.length; i++) {
-                    // ищем прошлые главные фото
-                    if (selects[i].value == 1){
-                        // меняем их на дефолтные в селектах
-                        $("#" + selects[i].getAttribute('id') + " [value='0']").attr("selected", "selected");
-                        // и в бд
-                        update_type(selects[i].getAttribute('id').slice(10), 0);
-                    }
-                };
-                $("#image_type"+id+" [value='1']").attr("selected", "selected");
-            }
+            for (var i in selects) {
+                var elem = selects[i];
+                var elem_id = elem.getAttribute('id');
+                // ищем прошлые главные фото
+                if (elem.value == 1){
+                    // меняем их на дефолтные в селектах
+                    $("#"+elem_id).val('0');
+                    // и в бд
+                    update_type(elem_id.slice(10), 0);
+                }
+                $("#image_type"+id).val('1');
+            };
         }
         // установка нового типа для выбранного фото
         update_type(id, type);
