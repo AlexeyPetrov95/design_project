@@ -107,7 +107,8 @@
                     <div class="col s12 m6 l4" id="<%= photos[i].id %>photo">
                         <div class="card">
                             <div class="card-image">
-                                <img style="height: 100%" src="/images/uploaded_files/<%= photos[i].mini_name %>"/>
+                                <!--img style="height: 100%" src="/images/uploaded_files/<%= photos[i].mini_name %>"/-->
+                                <img style="height: 100%" src="/images/uploaded_files/<%= photos[i].image_name %>"/>
                             </div>
 
                             <ul class="card-action-buttons">
@@ -144,19 +145,24 @@
 <script type="text/javascript" src="https://code.jquery.com/jquery-2.1.4.min.js"></script>
 <script type="text/javascript" src="/js/materialize.min.js"></script>
 <script>
+    var hasMainPhoto;
+    
     $(document).ready(function(){
         $('ul.tabs').tabs();
         $('.modal-trigger').leanModal();
         $('select').material_select();
-        var selects = document.getElementsByTagName("select");
-        for (var i = 1; i < selects.length; i++) {
-            selects[i].parentNode.parentNode.insertBefore(selects[i], selects[i].parentNode.parentNode.children[1]);
-            selects[i].parentNode.removeChild(selects[i].parentNode.children[0]);
-        }
         $('select').material_select();
+        var selects = $('select');
+        hasMainPhoto = false;
+        for (var i = 1; i < selects.length; i++) {
+            if (selects[i].value == 1){
+                hasMainPhoto = true;
+                break;
+            }
+        };
     });
-
-    var uploadPhoto = function(project_id){
+    
+    function uploadPhoto(project_id){
         var files = document.getElementById("photo_chooser").files;
         if (!files) { Materialize.toast('No files', 4000); return; }
         else
@@ -224,8 +230,7 @@
             upload(0);
         };
     }
-
-    var deletePhoto = function(photo_id){
+    function deletePhoto(photo_id){
         $.ajax({
             type: "POST",
             url: '/admin/projects/delete_photo/',
@@ -263,17 +268,36 @@
         });
     }
     function update(obj, id) {
+        // id нового выбранного типа (0 = дефолт (не укзаано), 1 = главная, 2..inf = остальные)
         var type = $("#image_type"+id).val();
-        $.ajax({
-            type: "POST",
-            url: '/admin/projects/update_photo',
-            data: 'id='+id+'&type='+type,
-            success: function (data){
-                Materialize.toast('Тип успешно изменен.', 1000);
+        var selects = $('select');
+        // ajax - апдейт фотки в бд
+        var update_type = function(id, type){
+            $.ajax({
+                type: "POST",
+                url: '/admin/projects/update_photo',
+                data: 'id='+id+'&type='+type,
+            });
+        };
+        // если уже было выбрано главное фото, то
+        if (type == 1){
+            if (hasMainPhoto){
+                for (var i = 1; i < selects.length; i++) {
+                    // ищем прошлые главные фото
+                    if (selects[i].value == 1){
+                        // меняем их на дефолтные в селектах
+                        $("#" + selects[i].getAttribute('id') + " [value='0']").attr("selected", "selected");
+                        // и в бд
+                        update_type(selects[i].getAttribute('id').slice(10), 0);
+                    }
+                };
+                $("#image_type"+id+" [value='1']").attr("selected", "selected");
             }
-        })
+        }
+        // установка нового типа для выбранного фото
+        update_type(id, type);
+        Materialize.toast('Тип успешно изменен.', 1000);
     }
-
 </script>
 </body>
 </html>

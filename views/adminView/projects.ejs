@@ -38,7 +38,9 @@
                             <div class="col s12 m6 l4">
                                 <div class="card medium" id="<%=projects[i].id %>card" >
                                     <div class="card-image">
-                                        <img src="/images/default.jpg">
+                                        <%  var pic = pictures.filter(function(x){return x.projects_id == projects[i].id })[0];
+                                            var image_name = pic ? "uploaded_files/"+pic.mini_name : "default.jpg" %>
+                                        <img src="/images/<%= image_name %>">
                                         <span class="card-title"><%= projects[i].name %></span>
                                     </div>
                                     <ul class="card-action-buttons">
@@ -65,7 +67,9 @@
                             <div class="col s12 m6 l4">
                                 <div class="card medium" id="<%=interiors[i].id%>card">
                                     <div class="card-image">
-                                        <img src="/images/default.jpg">
+                                        <%  pic = pictures.filter(function(x){return x.projects_id == interiors[i].id })[0];
+                                            image_name = pic ? "uploaded_files/"+pic.mini_name : "default.jpg" %>
+                                        <img src="/images/<%= image_name %>">
                                         <span class="card-title"><%= interiors[i].name %></span>
                                     </div>
                                     <ul class="card-action-buttons">
@@ -90,7 +94,9 @@
                             <div class="col s12 m6 l4">
                                 <div class="card medium" id="<%=landscape[i].id%>card">
                                     <div class="card-image">
-                                        <img src="/images/default.jpg">
+                                        <%  pic = pictures.filter(function(x){return x.projects_id == landscape[i].id })[0];
+                                            image_name = pic ? "uploaded_files/"+pic.mini_name : "default.jpg" %>
+                                        <img src="/images/<%= image_name %>">
                                         <span class="card-title"><%= landscape[i].name %></span>
                                     </div>
                                     <ul class="card-action-buttons">
