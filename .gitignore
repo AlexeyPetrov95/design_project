@@ -1,14 +1,22 @@
-/node_modules/
-<<<<<<< HEAD
-/.idea
-.idea/workspace.xml
-.idea/workspace.xml
-=======
+
 .idea/
-
 .idea/workspace.xml
-
 .idea/workspace.xml
-
 .idea/jsLibraryMappings.xml
->>>>>>> refs/remotes/origin/master
+public/images/uploaded_files/
+public/images/*
+node_modules/
+
+*.JPG
+
+*.jpg
+
+*.svg
+
+*.jpg
+
+*.svg
+
+public/images/фтшьфешщт.svg
+
+public/images/test2.jpg
