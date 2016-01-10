@@ -12,6 +12,16 @@
 
 <body>
 <main>
+    <div class="col s12">
+        <ul class="tabs z-depth-1">
+            <li class="tab col s3">
+                <a id="LinkUnselected" class="active light-blue-text accent-2" href="#unselected">Скрытые</a>
+            </li>
+            <li class="tab col s3">
+                <a id="LinkSelected" class="light-blue-text accent-2" href="#selected">Отображаемые</a>
+            </li>
+        </ul>
+    </div>
     <!-- таблица проектов !-->
     <div class="container">
         <div class="row">
@@ -25,25 +35,36 @@
                     </tr>
                     </thead>
 
-                    <tbody>
+                    <tbody id="unselected">
                     <% for (var i in projects) { %>
-
-                    <tr id="<%= projects[i].id %>tr">
-                        <td><%= projects[i].name %></td>
-                        <td><%= projects[i].mark %></td>
-                        <td>
-                            <p>
-                                <input type="checkbox" id="<%= projects[i].id %>check"
-                                       onchange="trycheck('<%= i %>', <%= projects[i].id%>);"
-                                    <% if (projects[i].selected == 1) {%>
-                                        checked="checked"
-                                    <% } %>
-                                />
-                                <label for="<%= projects[i].id %>check"></label>
-                            </p>
-                        </td>
-                    </tr>
-                    <%  } %>
+                    <% if (projects[i].selected != 1) { %>
+                        
+                        <tr id="<%= projects[i].id %>tr">
+                            <td><%= projects[i].name %></td>
+                            <td><%= projects[i].mark %></td>
+                            <td>
+                                <a onclick="trycheck(<%= projects[i].id %>, '<%= projects[i].name %>', '<%= projects[i].mark %>', true);" class="btn-flat">
+                                    <i class="small material-icons" >play_arrow</i>
+                                </a>
+                            </td>
+                        </tr>
+                    <%  }} %>
+                    </tbody>
+                    
+                    <tbody id="selected">
+                    <% for (var i in projects) { %>
+                    <% if (projects[i].selected == 1) { %>
+                        
+                        <tr id="<%= projects[i].id %>tr">
+                            <td><%= projects[i].name %></td>
+                            <td><%= projects[i].mark %></td>
+                            <td>
+                                <a onclick="trycheck(<%= projects[i].id %>, '<%= projects[i].name %>', '<%= projects[i].mark %>', false);" class="btn-flat">
+                                    <i class="small material-icons" >not_interested</i>
+                                </a>
+                            </td>
+                        </tr>
+                    <%  }} %>
                     </tbody>
                 </table>
             </div>
@@ -56,31 +77,65 @@
 <script>
     var checkedCount = 0;
     var checkedLimit = 6;
-    var checkboxes;
+    
     $(document).ready(function(){
         $(".button-collapse").sideNav();
         $('.modal-trigger').leanModal();
-        checkboxes = $( "input:checkbox" );
-        for (var i in checkboxes) {
-            if (checkboxes[i].checked) {
-                checkedCount++;
-            }
-        }
+        checkedCount = document.getElementById("selected").children.length;
     });
-    var trycheck = function(index, id){
-        if (checkboxes[index].checked) {
-            if (checkedCount >= checkedLimit) {
-                checkboxes[index].checked = false;
-                Materialize.toast("Больше 6 проектов нельзя", 1000);
-            } else { checkedCount++; }
-        } else { checkedCount--; }
+    
+    var trycheck = function(id, name, mark, checked){
+        
+        if (checked && checkedCount >= checkedLimit) {
+            
+            Materialize.toast("Больше 6 проектов нельзя", 1000);
+            return;
+        } 
+        
+        // удаляем старую строку
+        var sel_tr = document.getElementById(id+"tr");
+        sel_tr.parentNode.removeChild(sel_tr);
+
+        // создаем новую
+        var action_i = document.createElement("i");
+        action_i.className = "small material-icons";
+        action_i.innerHTML = checked ? "not_interested" : "play_arrow";
+
+        var action_a = document.createElement("a");
+        action_a.className = "btn-flat";
+        action_a.setAttribute("onclick", "trycheck("+id+", '"+name+"', '"+mark+"', " + !checked + ");");
+        action_a.appendChild(action_i);
+
+        var action_td = document.createElement("td");
+        action_td.appendChild(action_a);
+
+        var name_td = document.createElement("td");
+        name_td.innerHTML = name;
+
+        var mark_td = document.createElement("td");
+        mark_td.innerHTML = mark;
+
+        var new_tr = document.createElement("tr");
+        new_tr.appendChild(name_td);
+        new_tr.appendChild(mark_td);
+        new_tr.appendChild(action_td);            
+        new_tr.setAttribute("id", id+"tr");
+
+        // добавляем новую
+        var parent = document.getElementById(checked ? "selected" : "unselected");
+        parent.insertBefore(new_tr, parent.firstChild);
+
+        if (checked) checkedCount++; else checkedCount--;
+
+        console.log("checked : " + checkedCount);
+
         $.ajax({
             type:"POST",
             url:'/admin/main_view/update',
-            data: "id="+id + '&selected=' + checkboxes[index].checked,
+            data: "id="+id + '&selected=' + checked,
             success: function(data){
                 if (data){
-                    Materialize.toast('Главная страница обнавлена.', 1000);
+                    Materialize.toast('Главная страница обновлена', 1000);
                 }
             }
         });

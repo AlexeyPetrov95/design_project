@@ -391,15 +391,12 @@ router.get('/logout', function(req, res){
 //        ******* Внешний вид ********
 
 router.get('/admin/view_list/', function (req, res) {
-    knexSQL('type').select().then(function(types){
         knexSQL('projects').select().then(function (projects) {
             res.render('adminView/view_list.ejs', {
                title: "Внешний вид",
-               projects: projects,
-               types: types
+               projects: projects
             });
         });
-    })
 });
 
 
