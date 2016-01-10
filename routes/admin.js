@@ -138,7 +138,7 @@ router.post('/admin/projects/upload_photo/:proj_id', function(req, res) {
                 }, function (id, callback){
                     knexSQL('images').select().where({id: id}).update({image_name: id + uploadFile.format, mini_name: id + '_mini' + uploadFile.format}).then(function () {
                         gm(uploadDir + id + uploadFile.format)
-                            .resize(900, 600)
+                            .resize(null, 700)
                             .write(uploadDir + id + uploadFile.format, function (err) {
                                 if (err) { throw err; res.send(500); };
                                 callback(null, id);
@@ -147,7 +147,7 @@ router.post('/admin/projects/upload_photo/:proj_id', function(req, res) {
                 }, function (id, callback){
                     gm(uploadDir + id + uploadFile.format)
                         .gravity('Center')
-                        .crop(800, 500)
+                        .crop(450, 250)
                         .write(uploadDir + id +'_mini'+ uploadFile.format, function (err) {
                             if (err) {
                                 console.log (err);

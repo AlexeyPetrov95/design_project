@@ -55,7 +55,7 @@
 
       </header>
       <!-- Блоки !-->
-      <main class="grey lighten-5 row">
+      <main class="grey lighten-4 row">
         <!-- title !-->
         <div class="row padding-20">
           <div class="col l4 s4 m4 hide-on-small-only" style="height: 140px;">
@@ -154,8 +154,8 @@
                 }
               }
               miniPhoto += '</div>';
-              $("#"+row).after('<div class="row '+ row +'" id="moreinfo"> ' +
-                      '<div class="col s12 offset-l'+offset+' offset-m'+offset+'" style="width: 10px; height: 10px; background: darkred"> </div>  ' +
+              $("#"+row).after('<div class="col s12 '+ row +'" id="moreinfo"> ' +
+                      '<div class="col s12 offset-l'+offset+' offset-m'+offset+' triangle"> </div>  ' +
                       '<div  class="col s12"> ' +
                       '<img style="width: 100%;" src="images/uploaded_files/'+mainPhoto+'" class="responsive-img">' +
                       '<div class="row" style="background: darkred;"> ' + miniPhoto + '</div>'+
