@@ -107,8 +107,8 @@
                     <div class="col s12 m6 l4" id="<%= photos[i].id %>photo">
                         <div class="card">
                             <div class="card-image">
-                                <!--img style="height: 100%" src="/images/uploaded_files/<%= photos[i].mini_name %>"/-->
-                                <img style="height: 100%" src="/images/uploaded_files/<%= photos[i].image_name %>"/>
+                                <img style="height: 100%" src="/images/uploaded_files/<%= photos[i].mini_name %>"/>
+
                             </div>
 
                             <ul class="card-action-buttons">
@@ -280,19 +280,17 @@
             });
         };
         // если уже было выбрано главное фото, то
-        if (type == 1){
-            if (hasMainPhoto){
-                for (var i = 1; i < selects.length; i++) {
-                    // ищем прошлые главные фото
-                    if (selects[i].value == 1){
-                        // меняем их на дефолтные в селектах
-                        $("#" + selects[i].getAttribute('id') + " [value='0']").attr("selected", "selected");
-                        // и в бд
-                        update_type(selects[i].getAttribute('id').slice(10), 0);
-                    }
-                };
-                $("#image_type"+id+" [value='1']").attr("selected", "selected");
-            }
+        if (type == 1 && hasMainPhoto ){
+            for (var i = 1; i < selects.length; i++) {
+                // ищем прошлые главные фото
+                if (selects[i].value == 1){
+                    // меняем их на дефолтные в селектах
+                    $("#" + selects[i].getAttribute('id') + " [value='0']").attr("selected", "selected");
+                    // и в бд
+                    update_type(selects[i].getAttribute('id').slice(10), 0);
+                }
+            };
+            $("#image_type"+id+" [value='1']").attr("selected", "selected");
         }
         // установка нового типа для выбранного фото
         update_type(id, type);

@@ -145,7 +145,7 @@ router.post('/admin/projects/upload_photo/:proj_id', function(req, res) {
                         gm(uploadDir + id + uploadFile.format)
                             .resize(null, 700)
                             .write(uploadDir + id + uploadFile.format, function (err) {
-                                if (err) { throw err; res.send(500); }; */
+                                if (err) { throw err; res.send(500); }
                                 callback(null, id); 
                             });
                     });
@@ -158,7 +158,7 @@ router.post('/admin/projects/upload_photo/:proj_id', function(req, res) {
                             if (err) {
                                 console.log (err);
                                 res.send(500);
-                            } else { */
+                            } else {
                                 callback(null, id);
                             }
                         })
