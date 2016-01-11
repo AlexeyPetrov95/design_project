@@ -129,10 +129,12 @@ router.post('/admin/projects/upload_photo/:proj_id', function(req, res) {
         if(errors.length == 0) {
             async.waterfall([
                 function (callback) {
-                    knexSQL('images').insert({projects_id: req.params.proj_id, type_images_id: 0}).returning('id').then(function (id) {
-                        fs.rename(uploadFile.path, uploadDir + id + uploadFile.format,  function (err) {
-                            if (err) { throw err; res.send(500); }
-                            callback(null, id);
+                    knexSQL('type_images').select().where({type: "default"}).then(function(def_type){
+                        knexSQL('images').insert({projects_id: req.params.proj_id, type_images_id: def_type[0].id}).returning('id').then( function(id){
+                            fs.rename(uploadFile.path, uploadDir + id + uploadFile.format,  function (err) {
+                                if (err) { throw err; res.send(500); }
+                                callback(null, id);
+                            });
                         });
                     });
                 }, function (id, callback){
@@ -158,9 +160,7 @@ router.post('/admin/projects/upload_photo/:proj_id', function(req, res) {
                         })
                 }
             ], function(err , id){
-                console.log('point seven');
                 knexSQL('type_images').select().then(function (imgtypes) {
-                    console.log('point eight');
                     res.send({
                         photo_id: id,
                         filename: id + uploadFile.format,
@@ -224,10 +224,15 @@ router.post('/admin/projects/load_photo', function(req, res) {
 });
 
 router.post('/admin/projects/update_photo', function(req, res){
-    knexSQL('images').select().where({id: req.body.id}).update({type_images_id: req.body.type}).then(function(){
-        res.send(true);
+    var photo_id = req.body.id;
+    var new_type = req.body.type;
+    knexSQL('type_images').select().where({type: new_type}).then(function(img_type){
+        knexSQL('images').select().where({id: photo_id}).update({type_images_id: img_type[0].id}).then(function(){
+            res.send(true);
+        });
     });
 });
+
 router.post('/admin/projects/delete_photo', function(req, res){
     var path = './public/images/uploaded_files/';
     knexSQL('images').select().where({id: req.body.id}).then(function(photo){
@@ -278,16 +283,19 @@ router.get('/admin/projects/', function (req, res) {
                     });
                 });
             }, function (projects, interiors, callback){
-                knexSQL('images').select().where({type_images_id: 1}).then(function(photos) {
-                    if (!photos) {
-                        res.send(500);
-                    } else {
-                        callback(null, photos, projects, interiors);
-                    }
+                
+                knexSQL('type_images').select().where({type: 'main'}).then(function(main_type){
+                    knexSQL('images').select().where({type_images_id: main_type[0].id}).then(function(photos) {
+                        if (!photos) {
+                            res.send(500);
+                        } else {
+                            callback(null, photos, projects, interiors);
+                        }
+                    });
                 });
             }, function (photos, projects, interiors, callback){
                 knexSQL('type').select().where({type: 'landscape'}).then(function(type) {
-                    knexSQL('projects').select().where({type_id: type[0].id}).limit(count).offset(landscapeOffset).then(function (landscape) {
+                    knexSQL('projects').select().where({type_id: type[0].id}).limit(count).offset(landscapeOffset).then(function(landscape){
                         if (!landscape) {
                             res.send(500);
                         } else {

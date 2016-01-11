@@ -121,11 +121,11 @@
                                         <select class="browser-default custom-select" onChange="update(<%= photos[i].id %>)" id="image_type<%= photos[i].id %>">
                                             <% for (var j = 0; j < image_types.length; j++) {
                                             if (image_types[j].id == photos[i].type_images_id) { %>
-                                            <option value="<%= image_types[j].id %>"><%= image_types[j].type_name %></option>
+                                            <option value="<%= image_types[j].type %>"><%= image_types[j].type_name %></option>
                                             <% }} %>
                                             <% for (var j = 0; j < image_types.length; j++) {
                                             if (image_types[j].id != photos[i].type_images_id) { %>
-                                            <option value="<%= image_types[j].id %>"><%= image_types[j].type_name %></option>
+                                            <option value="<%= image_types[j].type %>"><%= image_types[j].type_name %></option>
                                             <% }} %>
                                         </select>
                                     </div>
@@ -258,7 +258,7 @@
     function update(id) {
         // id нового выбранного типа (0 = дефолт (не укзаано), 1 = главная, 2..inf = остальные)
         var type = $("#image_type"+id).val();
-        var selects = $('select').slice(1);
+        var selects = $('select');
         // ajax - апдейт фотки в бд
         var update_type = function(id, type){
             $.ajax({
@@ -268,18 +268,20 @@
             });
         };
         // если уже было выбрано главное фото, то
-        if (type == 1){
-            for (var i in selects) {
-                var elem = selects[i];
-                var elem_id = elem.getAttribute('id');
+        if (type == "main"){
+            var elem, elem_id;
+            for (var i = 1; i < selects.length; i++) {
+                elem = selects[i];
+                console.log(elem);
+                elem_id = selects[i].getAttribute('id');
                 // ищем прошлые главные фото
-                if (elem.value == 1){
+                if (elem.value == "main"){
                     // меняем их на дефолтные в селектах
-                    $("#"+elem_id).val('0');
+                    $("#"+elem_id).val('default');
                     // и в бд
-                    update_type(elem_id.slice(10), 0);
+                    update_type(elem_id.slice(10), "default");
                 }
-                $("#image_type"+id).val('1');
+                $("#image_type"+id).val('main');
             };
         }
         // установка нового типа для выбранного фото
