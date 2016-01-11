@@ -78,9 +78,15 @@
              <% for (var i = 0; i < projects.length; i++) { %>
                <div id="<%= i+1 %>" class="col s12 m4 l4">
                    <div class="card medium" onclick="more(<%= projects[i].id%>, <%=i%>, <%= projects.length%>)">
-                     <div style="background: #bdbdbd;">
-                       <div style="background: url(/images/uploaded_files/<%= projects[i].image_name %>) no-repeat; width: 100%; height: 225px;  background-size: <%= projects[i].orient == 1 ? 'contain' : 'cover'%>; background-position: center"> </div>
+                     <% if (projects[i].orient == 1){ %>
+                     <div style="background: black; height: 225px;">
+                       <img src="/images/uploaded_files/<%= projects[i].image_name %>" style="display: table; margin: 0 auto; height: 225px;" />
                      </div>
+                     <% } else { %>
+                     <div class="cover">
+                       <img src="/images/uploaded_files/<%= projects[i].image_name %>" class="cover" />
+                     </div>
+                     <% } %>
                      <ul class="card-action-buttons">
                        <li><a class="btn-floating waves-effect waves-light light-blue accent-2"><i class="material-icons">more_horiz</i></a></li>
                      </ul>

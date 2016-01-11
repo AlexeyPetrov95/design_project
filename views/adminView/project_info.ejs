@@ -106,9 +106,18 @@
                     <% for (var i = 0; i < photos.length; i++) { %>
                     <div class="col s12 m6 l4" id="<%= photos[i].id %>photo">
                         <div class="card">
-                            <div style="background: #d1d1d1;">
-                                <div style="background: url(/images/uploaded_files/<%= photos[i].image_name %>) no-repeat; width: 100%; height: 225px;  background-size: <%= photos[i].orient == 1 ? 'contain' : 'cover'%>; background-position: center"> </div>
-                            </div>
+
+                                <% if (photos[i].orient == 1){ %>
+                                    <div style="background: black; height: 225px;">
+                                        <img src="/images/uploaded_files/<%= photos[i].image_name %>" style="display: table; margin: 0 auto; height: 225px;" />
+                                    </div>
+                                <% } else { %>
+                                     <div class="cover">
+                                       <img src="/images/uploaded_files/<%= photos[i].image_name %>" class="cover" />
+                                     </div>
+                                <% } %>
+
+
                             <ul class="card-action-buttons">
                                 <li><a onclick="deletePhoto(<%= photos[i].id %>);" class="btn-floating waves-effect waves-light red"><i class="material-icons">close</i></a>
                                 </li>
@@ -193,7 +202,7 @@
                                 photo_item_html += '                <div>'
                                 photo_item_html += '                <select class="browser-default custom-select" onChange="update('+res.photo_id +')" id="image_type' + res.photo_id + '">';
                                 for (var j = 0; j < res.image_types.length; j++) {
-                                    photo_item_html += '                <option value="' + res.image_types[j].id + '">' + res.image_types[j].type_name + '</option>';
+                                    photo_item_html += '                <option value="' + res.image_types[j].type + '">' + res.image_types[j].type_name + '</option>';
                                 }
                                 photo_item_html += '                </select>';
                                 photo_item_html += '                </div>';

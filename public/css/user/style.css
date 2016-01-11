@@ -4,6 +4,36 @@ body{
   overflow-x: hidden;
 }
 
+body{
+  overflow-x:hidden;
+}
+div.cover {
+  position: relative;
+  left: -50%;
+  width: 200%;
+  height: 225px;
+  overflow: hidden;
+}
+.card-content {
+  overflow-y: auto !important;
+}
+.card{
+  overflow: hidden !important;
+}
+
+img.cover {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  margin: auto;
+  min-width: 52%;
+  min-height: 52%;
+  overflow-x: hidden;
+  height: 225px;
+}
+
 html, body{
   height : 100%;
   width : 100%;

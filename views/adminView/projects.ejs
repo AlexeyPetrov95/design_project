@@ -39,7 +39,7 @@
                                 <div class="card medium" id="<%=projects[i].id %>card" >
                                     <div class="card-image">
                                         <%  var pic = pictures.filter(function(x){return x.projects_id == projects[i].id })[0];
-                                            var image_name = pic ? "uploaded_files/"+pic.mini_name : "default.jpg" 
+                                            var image_name = pic ? "uploaded_files/"+pic.image_name : "default.jpg"
                                             var back_size = pic ? (pic.orient == 1 ? "contain" : "cover") : "cover" %>
                                         <div style="background: #d1d1d1;">
                                             <div style="background: url(/images/<%= image_name %>) no-repeat; width: 100%; height: 225px; background-size: <%= back_size %>; background-position: center"> </div>
@@ -71,7 +71,7 @@
                                 <div class="card medium" id="<%=interiors[i].id%>card">
                                     <div class="card-image">
                                         <%  pic = pictures.filter(function(x){return x.projects_id == interiors[i].id })[0];
-                                            image_name = pic ? "uploaded_files/"+pic.mini_name : "default.jpg" 
+                                            image_name = pic ? "uploaded_files/"+pic.image_name : "default.jpg"
                                             back_size = pic ? (pic.orient == 1 ? "contain" : "cover") : "cover" %>
                                         <div style="background: #d1d1d1;">
                                             <div style="background: url(/images/<%= image_name %>) no-repeat; width: 100%; height: 225px; background-size: <%= back_size %>; background-position: center"> </div>
@@ -101,7 +101,7 @@
                                 <div class="card medium" id="<%=landscape[i].id%>card">
                                     <div class="card-image">
                                         <%  pic = pictures.filter(function(x){return x.projects_id == landscape[i].id })[0];
-                                            image_name = pic ? "uploaded_files/"+pic.mini_name : "default.jpg" 
+                                            image_name = pic ? "uploaded_files/"+pic.image_name : "default.jpg"
                                             back_size = pic ? (pic.orient == 1 ? "contain" : "cover") : "cover" %>
                                         <div style="background: #d1d1d1;">
                                             <div style="background: url(/images/<%= image_name %>) no-repeat; width: 100%; height: 225px; background-size: <%= back_size %>; background-position: center"> </div>

@@ -151,7 +151,7 @@ router.post('/admin/projects/upload_photo/:proj_id', function(req, res) {
                 }, function (id, callback){ // надо ли теперь!
                     gm(uploadDir + id + uploadFile.format)
                         .gravity('Center')
-                        .crop(450, 250)
+                        .crop(500, 375)
                         .write(uploadDir + id +'_mini'+ uploadFile.format, function (err) {
                             if (err) {
                                 console.log (err);
