@@ -5,7 +5,7 @@ var router = express.Router();
 router.get('/', function(req, res, next) {
     knexSQL('type_images').select().where({type: 'main'}).then(function (type_images) {
         knexSQL('projects').select('projects.id as id', 'projects.material','projects.name','projects.price',
-        'projects.space','projects.number_room','projects.description','images.mini_name', 'type.type')
+        'projects.space','projects.number_room','projects.description','images.mini_name','images.image_name', 'type.type', 'images.orient', 'projects.name')
             .where({selected: 1})
             .join('images', 'projects.id', 'images.projects_id')
             .join('type', 'type.id', 'projects.type_id').as('ignored_alias1')

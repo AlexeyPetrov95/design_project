@@ -111,7 +111,6 @@ router.post('/admin/projects/upload_photo/:proj_id', function(req, res) {
     var maxSize = 10 * 1024 * 1024; //10MB
     var supportMimeTypes = ['image/jpg', 'image/jpeg', 'image/png'];
     var errors = [];
-    var cropSize = {width: 800, height: 500};
     var uploadDir = 'public/images/uploaded_files/'
     var prefix = 'uploaded';
 
@@ -138,26 +137,32 @@ router.post('/admin/projects/upload_photo/:proj_id', function(req, res) {
                         });
                     });
                 }, function (id, callback){
-                    knexSQL('images').select().where({id: id}).update({image_name: id + uploadFile.format, mini_name: id + '_mini' + uploadFile.format}).then(function () {
+                        gm(uploadDir + id + uploadFile.format).size(function(err, value){
+                            var isPort = value.width < value.height;
+                            gm(uploadDir + id + uploadFile.format)
+                                .resize(null, 700)
+                                .write(uploadDir + id + uploadFile.format, function (err) {
+                                    if (err) { throw err; res.send(500); }
+                                    knexSQL('images').select().where({id: id}).update({image_name: id + uploadFile.format, mini_name: id + '_mini' + uploadFile.format, orient: isPort ? 1 : 0 }).then(function () {
+                                        callback(null, id);
+                                    });
+                                });
+                        });
+                }, function (id, callback){ // надо ли теперь!
+                    gm(uploadDir + id + uploadFile.format).size(function(err, value) {
                         gm(uploadDir + id + uploadFile.format)
-                            .resize(900, 600)
-                            .write(uploadDir + id + uploadFile.format, function (err) {
-                                if (err) { throw err; res.send(500); }; 
-                                callback(null, id); 
-                            });
+                            .gravity('Center')
+                            .resize(value.width < 900 ? 900 : null, 700, '!')
+                            .crop(900, 700)
+                            .write(uploadDir + id + '_mini' + uploadFile.format, function (err) {
+                                if (err) {
+                                    console.log (err);
+                                    res.send(500);
+                                } else {
+                                    callback(null, id);
+                                }
+                            })
                     });
-                }, function (id, callback){
-                    gm(uploadDir + id + uploadFile.format)
-                        .gravity('Center')
-                        .crop(800, 500)
-                        .write(uploadDir + id +'_mini'+ uploadFile.format, function (err) {
-                            if (err) {
-                                console.log (err);
-                                res.send(500);
-                            } else { 
-                                callback(null, id);
-                            }
-                        })
                 }
             ], function(err , id){
                 knexSQL('type_images').select().then(function (imgtypes) {
@@ -258,7 +263,7 @@ router.get('/admin/projects/', function (req, res) {
         projectOffset = 0;
         interiorsOffset = 0;
         landscapeOffset = 0;
-        count = 12;
+        count = 6;
         async.waterfall([
             function (callback) {
                 knexSQL('type').select().where({type: 'projects'}).then(function(type){

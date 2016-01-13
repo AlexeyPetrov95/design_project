@@ -106,14 +106,14 @@
                     <% for (var i = 0; i < photos.length; i++) { %>
                     <div class="col s12 m6 l4" id="<%= photos[i].id %>photo">
                         <div class="card">
+
                             <div class="card-image">
-                                <img style="height: 100%" src="/images/uploaded_files/<%= photos[i].mini_name %>"/>
+                                <img src="/images/uploaded_files/<%= photos[i].mini_name %>" class="responsive-img" />
                             </div>
 
                             <ul class="card-action-buttons">
                                 <li><a onclick="deletePhoto(<%= photos[i].id %>);" class="btn-floating waves-effect waves-light red"><i class="material-icons">close</i></a>
                                 </li>
-
                             </ul>
                             <div class="card-content overflow-none">
                                 <div class="input-field">
@@ -150,6 +150,7 @@
         $('.modal-trigger').leanModal();
         $('select').material_select();
     });
+
     
     function uploadPhoto(project_id){
         var files = document.getElementById("photo_chooser").files;
@@ -165,7 +166,7 @@
                 if (index < data.length){
                     $.ajax({
                         type: "POST",
-                        url: "/admin/projects/upload_photo/"+project_id ,
+                        url: "/admin/projects/upload_photo/"+project_id + '?album='+true,
                         data: data[index],
                         cache: false,
                         processData: false,
@@ -195,7 +196,7 @@
                                 photo_item_html += '                <div>'
                                 photo_item_html += '                <select class="browser-default custom-select" onChange="update('+res.photo_id +')" id="image_type' + res.photo_id + '">';
                                 for (var j = 0; j < res.image_types.length; j++) {
-                                    photo_item_html += '                <option value="' + res.image_types[j].id + '">' + res.image_types[j].type_name + '</option>';
+                                    photo_item_html += '                <option value="' + res.image_types[j].type + '">' + res.image_types[j].type_name + '</option>';
                                 }
                                 photo_item_html += '                </select>';
                                 photo_item_html += '                </div>';

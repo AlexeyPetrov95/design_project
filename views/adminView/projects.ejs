@@ -36,19 +36,19 @@
                             <% var start = 0, count = projects.length > 12 ? 12 : projects.length ;
                             for (var i = start; i < count; i++) { %>
                             <div class="col s12 m6 l4">
-                                <div class="card medium" id="<%=projects[i].id %>card" >
+                                <div class="card" id="<%=projects[i].id %>card" >
                                     <div class="card-image">
                                         <%  var pic = pictures.filter(function(x){return x.projects_id == projects[i].id })[0];
-                                            var image_name = pic ? "uploaded_files/"+pic.mini_name : "default.jpg" 
+                                            var image_name = pic ? "uploaded_files/"+pic.mini_name : "default.jpg"
                                             var back_size = pic ? (pic.orient == 1 ? "contain" : "cover") : "cover" %>
-                                        <div style="background: #d1d1d1;">
-                                            <div style="background: url(/images/<%= image_name %>) no-repeat; width: 100%; height: 225px; background-size: <%= back_size %>; background-position: center"> </div>
+                                        <div class="card-image">
+                                            <img src="/images/<%= image_name %>" class="responsive-img" />
                                         </div>
                                         <span class="card-title"><%= projects[i].name %></span>
                                     </div>
                                     <ul class="card-action-buttons">
                                         <li><a href="/admin/projects/<%= projects[i].id %>" class="btn-floating waves-effect waves-light light-blue accent-2"><i class="material-icons">more_horiz</i></a></li>
-                                        <li><a onclick="getProject(<%=projects[i].id%>, '<%= projects[i].mark %>')" class="btn-floating waves-effect waves-light red"><i class="material-icons">close</i></a></li>
+                                        <li><a onclick="getProject(<%=projects[i].id%>)" class="btn-floating waves-effect waves-light red"><i class="material-icons">close</i></a></li>
                                     </ul>
                                     <div class="card-content">
                                         <div> <b>Маркировка:</b> <%= projects[i].mark %> </div>
@@ -68,13 +68,13 @@
                         <div class="row" id="interiors_place">
                             <% for (var i = start; i < interiors.length; i++) { %>
                             <div class="col s12 m6 l4">
-                                <div class="card medium" id="<%=interiors[i].id%>card">
+                                <div class="card" id="<%=interiors[i].id%>card">
                                     <div class="card-image">
                                         <%  pic = pictures.filter(function(x){return x.projects_id == interiors[i].id })[0];
-                                            image_name = pic ? "uploaded_files/"+pic.mini_name : "default.jpg" 
+                                            image_name = pic ? "uploaded_files/"+pic.mini_name : "default.jpg"
                                             back_size = pic ? (pic.orient == 1 ? "contain" : "cover") : "cover" %>
-                                        <div style="background: #d1d1d1;">
-                                            <div style="background: url(/images/<%= image_name %>) no-repeat; width: 100%; height: 225px; background-size: <%= back_size %>; background-position: center"> </div>
+                                        <div class="card-image">
+                                            <img src="/images/<%= image_name %>" class="responsive-img" />
                                         </div>
                                         <span class="card-title"><%= interiors[i].name %></span>
                                     </div>
@@ -98,13 +98,13 @@
                         <div class="row" id="landscape_place">
                             <% for (var i = start; i < landscape.length; i++) { %>
                             <div class="col s12 m6 l4">
-                                <div class="card medium" id="<%=landscape[i].id%>card">
+                                <div class="card" id="<%=landscape[i].id%>card">
                                     <div class="card-image">
                                         <%  pic = pictures.filter(function(x){return x.projects_id == landscape[i].id })[0];
-                                            image_name = pic ? "uploaded_files/"+pic.mini_name : "default.jpg" 
+                                            image_name = pic ? "uploaded_files/"+pic.mini_name : "default.jpg"
                                             back_size = pic ? (pic.orient == 1 ? "contain" : "cover") : "cover" %>
-                                        <div style="background: #d1d1d1;">
-                                            <div style="background: url(/images/<%= image_name %>) no-repeat; width: 100%; height: 225px; background-size: <%= back_size %>; background-position: center"> </div>
+                                        <div class="card-image">
+                                            <img src="/images/<%= image_name %>" class="responsive-img" />
                                         </div>
                                         <span class="card-title"><%= landscape[i].name %></span>
                                     </div>
@@ -149,7 +149,7 @@
 
                             <option value="" disabled selected>Выберите тип</option>
                             <% for (var i = 0; i < type.length; i++) { %>
-                                <option value="<%=type[i].type%>"><%= type[i].name %></option>
+                                <option value="<%=type[i].type%>"><%= type[i].type_name %></option>
                             <% } %>
                         </select>
                         <label>Выберите тип</label>
