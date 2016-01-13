@@ -107,16 +107,9 @@
                     <div class="col s12 m6 l4" id="<%= photos[i].id %>photo">
                         <div class="card">
 
-                                <% if (photos[i].orient == 1){ %>
-                                    <div style="background: black; height: 225px;">
-                                        <img src="/images/uploaded_files/<%= photos[i].image_name %>" style="display: table; margin: 0 auto; height: 225px;" />
-                                    </div>
-                                <% } else { %>
-                                     <div class="cover">
-                                       <img src="/images/uploaded_files/<%= photos[i].image_name %>" class="cover" />
-                                     </div>
-                                <% } %>
-
+                            <div class="card-image">
+                                <img src="/images/uploaded_files/<%= photos[i].mini_name %>" class="responsive-img" />
+                            </div>
 
                             <ul class="card-action-buttons">
                                 <li><a onclick="deletePhoto(<%= photos[i].id %>);" class="btn-floating waves-effect waves-light red"><i class="material-icons">close</i></a>
@@ -157,6 +150,7 @@
         $('.modal-trigger').leanModal();
         $('select').material_select();
     });
+
     
     function uploadPhoto(project_id){
         var files = document.getElementById("photo_chooser").files;

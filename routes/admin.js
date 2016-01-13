@@ -149,17 +149,20 @@ router.post('/admin/projects/upload_photo/:proj_id', function(req, res) {
                                 });
                         });
                 }, function (id, callback){ // надо ли теперь!
-                    gm(uploadDir + id + uploadFile.format)
-                        .gravity('Center')
-                        .crop(500, 375)
-                        .write(uploadDir + id +'_mini'+ uploadFile.format, function (err) {
-                            if (err) {
-                                console.log (err);
-                                res.send(500);
-                            } else {
-                                callback(null, id);
-                            }
-                        })
+                    gm(uploadDir + id + uploadFile.format).size(function(err, value) {
+                        gm(uploadDir + id + uploadFile.format)
+                            .gravity('Center')
+                            .resize(value.width < 900 ? 900 : null, 700, '!')
+                            .crop(900, 700)
+                            .write(uploadDir + id + '_mini' + uploadFile.format, function (err) {
+                                if (err) {
+                                    console.log (err);
+                                    res.send(500);
+                                } else {
+                                    callback(null, id);
+                                }
+                            })
+                    });
                 }
             ], function(err , id){
                 knexSQL('type_images').select().then(function (imgtypes) {
@@ -260,7 +263,7 @@ router.get('/admin/projects/', function (req, res) {
         projectOffset = 0;
         interiorsOffset = 0;
         landscapeOffset = 0;
-        count = 12;
+        count = 6;
         async.waterfall([
             function (callback) {
                 knexSQL('type').select().where({type: 'projects'}).then(function(type){

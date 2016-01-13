@@ -9,6 +9,11 @@ div.cover {
     overflow: hidden;
 }
 
+.card-content {
+    overflow-y: auto !important;
+    height: 135px;
+}
+
 .card{
     overflow: hidden !important;
 }
