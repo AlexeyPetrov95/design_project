@@ -13,17 +13,17 @@
 
 <body>
 <main>
-
-        <div class="col s12">
-            <ul class="tabs z-depth-1">
-                <li class="tab col s3"><a id="LinkInfo" class="active light-blue-text accent-2" href="#information">Информация</a></li>
-                <li class="tab col s3"><a id="LinkPhoto" class="light-blue-text accent-2" href="#photo">Фотографии</a></li>
-            </ul>
-        </div>
+    <!-- Навигация -->
+    <div class="col s12">
+        <ul class="tabs z-depth-1">
+            <li class="tab col s3"><a id="LinkInfo" class="active light-blue-text accent-2" href="#information">Информация</a></li>
+            <li class="tab col s3"><a id="LinkPhoto" class="light-blue-text accent-2" href="#photo">Фотографии</a></li>
+        </ul>
+    </div>
     <div class="container">
+        <!-- Форма информации о проекте -->
         <div id="information" class="col s12">
             <div class="row padding-top-20">
-                <!-- ФОРМА РЕДАКТИРОВАТЬ !-->
                 <div class="card-panel">
                     <div class="input-field col s12">
                         <select id="type" disabled>
@@ -81,40 +81,46 @@
                 </div>
             </div>
         </div>
-        <!-- РАЗДЕЛ ФОТО !-->
+        
+        <!-- Раздел фотографий проекта -->
         <div id="photo" class="col s12">
             <div class="row padding-top-20">
+                
+                <!-- Аплоадер -->
                 <form class="col s12 m12 l12" action="#">
                     <div class="file-field input-field">
                         <div class="btn light-blue accent-2">
                             <span>Upload</span>
-                            <input id="photo_chooser" type="file"  multiple onchange="uploadPhoto(<%= project.id %> ); $(this).val('')">
+                            <input id="photo_chooser" type="file" multiple onchange="uploadPhoto(<%= project.id %> ); $(this).val('')">
                         </div>
                         <div class="file-path-wrapper">
                             <input class="file-path validate" type="text">
                         </div>
                     </div>
                 </form>
-
-
-
+                
+                <!-- Прелоадер -->
                 <div  id='preloader' class="progress  blue lighten-5" style="display: none">
                     <div class="indeterminate blue"></div>
                 </div>
 
+                <!-- Фотографии -->
                 <div class="row" id="main_photo">
+                    
                     <% for (var i = 0; i < photos.length; i++) { %>
+                    <!-- Карточка -->
                     <div class="col s12 m6 l4" id="<%= photos[i].id %>photo">
                         <div class="card">
-
+                            <!-- Фото в карточке -->
                             <div class="card-image">
                                 <img src="/images/uploaded_files/<%= photos[i].mini_name %>" class="responsive-img" />
                             </div>
-
+                            <!-- Кнопка "удалить" -->
                             <ul class="card-action-buttons">
                                 <li><a onclick="deletePhoto(<%= photos[i].id %>);" class="btn-floating waves-effect waves-light red"><i class="material-icons">close</i></a>
                                 </li>
                             </ul>
+                            <!-- Селект с типами -->
                             <div class="card-content overflow-none">
                                 <div class="input-field">
                                     <div>
@@ -143,152 +149,6 @@
 
 <script type="text/javascript" src="https://code.jquery.com/jquery-2.1.4.min.js"></script>
 <script type="text/javascript" src="/js/materialize.min.js"></script>
-<script>
-    
-    $(document).ready(function(){
-        $('ul.tabs').tabs();
-        $('.modal-trigger').leanModal();
-        $('select').material_select();
-    });
-
-    
-    function uploadPhoto(project_id){
-        var files = document.getElementById("photo_chooser").files;
-        if (!files) { Materialize.toast('No files', 4000); return; }
-        else
-        {
-            var data = [];
-            for (var i = 0; i < files.length; i++){
-                data[i] = new FormData();
-                data[i].append('uploadFile', files[i]);
-            }
-            var upload = function(index){
-                if (index < data.length){
-                    $.ajax({
-                        type: "POST",
-                        url: "/admin/projects/upload_photo/"+project_id + '?album='+true,
-                        data: data[index],
-                        cache: false,
-                        processData: false,
-                        contentType: false,
-                        beforeSend: function(){
-                            $('#preloader').css("display", "block");
-                        },
-                        success: function(res){
-
-                            upload(++index);
-                            if (res.status == 'bad'){ Materialize.toast("Ошибка при загрузке", 3000); }
-                            else {
-                                // генерим HTML для нового блока фотографии
-                                var photo_item = document.createElement("div");
-                                photo_item.className = "col s12 m6 l4";
-                                photo_item.setAttribute("id", res.photo_id+"photo");
-                                var photo_item_html = "";
-                                photo_item_html += '     <div class="card" id="main_photo">';
-                                photo_item_html += '         <div class="card-image">';
-                                photo_item_html += '            <img style="height: 100%" src="/images/uploaded_files/'+res.mini_name + '"/>';
-                                photo_item_html += '        </div>';
-                                photo_item_html += '        <ul class="card-action-buttons">';
-                                photo_item_html += '            <li><a onclick="deletePhoto('+res.photo_id+');" class="btn-floating waves-effect waves-light red"><i class="material-icons">close</i></a></li>';
-                                photo_item_html += '        </ul>';
-                                photo_item_html += '        <div class="card-content overflow-none"> ';
-                                photo_item_html += '            <div class="input-field">';
-                                photo_item_html += '                <div>'
-                                photo_item_html += '                <select class="browser-default custom-select" onChange="update('+res.photo_id +')" id="image_type' + res.photo_id + '">';
-                                for (var j = 0; j < res.image_types.length; j++) {
-                                    photo_item_html += '                <option value="' + res.image_types[j].type + '">' + res.image_types[j].type_name + '</option>';
-                                }
-                                photo_item_html += '                </select>';
-                                photo_item_html += '                </div>';
-                                photo_item_html += '            </div>';
-                                photo_item_html += '        </div>';
-                                photo_item_html += '        </div>';
-                                photo_item_html += '    </div>';
-                                photo_item.innerHTML = photo_item_html;
-                                document.getElementById("main_photo").appendChild(photo_item);
-                            }
-                        }
-                    });
-                } else {
-                    // добавляем materialize обработку на селекты
-                    $('select').material_select();
-                    $('#preloader').css("display", "none");
-                    Materialize.toast("фотографии загружены на сервер", 1000);
-                }
-            }
-            upload(0);
-        };
-    }
-    function deletePhoto(photo_id){
-        $.ajax({
-            type: "POST",
-            url: '/admin/projects/delete_photo/',
-            data: 'id='+ photo_id,
-            success: function (data) {
-                if (!data) {
-                    Materialize.toast('Не удалось удалить фото', 1000);
-                } else {
-                    $('#'+photo_id+'photo').remove();
-                    Materialize.toast('Фотография удалена', 1000);
-                }
-            }
-        });
-    }
-    function replaceProject(id) {
-        var material = $("#material").val();
-        var description = $("#desc").val();
-        var name = $('[name="name"]').val();
-        var mark = $('[name="mark"]').val();
-        var price = $('[name="price"]').val();
-        var space = $('[name="space"]').val();
-        var number_room = $('[name="number_room"]').val();
-
-        $.ajax({
-            type: "POST",
-            url: '/admin/projects/replace_project',
-            data: 'id='+ id +'&type=' + type + '&name=' + name + '&mark=' + mark + '&price=' + price + '&space=' + space + '&number_room=' + number_room + '&material=' + material + '&description=' + description,
-            success: function (data) {
-                if (!data) {
-                    Materialize.toast('Не удалось сохранить изменения', 1000);
-                } else {
-                    Materialize.toast('Изменения сохранены', 1000);
-                }
-            }
-        });
-    }
-    function update(id) {
-        // id нового выбранного типа (0 = дефолт (не укзаано), 1 = главная, 2..inf = остальные)
-        var type = $("#image_type"+id).val();
-        var selects = $('select');
-        // ajax - апдейт фотки в бд
-        var update_type = function(id, type){
-            $.ajax({
-                type: "POST",
-                url: '/admin/projects/update_photo',
-                data: 'id='+id+'&type='+type,
-            });
-        };
-        // если уже было выбрано главное фото, то
-        if (type == "main"){
-            var elem, elem_id;
-            for (var i = 1; i < selects.length; i++) {
-                elem = selects[i];
-                console.log(elem);
-                elem_id = selects[i].getAttribute('id');
-                // ищем прошлые главные фото
-                if (elem.value == "main"){
-                    // меняем их на дефолтные в селектах
-                    $("#"+elem_id).val('default');
-                    // и в бд
-                    update_type(elem_id.slice(10), "default");
-                }
-                $("#image_type"+id).val('main');
-            };
-        }
-        // установка нового типа для выбранного фото
-        update_type(id, type);
-        Materialize.toast('Тип успешно изменен.', 1000);
-    }
-</script>
+<script src="/js/admin_project_info.js"></script>
 </body>
 </html>

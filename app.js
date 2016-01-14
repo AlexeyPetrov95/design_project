@@ -11,10 +11,13 @@ var winston = require('winston')
 var routes = require('./routes/index');
 var login = require('./routes/login');
 var admin = require('./routes/admin');
-var admin_design = require('./routes/admin_design');
-
+var adminDesign = require('./routes/adminDesign');
+var adminProjects = require('./routes/adminProjects');
+var adminProjects = require('./routes/adminProjectInfo');
+var adminProjects = require('./routes/adminViewList');
 
 var app = express();
+
 winston.add(winston.transports.File, { filename: 'somefile.log' });
 
 knexSQL = require('knex')({
@@ -26,7 +29,6 @@ knexSQL = require('knex')({
     database : 'design_db_test'
   }
 });
-
 
 var store = new KnexSessionStore({
   knex: knexSQL,
@@ -41,7 +43,6 @@ app.use(logger('dev'));
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(cookieParser());
-
 app.use(session ({
 	resave: true,
     saveUninitialized: false,
@@ -56,9 +57,10 @@ app.use(express.static(path.join(__dirname, 'public')));
 app.use('/', routes);
 app.use('/', login );
 app.use('/', loadUser, admin);
-app.use('/', loadUser, admin_design);
-
-
+app.use('/', loadUser, adminDesign);
+app.use('/', loadUser, adminProjects);
+app.use('/', loadUser, adminProjectInfo);
+app.use('/', loadUser, adminViewList);
 
 function loadUser(req, res, next) {
   if (req.session.authorized) {
@@ -76,7 +78,6 @@ app.use(function(req, res, next) {
   next(err);
 });
 
-
 if (app.get('env') === 'development') {
   app.use(function(err, req, res, next) {
     res.status(err.status || 500);
@@ -87,7 +88,6 @@ if (app.get('env') === 'development') {
   });
 }
 
-
 app.use(function(err, req, res, next) {
   res.status(err.status || 500);
   res.render('user/error', {
@@ -95,6 +95,5 @@ app.use(function(err, req, res, next) {
     error: {}
   });
 });
-
 
 module.exports = app;

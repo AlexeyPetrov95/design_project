@@ -33,7 +33,7 @@
                 <div class="row">
                     <div id="projects" class="col s12">
                         <div class="row" id="project_place">
-                            <% var start = 0, count = projects.length > 12 ? 12 : projects.length ;
+                            <% var start = 0, count = (projects.length > 12) ? 12 : projects.length ;
                             for (var i = start; i < count; i++) { %>
                             <div class="col s12 m6 l4">
                                 <div class="card" id="<%=projects[i].id %>card" >
@@ -70,7 +70,7 @@
                             <div class="col s12 m6 l4">
                                 <div class="card" id="<%=interiors[i].id%>card">
                                     <div class="card-image">
-                                        <%  pic = pictures.filter(function(x){return x.projects_id == interiors[i].id })[0];
+                                        <%  pic = pictures.filter(function(x){ return x.projects_id == interiors[i].id })[0];
                                             image_name = pic ? "uploaded_files/"+pic.mini_name : "default.jpg"
                                             back_size = pic ? (pic.orient == 1 ? "contain" : "cover") : "cover" %>
                                         <div class="card-image">
