@@ -90,12 +90,12 @@ router.get('/admin/projects/', function (req, res) {
                 });
             }, function (photos, projects, interiors, callback){
                 
-                // выгрузка ландшафтов
-                var landscapeType = type[0];
                 knexSQL('type').select()
                     .where({type: 'landscape'})
                     .then(function(type) {
                     
+                    // выгрузка ландшафтов
+                    var landscapeType = type[0];
                     knexSQL('projects').select()
                         .where({type_id: type[0].id})
                         .limit(count)

@@ -10,11 +10,11 @@ var winston = require('winston')
 
 var routes = require('./routes/index');
 var login = require('./routes/login');
-var admin = require('./routes/admin');
-var adminDesign = require('./routes/adminDesign');
-var adminProjects = require('./routes/adminProjects');
-var adminProjects = require('./routes/adminProjectInfo');
-var adminProjects = require('./routes/adminViewList');
+var admin = require('./routes/admin/admin');
+var adminDesign = require('./routes/admin/adminDesign');
+var adminProjects = require('./routes/admin/adminProjects');
+var adminProjectInfo = require('./routes/admin/adminProjectInfo');
+var adminViewList = require('./routes/admin/adminViewList');
 
 var app = express();
 
