@@ -124,6 +124,8 @@ router.post('/admin/projects/upload_photo/:proj_id', function(req, res) {
     });
 
     form.on('close', function() {
+        var format = uploadFile.format.replace('.', '');
+        console.log(format);
         //если нет ошибок и все хорошо
         if(errors.length == 0) {
             async.waterfall([
@@ -141,6 +143,7 @@ router.post('/admin/projects/upload_photo/:proj_id', function(req, res) {
                             var isPort = value.width < value.height;
                             gm(uploadDir + id + uploadFile.format)
                                 .resize(null, 700)
+                                .quality(80)
                                 .write(uploadDir + id + uploadFile.format, function (err) {
                                     if (err) { throw err; res.send(500); }
                                     knexSQL('images').select().where({id: id}).update({image_name: id + uploadFile.format, mini_name: id + '_mini' + uploadFile.format, orient: isPort ? 1 : 0 }).then(function () {
@@ -153,6 +156,7 @@ router.post('/admin/projects/upload_photo/:proj_id', function(req, res) {
                         gm(uploadDir + id + uploadFile.format)
                             .gravity('Center')
                             .resize(value.width < 900 ? 900 : null, 700, '!')
+                            .quality(30)
                             .crop(900, 700)
                             .write(uploadDir + id + '_mini' + uploadFile.format, function (err) {
                                 if (err) {

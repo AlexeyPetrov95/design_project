@@ -2,6 +2,9 @@
 <html>
 <head>
     <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+    <meta http-equiv="Content-Language" content="ru" />
     <title><%= title %></title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
     <link href='https://fonts.googleapis.com/css?family=Bad+Script&subset=latin,cyrillic' rel='stylesheet' type='text/css'>
@@ -44,8 +47,8 @@
         </div>
 
         <!-- Основная картинка-фон  *******  Переделать на background в css ******** !-->
-        <div class="mainBackground" style="background: rgba(0,0,0,0.3);">
-            <img src="/images/main.jpg">
+        <div class="mainBackground">
+           <!-- <img src="/images/main.jpg"> !-->
         </div>
 
     </div>
@@ -61,7 +64,7 @@
 </header>
 
 
-<main class="grey lighten-2 row">
+<main class="grey lighten-3 row">
     <!-- Заголовок  !-->
     <div id="scrollBottom" class="row padding-20">
         <div class="col l4 s4 m4 hide-on-small-only" style="height: 140px;">
@@ -81,13 +84,13 @@
             <div class="row">
                 <% for (var i = 0; i < projects.length; i++) { %>
                 <div id="<%= i + 1 %>" class="col s12 m4 l4">
-                    <div class="card waves-light waves-effect waves-block" onclick="more(<%= projects[i].id %>, <%= i %>, <%= projects.length %>)">
+                    <div class="card waves-light waves-effect waves-block" onclick="moreInfo(<%= projects[i].id %>, <%= i %>, <%= projects.length %>)">
                         <div class="card-image">
                             <img src="/images/uploaded_files/<%= projects[i].mini_name %>" class="responsive-img"/>
                             <span class="card-title"><%= projects[i].name %></span>
                         </div>
                         <ul class="card-action-buttons">
-                            <li><a class="btn-floating waves-effect waves-light brown lighten-2"><i class="material-icons">more_horiz</i></a></li>
+                            <li><a onclick="moreInfo(<%= projects[i].id %>, <%= i %>, <%= projects.length %>)" class="btn-floating waves-effect waves-light brown lighten-2"><i class="material-icons">more_horiz</i></a></li>
                         </ul>
                         <div class="card-content">
                             <% if(projects[i].type == 'design') { %>
@@ -112,6 +115,50 @@
 </main>
 
 
+<footer class="page-footer">
+        <div class="container margin-60">
+            <div class="row">
+                <div class="col l6 s6">
+                    <div class="row">
+                        <form class="col s12">
+                            <div class="row">
+                                <div class="input-field col s6">
+                                    <input id="first_name" type="text" class="validate">
+                                    <label for="first_name">First Name</label>
+                                </div>
+                                <div class="input-field col s6">
+                                    <input id="email" type="email" class="validate">
+                                    <label for="email">Email</label>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="input-field col s12">
+                                    <textarea id="textarea1" class="materialize-textarea"></textarea>
+                                    <label for="textarea1">Textarea</label>
+                                </div>
+                            </div>
+                            <div class="col s12 l12 m12 center-align">
+                                <a class="waves-effect waves-light btn-submit brown lighten-2">Отправить</a>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+                <div class="col l6 s6 right-align">
+                    <h5 class="white-text">Ссылки</h5>
+                    <ul>
+                        <li><a class="grey-text text-lighten-3" href="#!">+7 (911) 779-91-73</a></li>
+                        <li><a class="grey-text text-lighten-3" href="#!">kantand150@gmail.com</a></li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+        <div class="footer-copyright">
+            <div class="container">
+                © 2014 Copyright Text
+                <a class="grey-text text-lighten-4 right" href="#!">More Links</a>
+            </div>
+        </div>
+</footer>
 
 <!-- footer !-->
 
@@ -119,115 +166,7 @@
 <script type="text/javascript" src="https://code.jquery.com/jquery-2.1.4.min.js"></script>
 <script type="text/javascript" src="js/materialize.min.js"></script>
 <script src="js/jquery.magnific-popup.min.js"></script>
+<script src="js/user_js/index.js"></script>
 
-<script>
-    $(document).ready(function () {
-        $(".button-collapse").sideNav();
-        $('.parallax').parallax();
-        $(".bottom").on("click", "a", function (event) {
-            event.preventDefault();
-            var id = $(this).attr('href'), top = $(id).offset().top;
-            $('body,html').animate({scrollTop: top}, 400);
-        });
-    });
-
-    function more(project, i, length) {
-        $('#moreinfo').remove();
-        var row;
-        var offset;
-        if ((i + 1) % 3 == 0) {
-            row = i + 1;
-            offset = 10;
-        }
-        else {
-            row = Math.min(length, ((i + 1) + (3 - ((i + 1) % 3))));
-            if (3 - (i + 1) % 3 == 1) {
-                offset = 6;
-            }
-            else {
-                offset = 2;
-            }
-        }
-
-        $.ajax({
-            type: "GET",
-            url: '/get_project_information/',
-            data: "id=" + project,
-            success: function (data) {
-                var miniPhoto = '<div id="mini"> </a> <div class="popup-gallery">'
-                for (var i = 0; i < data.length; i++) {
-                    miniPhoto += '<div class="divMiniPhoto"> <a href="images/uploaded_files/' + data[i].image_name + '"> <img src="images/uploaded_files/' + data[i].mini_name + '" style="height: 100px;" class="responsive-img mini_photo"/> </a> </div>'
-                }
-                miniPhoto += '</div>';
-                $("#" + row).after('<div class="col s12 ' + row + '" id="moreinfo" style="clear: both; height: 400px; display: none;"> ' +
-                        '<div class="col s1 offset-l' + offset + ' offset-m' + offset + ' triangle"> </div>  ' +
-                        '<div id="infoDiv" class="z-depth-1" style="position: absolute; left: 0; right: 0px;"> ' +
-                        '<div id="infomainimg"> ' +
-                        '<div class="container">' +
-                        miniPhoto +
-                        '</div> ' +
-                        '</div> ' +
-                        '</div> ' +
-                        '</div>');
-
-                $("#moreinfo").fadeIn();
-
-                var loadPhoto = 0;
-                $(".mini_photo").load(function () {
-                    loadPhoto++;
-                    if (loadPhoto == data.length) {
-                        var height = $("#infoDiv").height();
-                        $('#moreinfo').css("height", height + 20 + 'px');
-                        var top = $("#mini").offset().top;
-                        //if (($(window).scrollTop() < top + height) || ($(window).scrollTop() > top + height) ){
-                        $('body,html').animate({scrollTop: top}, 200);
-                        //}
-
-
-                    }
-                });
-                $('.popup-gallery').magnificPopup({
-                    delegate: 'a',
-                    type: 'image',
-                    tLoading: 'Загрузка изображения #%curr%...',
-                    mainClass: 'mfp-img-mobile',
-                    gallery: {
-                        enabled: true,
-                        navigateByImgClick: true,
-                        preload: [0, 1] // Will preload 0 - before current, and 1 after the current image
-                    },
-                    image: {
-                        tError: '<a href="%url%">Изображение #%curr%</a> не может быть загружено.',
-                    }
-                });
-            }
-        });
-    }
-
-    window.onscroll = function () {
-        var height = $(window).height();
-        if (height < $(window).scrollTop()) {
-            $('nav').css('position', 'fixed');
-            $('nav').css('background', 'rgba(255,255,255,1)');
-            $('nav ul li a ').css('color', 'black');
-            $('nav ul li a:hover, nav ul li a.activeCustom').css('border-bottom', 'transparent');
-            $("nav").addClass("z-depth-1");
-            $("nav").removeClass("z-depth-0");
-        } else if (height > $(window).scrollTop()) {
-            $('nav').css('position', 'absolute');
-            $('nav').css('background', 'transparent');
-            $('nav ul li a ').css('color', 'white');
-            $("nav").removeClass("z-depth-1");
-            $("nav").addClass("z-depth-0");
-        }
-    };
-    $(window).resize(function () {
-        var height = $("#infoDiv").height();
-        $('#moreinfo').css("height", height + 'px');
-        var heightMini = $("#divMainPhoto").outerHeight();
-        $("#mini").css("height", heightMini + "px");
-    });
-
-</script>
 </body>
 </html>
