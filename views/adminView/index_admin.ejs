@@ -22,20 +22,19 @@
                                 <th data-field="id">id</th>
                                 <th data-field="name">Имя</th>
                                 <th>Сменить пароль</th>
-                                <% if (super_user){ %>
+                                <% if (superUser){ %>
                                     <th>Удалить пользователя</th>
                                 <% } %>
-
                             </tr>
                             </thead>
 
                             <tbody>
                             <% for(var i in users) { %>
-                            <tr id="<%= users[i].id%>tr">
+                            <tr id="<%= users[i].id %>tr">
                                 <td><%= users[i].id %></td>
                                 <td><%= users[i].name %></td>
-                                <% if (super_user) { %>
-                                    <% if (users[i].id == currentUser) { %>
+                                <% if (isSuperUser) { %>
+                                    <% if (users[i].id == currentUserId) { %>
                                         <td><a href="#modalUpdate" class="modal-trigger" onclick="getUser(<%=users[i].id%>, <%=users[i].superUser%>)"><i class="material-icons black-text">cached</i></a></td>
                                         <td></td>
                                     <% } else { %>
@@ -43,7 +42,7 @@
                                         <td><a href="#modalDelete" class="modal-trigger" onclick="getUser(<%=users[i].id%>, <%=users[i].superUser%>)"><i class="material-icons red-text">close</i></a></td>
                                     <% } %>
                                 <% } else { %>
-                                    <% if (users[i].id == currentUser) { %>
+                                    <% if (users[i].id == currentUserId) { %>
                                          <td><a href="#modalUpdate" class="modal-trigger" onclick="getUser(<%=users[i].id%>, <%=users[i].superUser%>)"><i class="material-icons black-text">cached</i></a></td>
                                          <td></td>
                                     <% } else { %>
@@ -60,11 +59,11 @@
             </div>
 
             <!-- кнопка добавления !-->
-            <% if (super_user) { %>
+            <% if (isSuperUser) { %>
                 <div class="fixed-action-btn" style="bottom: 45px; right: 24px;">
                   <a class="btn-floating btn-large waves-effect waves-light red modal-trigger" href="#modalAdd"><i class="material-icons">add</i></a>
                  </div>
-            <%}%>
+            <% } %>
 
             <!-- модальные окна !-->
             <div id="modalAdd" class="modal">
@@ -125,74 +124,6 @@
 
         <script type="text/javascript" src="https://code.jquery.com/jquery-2.1.4.min.js"></script>
         <script type="text/javascript" src="/js/materialize.min.js"></script>
-        <script>
-            var user = {id: undefined}
-            function getUser(userID, superUser){
-                user.id = userID;
-                user.superUser = superUser;
-            }
-
-            function changePassword() {
-                var oldPassword = $('[name="oldpassword"]').val();
-                var newPassword = $('[name="newpassword"]').val();
-
-                if (newPassword == "" || oldPassword == ""){
-                    Materialize.toast('Все поля должны быть заполнены', 4000);
-                    return 0;
-                }
-
-                $.ajax({
-                    type:"POST",
-                    url: '/admin/update_password',
-                    data: 'oldpassword='+oldPassword+'&newpassword='+newPassword+'&id='+user.id,
-                    success: function (data) {
-                        if (!data){ Materialize.toast('Неверный пароль', 4000);}
-                        else { window.location.replace("/admin");}
-                    }
-                });
-            }
-
-            function addUser(){
-                var name = $('[name="login"]').val();
-                var password = $('[name="password"]').val();
-
-                if (name == "" || password == ""){
-                    Materialize.toast('Все поля должны быть заполнены', 4000);
-                    return 0;
-                }
-
-                $.ajax({
-                    type:"POST",
-                    url: '/admin/create_new_user',
-                    data: 'login='+name+'&password='+password,
-                    success: function (data) {
-                        if (!data){ Materialize.toast('Такой пользователь уже существует', 4000);}
-                        else { window.location.replace("/admin");}
-                    }
-                });
-            }
-
-            function deleteUser(){
-                alert(user.id);
-                 $.ajax({
-                     type:"DELETE",
-                     url:'/admin/delete_user',
-                     data: "id="+user.id,
-                    success: function(data){
-                        if (data){
-                            $('#'+user.id+"tr").remove();
-                        }
-                    }
-                });
-            }
-        </script>
-        <script>
-            $(document).ready(function(){
-                $(".button-collapse").sideNav();
-                $('.modal-trigger').leanModal();
-                var name = $('[name="login"]').val();
-                var password = $('[name="password"]').val();
-            })
-        </script>
+        <script src="/js/admin_management.js"></script>
     </body>
 </html>

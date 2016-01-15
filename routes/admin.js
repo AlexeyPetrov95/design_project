@@ -123,9 +123,7 @@ router.post('/admin/projects/upload_photo/:proj_id', function(req, res) {
         }
     });
 
-    form.on('close', function() {
-        var format = uploadFile.format.replace('.', '');
-        console.log(format);
+    form.on('close', function() {;
         //если нет ошибок и все хорошо
         if(errors.length == 0) {
             async.waterfall([

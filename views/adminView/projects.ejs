@@ -22,11 +22,11 @@
     <div class="col s12">
         <ul class="tabs z-depth-1">
             <% for ( var i = 0; i < type.length; i++) { %>
-                <% if (i == 0 ) { %>
-                    <li class="tab col s3"><a id="<%= type[i].type %>Link" class="active light-blue-text accent-2" href="#<%= type[i].type %>"><%= type[i].type_name %></a></li>
-                <% } else { %>
-                    <li class="tab col s3"><a id="<%= type[i].type %>Link" class="light-blue-text accent-2" href="#<%= type[i].type %>"><%= type[i].type_name %></a></li>
-                <% } %>
+            <% if (i == 0 ) { %>
+            <li class="tab col s3"><a id="<%= type[i].type %>Link" class="active light-blue-text accent-2" href="#<%= type[i].type %>"><%= type[i].type_name %></a></li>
+            <% } else { %>
+            <li class="tab col s3"><a id="<%= type[i].type %>Link" class="light-blue-text accent-2" href="#<%= type[i].type %>"><%= type[i].type_name %></a></li>
+            <% } %>
             <% } %>
         </ul>
     </div>
@@ -43,8 +43,7 @@
                             <div class="card-image">
                                 <% var pic = pictures.filter(function (x) {
                                     return x.projects_id == projects[i].id})[0];
-                                    var image_name = pic ? "uploaded_files/" + pic.mini_name : "default.jpg"
-                                    var back_size = pic ? (pic.orient == 1 ? "contain" : "cover") : "cover" %>
+                                    var image_name = pic ? "uploaded_files/" + pic.mini_name : "default.jpg" %>
                                 <div class="card-image">
                                     <img src="/images/<%= image_name %>" class="responsive-img"/>
                                 </div>
@@ -79,8 +78,7 @@
                                 <% pic = pictures.filter(function (x) {
                                     return x.projects_id == interiors[i].id
                                 })[0];
-                                    image_name = pic ? "uploaded_files/" + pic.mini_name : "default.jpg"
-                                    back_size = pic ? (pic.orient == 1 ? "contain" : "cover") : "cover" %>
+                                    image_name = pic ? "uploaded_files/" + pic.mini_name : "default.jpg" %>
                                 <div class="card-image">
                                     <img src="/images/<%= image_name %>" class="responsive-img"/>
                                 </div>
@@ -113,8 +111,7 @@
                                 <% pic = pictures.filter(function (x) {
                                     return x.projects_id == landscape[i].id
                                 })[0];
-                                    image_name = pic ? "uploaded_files/" + pic.mini_name : "default.jpg"
-                                    back_size = pic ? (pic.orient == 1 ? "contain" : "cover") : "cover" %>
+                                    image_name = pic ? "uploaded_files/" + pic.mini_name : "default.jpg" %>
                                 <div class="card-image">
                                     <img src="/images/<%= image_name %>" class="responsive-img"/>
                                 </div>
