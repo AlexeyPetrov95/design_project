@@ -18,8 +18,9 @@ router.get('/admin/view_list/', function (req, res) {
 router.post('/admin/viewList/changeSelection', function(req, res){
     
     var projectId = req.body.id; // id изменяемого проекта
-    var selection = req.body.selected ? 1 : 0; // выбор
-    
+
+    var selection =  req.body.selected;
+
     knexSQL('projects').select()
         .where({id: projectId})
         .update({selected: selection})

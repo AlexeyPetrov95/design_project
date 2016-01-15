@@ -1,6 +1,7 @@
 var express = require('express');
 var router = express.Router();
 var async = require('async');
+var fs = require("fs");
 
 var projectOffset; // индекс первого проекта, необходимого для следующей выгрузки
 var interiorsOffset; // индекс первого интерьера, необходимого для следующей выгрузки
@@ -90,28 +91,27 @@ router.get('/admin/projects/', function (req, res) {
                 });
             }, function (photos, projects, interiors, callback){
                 
-                // выгрузка ландшафтов
-                var landscapeType = type[0];
+
                 knexSQL('type').select()
                     .where({type: 'landscape'})
                     .then(function(type) {
-                    
-                    knexSQL('projects').select()
-                        .where({type_id: type[0].id})
-                        .limit(count)
-                        .offset(landscapeOffset)
-                        .then(function(landscape){
-                        
-                        if (!landscape) {
-                            
-                            res.send(500);
-                            
-                        } else {
-                            
-                            callback(null, photos, projects, interiors, landscape);
-                            
-                        }
-                    });
+                        var landscapeType = type[0];
+                        knexSQL('projects').select()
+                            .where({type_id: landscapeType.id})
+                            .limit(count)
+                            .offset(landscapeOffset)
+                            .then(function(landscape){
+
+                            if (!landscape) {
+
+                                res.send(500);
+
+                            } else {
+
+                                callback(null, photos, projects, interiors, landscape);
+
+                            }
+                        });
                 });
             }
             
@@ -218,8 +218,9 @@ router.delete('/admin/projects/delete', function(req, res){
                 .where('id', req.body.id)
                 .del()
                 .then(function (check) {
-                
-                res.send(check); 
+                    if (!check) { res.send(false); }
+                    else { res.send(true); }
+
             });
         });
     });

@@ -33,6 +33,7 @@ function deleteProject(id) {
         url:'/admin/projects/delete',
         data: "id="+id,
         success: function(data){
+            console.log(data);
             if (data){
                 $('#'+id+"card").remove();
                 Materialize.toast('Проект/интерьер был упсешно удален', 1000);
