@@ -1,7 +1,173 @@
-@import url(http://fonts.googleapis.com/css?family=Roboto:400,100,300);
+/* оснонные стили */
+html, body{
+  height : 100%;
+  width : 100%;
+  font-family: 'Roboto' sans-serif;
+  font-weight: 300;
+  font-size: 14px;
+}
 
-#img_test{
-  max-height: 500px;
+header{
+  height: 100%;
+  width: 100%;
+  background-size: cover;
+  z-index: 1;
+}
+
+/*  navigation bar  */
+.navbar-fixed nav{  position: absolute;  }
+
+nav {
+  font-family: 'Roboto' sans-serif;
+  font-weight: 300;
+  z-index: 500 !important;
+  background: transparent;
+}
+
+nav ul li a {  color: white;  }
+
+nav ul li a{
+  font-size: 16px !important;
+  border-bottom: 2px solid transparent;
+}
+
+.customNavigation ul li a:after {  background: none repeat scroll 0 0 black !important;  }
+
+nav ul li a:hover:after {
+  bottom: 0;
+  left: 0;
+  opacity: 1;
+  width: 100%;
+  transition: all 0.3s ease 0s;
+}
+
+nav ul li a:after {
+  background: none repeat scroll 0 0 white;
+  bottom: 30%;
+  content: "";
+  height: 2px;
+  left: 10%;
+  opacity: 0;
+  position: absolute;
+  width: 80%;
+}
+
+nav ul li a.activeCustom{
+  border-bottom: 2px solid white;
+  line-height: 60px;
+}
+
+.side-nav li a:hover, .side-nav li a.active {
+  background: transparent !important;
+  border-bottom:  2px solid white;
+}
+
+/* главная картинка и ее содердимое */
+.mainBackground {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  z-index: 10;
+  background: url(/images/main.jpg) 50% 0 no-repeat;
+  background-size: cover;
+}
+
+.logoAndMainTextSection {
+  position: relative;
+  overflow: hidden;
+  height: 100%;
+  margin-top: -64px;
+  width: 100%;
+}
+
+.logoAndMainTextSection .logoAndMainText {  width: 100%;  }
+
+.mainTextAboutArtObject{
+  font-family: 'Bad Script', cursive;
+  width: 800px;
+  z-index: 50;
+  margin: 0 auto;
+  font-size: 24px;
+  color: white;
+  padding: 20px;
+}
+
+.scrollBottomArrow{
+  position: absolute;
+  bottom: 0;
+  height: 70px;
+  width: 70px;
+  right: 0;
+  left: 0;
+  margin: auto;
+  z-index: 12;
+}
+
+.scrollBottomArrow img {
+  width: 100%;
+  height: 100%;
+}
+
+.scrollBottomArrow img:hover{
+  background: rgba(0,0,0,0.5);
+}
+
+.path {
+  stroke-dasharray: 1000;
+  stroke-dashoffset: 1000;
+  animation: dash 5s linear forwards;
+}
+
+@keyframes dash {
+  to {
+    stroke-dashoffset: 0;
+  }
+}
+
+/* осноной блок */
+main {
+  margin-bottom: 0px !important;
+}
+
+.projectsTitle {
+  height: 140px !important;
+}
+
+.projectsTitle h1 {
+  font-family: 'Roboto' sans-serif;
+  font-weight: 300;
+  font-size: 32px;
+  color: black;
+  line-height: 80px;
+}
+
+.line{
+  width: 150px;
+  height: 6px;
+  position: relative;
+  top: 70px;
+}
+
+ul.card-action-buttons{
+  margin: -20px 6px 0px 0px;
+  text-align: right;
+  position: absolute;
+  right: 0;
+}
+
+.card-content {
+  overflow-y: auto !important;
+  height: 135px;
+}
+.card{
+  overflow: hidden !important;
+}
+
+.mfp-title{
+  font-size: 24px;
+  line-height: 24px !important;
 }
 
 .divMiniPhoto{
@@ -43,7 +209,7 @@
   left: -10px;
 }
 
-#infomainimg {
+#moreImg {
   width: 100%;
   display: table;
   text-align: center;
@@ -51,293 +217,60 @@
   padding: 20px;
 }
 
-.infoname {
-  background: #A1887F;
-  text-align: left;
-  padding: 10px;
-  color: #fff;
-}
-
-#forMargin{
-  float: left;
-}
-
-#anotherPhoto{
-  float: right;
-  width: 40%;
-}
-
-
-div.cover {
-  position: relative;
-  left: -50%;
-  width: 200%;
-  height: 260px;
-  overflow: hidden;
-}
-.card-content {
-  overflow-y: auto !important;
-  height: 135px;
-}
-.card{
-  overflow: hidden !important;
-}
-
-img.cover {
-  position: absolute;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  margin: auto;
-  min-width: 50%;
-  min-height: 52%;
-  overflow-x: hidden;
-  height: 260px;
-}
-
-html, body{
-  height : 100%;
-  width : 100%;
-}
-
-header{
-  height: 100%;
-  width: 100%;
-  background-size: cover;
-  z-index: 1;
-}
-
-.section svg {
-  position: relative;
-  z-index: 11;
-}
-
-.mainBackground {
-  position: absolute;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  z-index: 10;
-}
-
-.mainBackground img {
-  position: absolute;
-  width: 100%;
-  height: 100%;
-  display: block;
-}
-
-.logoAndMainTextSection {
-  position: relative;
-  overflow: hidden;
-  height: 100%;
-  margin-top: -64px;
-  width: 100%;
-}
-
-.logoAndMainTextSection .logoAndMainText {
-  width: 100%;
-}
-
-.center{
-  height: 100%;
-  max-width: 400px;
-  margin: 0 auto;
-}
-
-.opacity { opacity: 0.9; }
-
-.navbar-fixed nav{
-  position: absolute;
-}
-
-nav {
-  font-family: 'Roboto' sans-serif;
-  font-weight: 300;
-  z-index: 500 !important;
-  background: transparent;
-}
-
-.parallax-container{
-  z-index: 0; 
-  height: 610px;
-}
-
-nav ul li a {
-  color: white;
-}
-
-nav ul li a{
-  font-size: 16px !important;
-  border-bottom: 2px solid transparent;
-}
-
-.right{
-  margin-right: 40px;
-}
-
-nav ul li:hover, nav ul li.active{
-  background: transparent !important;
-}
-
-nav ul li a:hover, nav ul li a.activeCustom{
-  background: transparent !important;
-  border-bottom:  2px solid white;
-}
-
-.side-nav li:hover, .side-nav li.active {
-  background: transparent !important;
-  border-bottom:  2px solid white;
-}
-
-.aboutus{
-  z-index: 100;
-  position: absolute;
-  top: 28%;
-  right: 68px;
-  height: 350px;
-  width: 600px;
-}
-
-.mainTextAboutArtObject{
-  font-family: 'Bad Script', cursive;
-  width: 800px;
-  z-index: 50;
-  margin: 0 auto;
-  font-size: 24px;
-  color: white;
-  padding: 20px;
-}
-
-.scrollBottomArrow{
-  position: absolute;
-  bottom: 0;
-  height: 70px;
-  width: 70px;
-  right: 0;
-  left: 0;
-  margin: auto;
-  z-index: 12;
-}
-
-.scrollBottomArrow img {
-  width: 100%;
-  height: 100%;
-}
-
-.scrollBottomArrow img:hover{
-  background: rgba(0,0,0,0.5);
-}
-
-.title{
-  height: 60px;
-  color: white;
-  font-family: 'Roboto' sans-serif;
-  font-weight: 400;
-  font-size: 18px;
-  line-height:70px;
-  border-bottom: 1px solid white;
-}
-
-.information {
-  height: 100%;
-  width: 85%;
-  margin-left: 40px;
-  margin-top: 20px;
-  color: white;
-  font-family: 'Roboto' sans-serif;
-  font-weight: 300;
-  font-size: 13px;
-}
-
-main .title{
-  width: 432px;
-  height: 100px;
-  color: #7e7e7e;
-  font-size: 28px;
-  font-weight: 300;
-  margin: 0 auto;
-  position: relative;
-}
-
-main {
-  margin-bottom: 0px !important;
-}
-
-.text{
-  width: 200px;
-  margin: 0 auto;
-  line-height: 125px;
-  text-align: center;
-}
-
-
-.projectsTitle {
-  height: 140px !important;
-}
-
-.projectsTitle h1 {
-  font-family: 'Roboto' sans-serif;
-  font-weight: 300;
-  font-size: 32px;
-  color: black;
-  line-height: 80px;
-}
-
-.line{
-  width: 150px;
-  height: 6px;
-  position: relative;
-  top: 70px;
-}
-
-ul.card-action-buttons{
-  margin: -20px 6px 0px 0px;
-  text-align: right;
-  position: absolute;
-  right: 0;
-}
-
-.path {
-  stroke-dasharray: 1000;
-  stroke-dashoffset: 1000;
-  animation: dash 5s linear forwards;
-}
-
 .btn{
   margin: 50px;
   width: 200px;
-}
-
-@keyframes dash {
-  to {
-    stroke-dashoffset: 0;
-  }
 }
 
 .btn-submit {
   margin: 0 auto;
 }
 
-
-#facebook{
-  background: linear-gradient(to top, #fefcea, #f1da36);
+img.mfp-img {
+  padding: 40px 0px 0px 0px !important;
 }
 
-#vk{
-
+.mfp-counter {
+  padding: 18px;
 }
 
-#twitter{
+.mfp-bottom-bar{
+  margin-top: -54px !important;
+  background: rgba(0,0,0,0.9) !important;
+  padding: 15px !important;
 }
 
+  /*   footer */
+footer.page-footer{
+  margin-top: 0;
+  background: url(/images/footer.jpg);
+  background-size: cover;
+}
+
+.parallax-container {
+  height: 459px;
+}
+
+.btn-submit{
+  width: 200px;
+  text-decoration: none;
+  color: #fff;
+  text-align: center;
+  letter-spacing: .5px;
+  border: none;
+  border-radius: 2px;
+  display: inline-block;
+  height: 36px;
+  line-height: 36px;
+  outline: 0;
+  padding: 0 2rem;
+  text-transform: uppercase;
+}
+
+.margin-60 { margin-top: 60px; margin-bottom: 60px }
 .padding-20{ padding-top: 20px;  padding-bottom: 20px; margin: 0 !important;}
 .padding-left-15{  padding-left:15px;  }
-
 .padding-left-30 { padding-left: 30px; }
-
 .padding-left-50 {  padding-left: 50px !important;  }
 
 .margin-50{
@@ -345,88 +278,25 @@ ul.card-action-buttons{
   margin-bottom: 50px !important;
 }
 
-.margin-120 {
-  margin: 120px auto !important;
-}
+.margin-120 {  margin: 120px auto !important;  }
 
 .margin-100 {
   margin-top: 100px !important;
   margin-bottom: 100px !important;
 }
 
-
-footer.page-footer .footer-copyright{
-  background-color: rgba(0,0,0,0.5);
-}
-
-
-input[type=text], input[type=password], input[type=email], input[type=url], input[type=time], input[type=date], input[type=datetime-local], input[type=tel], input[type=number], input[type=search], textarea.materialize-textarea {
-  border-bottom: 1px solid #ffffff !important;
-  color: white;
-}
-
-.input-field label {
-  color: #ffffff !important;
-}
-/* label focus color */
-.input-field input[type=text]:focus + label, .input-field input[type=email]:focus + label {
-  color: #ffffff !important;
-}
-/* label underline focus color */
-.input-field input[type=text]:focus, .input-field input[type=email]:focus {
-  border-bottom: 1px solid #ffffff !important;
-  box-shadow: 0 1px 0 0 #ffffff !important;
-}
-/* valid color */
-.input-field input[type=text].valid, .input-field input[type=email].valid {
-  border-bottom: 1px solid #ffffff !important;
-  box-shadow: 0 1px 0 0 #ffffff !important;
-}
-/* invalid color */
-.input-field input[type=text].invalid, .input-field input[type=email].invalid {
-  border-bottom: 1px solid red !important;
-  box-shadow: 0 1px 0 0 red !important;
-}
-/* icon prefix focus color */
-.input-field .prefix.active {
-  color: #ffffff !important;
-}
-.materialize-textarea:focus {
-  border-bottom: 1px solid #ffffff !important;
-  box-shadow: 0 1px 0 0 #ffffff !important;
-}
-
 @media (max-width: 600px) {
   .line {
      width: 75px;
   }
-  .text {
-    width: 200px;
-    font-size: 28px;
-  }
-
-
-  main .title{
-    width: 370px;
-  }
-
-  .motivation {
-    margin-top: 70px;
-  }
 }
 
 @media (max-width: 740px){
-  .aboutus {
-    position: inherit;
-    width: 100%;
-    margin: 27% 0 0;
-  }
+
 }
 
 @media (max-width: 992px) {
-  .center {
-    display: none;
-  }
+
 }
 
 section h1{

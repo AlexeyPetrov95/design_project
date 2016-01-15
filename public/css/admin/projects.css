@@ -14,20 +14,8 @@ div.cover {
     height: 135px;
 }
 
-.card{
+.card {
     overflow: hidden !important;
-}
-
-img.cover {
-    position: absolute;
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    margin: auto;
-    min-width: 50%;
-    overflow-x: hidden;
-    height: 225px;
 }
 
 header ul li {
@@ -39,7 +27,6 @@ header ul li {
 nav {
     height: 100px !important;
 }
-
 
 header {
     padding-left: 240px;

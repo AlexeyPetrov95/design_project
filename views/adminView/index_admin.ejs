@@ -35,15 +35,15 @@
                                 <td><%= users[i].name %></td>
                                 <% if (isSuperUser) { %>
                                     <% if (users[i].id == currentUserId) { %>
-                                        <td><a href="#modalUpdate" class="modal-trigger" onclick="getUser(<%=users[i].id%>, <%=users[i].superUser%>)"><i class="material-icons black-text">cached</i></a></td>
+                                        <td><a href="#modalUpdate" class="modal-trigger" onclick="getUser(<%=users[i].id%>)"><i class="material-icons black-text">cached</i></a></td>
                                         <td></td>
                                     <% } else { %>
-                                        <td><a href="#modalUpdate" class="modal-trigger" onclick="getUser(<%=users[i].id%>, <%=users[i].superUser%>)"><i class="material-icons black-text">cached</i></a></td>
-                                        <td><a href="#modalDelete" class="modal-trigger" onclick="getUser(<%=users[i].id%>, <%=users[i].superUser%>)"><i class="material-icons red-text">close</i></a></td>
+                                        <td><a href="#modalUpdate" class="modal-trigger" onclick="getUser(<%=users[i].id%>)"><i class="material-icons black-text">cached</i></a></td>
+                                        <td><a href="#modalDelete" class="modal-trigger" onclick="getUser(<%=users[i].id%>)"><i class="material-icons red-text">close</i></a></td>
                                     <% } %>
                                 <% } else { %>
                                     <% if (users[i].id == currentUserId) { %>
-                                         <td><a href="#modalUpdate" class="modal-trigger" onclick="getUser(<%=users[i].id%>, <%=users[i].superUser%>)"><i class="material-icons black-text">cached</i></a></td>
+                                         <td><a href="#modalUpdate" class="modal-trigger" onclick="getUser(<%=users[i].id%>)"><i class="material-icons black-text">cached</i></a></td>
                                          <td></td>
                                     <% } else { %>
                                         <td></td>

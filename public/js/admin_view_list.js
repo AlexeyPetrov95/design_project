@@ -44,10 +44,11 @@
 
         if (checked) checkedCount++; else checkedCount--;
 
+        var selection = checked ? 1 : 0;
         $.ajax({
             type:"POST",
             url:'/admin/viewList/changeSelection',
-            data: "id="+id + '&selected=' + checked,
+            data: "id="+id + '&selected=' + selection,
             success: function(data){
                 if (data){
                     Materialize.toast('Главная страница обновлена', 1000);

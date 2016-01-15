@@ -4,18 +4,18 @@ $(document).ready(function(){
 })
 
 var user = { 
-    id: undefined; 
-    superUser : undefined 
+    id: undefined
 };
 
-function getUser(userID, superUser){
+function getUser(userID){
     user.id = userID;
-    user.superUser = superUser;
 }
 
 function changePassword() {
     var oldPassword = $('[name="oldpassword"]').val();
     var newPassword = $('[name="newpassword"]').val();
+
+    alert(oldPassword);
 
     if (newPassword == "" || oldPassword == ""){
         Materialize.toast('Все поля должны быть заполнены', 4000);

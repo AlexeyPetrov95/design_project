@@ -6,6 +6,7 @@ $(document).ready(function(){
     $(".button-collapse").sideNav();
 });
 
+// подгрузка по скроллу
 window.onscroll = function(){
     var scrollBottom = $(document).height() - $(window).height() - $(window).scrollTop();
     if (scrollBottom == 0){
@@ -26,15 +27,15 @@ function getProject (projectID, projectName){
     deleteProject();
 }
 
-function deleteProject() {
+function deleteProject(id) {
     $.ajax({
         type:"DELETE",
         url:'/admin/projects/delete',
-        data: "id="+project.id,
+        data: "id="+id,
         success: function(data){
+            console.log(data);
             if (data){
-                $('#'+project.id+"card").remove();
-                console.log(data);
+                $('#'+id+"card").remove();
                 Materialize.toast('Проект/интерьер был упсешно удален', 1000);
             }
         }
@@ -130,7 +131,7 @@ function addDiv(data, type){
         newcard += '</div>';
         newcard += '<div class="card-action">';
         newcard += '<a href="/admin/projects/'+ data[i].id +'">Подробнее</a>';
-        newcard += '<a class="waves-effect waves-light" onclick="getProject('+data[i].id+')" href="#modalDelete">Удалить</a>';
+        newcard += '<a class="waves-effect waves-light" onclick="deleteProject('+data[i].id+')" href="#modalDelete">Удалить</a>';
         newcard += '</div>';
         newcard += '</div>';
         newcard += '</div>';
@@ -157,7 +158,6 @@ function addProject() {
     if (type == 'projects'){ material = $("#material_text").val();}
     var valid = validate(material, type, name, mark, price, space, number_room);
     if (!valid){ return }
-
 
     $.ajax({
         type: "POST",
