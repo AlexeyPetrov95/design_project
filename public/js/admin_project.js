@@ -6,10 +6,9 @@ $(document).ready(function(){
     $(".button-collapse").sideNav();
 });
 
-// подгрузка по скроллу
-window.onscroll = function(){
+function tryLoad(){
     var scrollBottom = $(document).height() - $(window).height() - $(window).scrollTop();
-    if (scrollBottom == 0){
+    if (scrollBottom < 10){
         if ($('#designLink').hasClass('active')){
             loadInteriors();
         } else if ($('#projectsLink').hasClass('active')){
@@ -18,7 +17,9 @@ window.onscroll = function(){
             loadLandscape();
         }
     }
-};
+}
+// подгрузка по скроллу
+window.onscroll = tryLoad;
 
 var project = {id: undefined, name: undefined}
 function getProject (projectID, projectName){
@@ -27,15 +28,15 @@ function getProject (projectID, projectName){
     deleteProject();
 }
 
-function deleteProject(id) {
+function deleteProject(id, type) {
     $.ajax({
         type:"DELETE",
         url:'/admin/projects/delete',
         data: "id="+id,
         success: function(data){
-            console.log(data);
             if (data){
                 $('#'+id+"card").remove();
+                tryLoad();
                 Materialize.toast('Проект/интерьер был упсешно удален', 1000);
             }
         }
@@ -95,7 +96,7 @@ function isInt(n){
     return Number(n) === n && n % 1 === 0;
 }
 
-function addDiv(data, type){
+function addDivs(data, type, images){
     var cardplace, materialDiv, spaceDiv, numberRoomDiv;
     var newcard = "";  // создать новый тег div
     for (var i = 0; i < data.length; i++){
@@ -104,7 +105,6 @@ function addDiv(data, type){
             materialDiv ="";
             spaceDiv = '<div> <b>Площадь: </b>'+ data[i].space + '</div>';
             numberRoomDiv = '<div> <b>Количество комнат: </b>'+ data[i].number_room +'</div>';
-            console.log('sdasds');
         } else if (type == 'projects') {
             cardplace = document.getElementById("project_place");
             materialDiv = '<div> <b>Материал изделий: </b>' + data[i].material + '</div>';
@@ -116,26 +116,35 @@ function addDiv(data, type){
             spaceDiv = '';
             numberRoomDiv = '';
         }
-        newcard =  '<div class="col s12 m6 l4">';
-        newcard += '<div class="card medium" id="'+data[i].id+'card"> ';
+        
+        newcard = '<div class="card" id="'+data[i].id+'card"> ';
         newcard += '<div class="card-image">';
-        newcard +=  ' <img src="/images/default.jpg">';;
+        
+        // поиск фотографии, соответствующей проекту
+        var pic = images ? images.filter(function (x) { return x.projects_id == data[i].id; })[0] : false;
+        var image_name = pic ? "uploaded_files/" + pic.mini_name : "default.jpg";
+        
+        newcard += '<div class="card-image">';
+        newcard += '<img src="/images/' + image_name + '" class="responsive-img"/>';
+        newcard += '</div>';
         newcard += '<span class="card-title">'+ data[i].name +'</span>';
         newcard += '</div>';
+        newcard += '<ul class="card-action-buttons">';
+        newcard += '<li><a href="/admin/projects/' + data[i].id + '" class="btn-floating waves-effect waves-light light-blue accent-2"><i class="material-icons">more_horiz</i></a></li>';
+        newcard += '<li><a onclick="deleteProject(' + data[i].id + ')" class="btn-floating waves-effect waves-light red"><i class="material-icons">close</i></a></li>';
+        newcard += '</ul>';        
         newcard += '<div class="card-content">';
-        newcard += '<div> <b>Маркировка: </b>'+ data[i].mark +'</div>';
-        newcard += '<div> <b>Цена: </b>'+ data[i].price +'</div>';
+        newcard += '<div><b>Маркировка: </b>'+ data[i].mark +'</div>';
+        newcard += '<div><b>Цена: </b>'+ data[i].price +'</div>';
         newcard +=  spaceDiv;
         newcard +=  numberRoomDiv;
-        newcard += materialDiv;
-        newcard += '</div>';
-        newcard += '<div class="card-action">';
-        newcard += '<a href="/admin/projects/'+ data[i].id +'">Подробнее</a>';
-        newcard += '<a class="waves-effect waves-light" onclick="deleteProject('+data[i].id+')" href="#modalDelete">Удалить</a>';
+        newcard +=  materialDiv;
         newcard += '</div>';
         newcard += '</div>';
-        newcard += '</div>';
-        cardplace.innerHTML += newcard;
+        var card = document.createElement('div');
+        card.className = "col s12 m6 l4";
+        card.innerHTML = newcard;
+        cardplace.appendChild(card);
     }
     $("#material_text").val('')
     $("#type").val('');
@@ -168,7 +177,7 @@ function addProject() {
             else {
                 $('#modalAdd').closeModal();
                 var dataValid = [{id: data.id, material: material, name: name, mark: mark, price: price, space: space, number_room: number_room}];
-                addDiv(dataValid, type);
+                addDivs(dataValid, type);
             }
         }
     });
@@ -181,7 +190,7 @@ function loadInteriors(){
         success: function (interiors) {
             if (!interiors){ Materialize.toast('Ошибка', 1000);}
             else {
-                addDiv(interiors, 'design');
+                addDivs(interiors.loaded, 'design', interiors.images);
             }
         }
     });
@@ -194,12 +203,11 @@ function loadProjects(){
         success: function (projects) {
             if (!projects){ Materialize.toast('Невозможно загрузить проекты', 1000);}
             else {
-                addDiv(projects, 'projects');
+                addDivs(projects.loaded, 'projects', projects.images);
             }
         }
     });
 }
-
 
 function loadLandscape(){
     $.ajax({
@@ -208,7 +216,7 @@ function loadLandscape(){
         success: function (landscape) {
             if (!landscape){ Materialize.toast('Невозможно загрузить проекты', 1000);}
             else {
-                addDiv(landscape, 'landscape');
+                addDivs(landscape.loaded, 'landscape', landscape.images);
             }
         }
     });
