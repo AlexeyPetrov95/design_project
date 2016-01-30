@@ -194,6 +194,22 @@ router.post('/admin/projects/replaceProject', function(req, res) {
     });
 });
 
+//---ajax--- Изменение избранных проектов
+router.post('/admin/projects/changeFavourite', function (req, res){
+   
+    var checked = req.body.checked;
+    var id = req.body.id;
+    
+    knexSQL('projects').select()
+        .where({id: id})
+        .update({ favourite: checked })
+        .then(function(result) { 
+        
+        console.log(id + ": changed favourite to " + checked);
+        res.send(200); 
+    });
+});
+
 //---ajax--- Удаление проекта
 router.delete('/admin/projects/delete', function(req, res){
     
@@ -301,7 +317,7 @@ router.get('/admin/projects/load_projects', function (req, res) {
 router.get('/admin/projects/load_landscape', function (req, res) {
     
     knexSQL('type').select()
-        .where({type: 'landscapes'})
+        .where({type: 'landscape'})
         .then(function (types) {
 
         var landscapeType = types[0];
