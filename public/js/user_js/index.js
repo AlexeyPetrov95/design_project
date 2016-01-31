@@ -29,6 +29,18 @@ function mathForDivPositionAndTraingle (i, length){
     return objectPostition;
 }
 
+function imageCompare(a, b){
+    var types = ['main', 'plan', 'plan1', 'plan2', 'plan3', 'facade', 'view', 'design', 'default'];
+    var ta = types.indexOf(a.type);
+    var tb = types.indexOf(b.type);
+
+    if (ta < tb) { return -1; }
+    else if (ta > tb) { return 1; }
+    else { return 0; }
+}
+
+// сортировка
+
 function moreInfo(projectId, i, length) {
     var objectPostion = mathForDivPositionAndTraingle(i,length);
     $.ajax({
@@ -36,7 +48,7 @@ function moreInfo(projectId, i, length) {
         url: '/get_project_information/',
         data: "id=" + projectId,
         success: function (data) {
-
+            data.sort(imageCompare);
             var miniPhotoSection = '<div id="preview" > <div class="popup-gallery">'
             for (var i = 0; i < data.length; i++) {
                 miniPhotoSection += '<div class="divMiniPhoto"> <a href="images/uploaded_files/' + data[i].image_name + '" title="'+ data[i].type_name +'"> <img src="images/uploaded_files/' + data[i].mini_name + '" alt="'+ data[i].type_name +'" style="height: 100px;" class="responsive-img miniImg"/> </a> </div>'

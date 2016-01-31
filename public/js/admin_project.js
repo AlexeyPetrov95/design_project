@@ -28,6 +28,7 @@ function getProject (projectID, projectName){
     deleteProject();
 }
 
+
 // изменение Избранности проекта
 function changeFavourite(id, checked, checkedClass, uncheckedClass) {
     $.ajax({
@@ -203,6 +204,7 @@ var allProjectsAreLoaded = false;
 var allLandscapesAreLoaded = false;
 
 function loadInteriors(){
+
     if (!allInteriorsAreLoaded){
         $.ajax({
             type:"GET",
