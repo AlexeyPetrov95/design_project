@@ -50,10 +50,16 @@
                                 <span class="card-title"><%= projects[i].name %></span>
                             </div>
                             <ul class="card-action-buttons">
+                                <% 
+                                    // установка классов для кнопок Favourite
+                                    favButtonClass = "light-green";
+                                    defButtonClass = "grey";
+                                %>
+                                <li><a id="favBtn<%= projects[i].id %>" onclick="changeFavourite(<%= projects[i].id %>, <%= !projects[i].favourite %>, '<%= favButtonClass %>', '<%= defButtonClass %>')" class="btn-floating waves-effect waves-light <%= projects[i].favourite?favButtonClass:defButtonClass %> lighten-1"><i class="material-icons">grade</i></a></li>
                                 <li><a href="/admin/projects/<%= projects[i].id %>"
                                        class="btn-floating waves-effect waves-light light-blue accent-2"><i class="material-icons">more_horiz</i></a></li>
-                                <li><a onclick="deleteProject(<%= projects[i].id %>)"
-                                       class="btn-floating waves-effect waves-light red"><i class="material-icons">close</i></a></li>
+                                <li><a onclick="deleteProject(<%= projects[i].id %>)" class="btn-floating waves-effect waves-light red">
+                                    <i class="material-icons">close</i></a></li>
                             </ul>
                             <div class="card-content">
                                 <div><b>Маркировка:</b> <%= projects[i].mark %> </div>
@@ -75,9 +81,7 @@
                     <div class="col s12 m6 l4">
                         <div class="card" id="<%= interiors[i].id %>card">
                             <div class="card-image">
-                                <% pic = pictures.filter(function (x) {
-                                    return x.projects_id == interiors[i].id
-                                })[0];
+                                <% pic = pictures.filter(function (x) { return x.projects_id == interiors[i].id })[0];
                                     image_name = pic ? "uploaded_files/" + pic.mini_name : "default.jpg" %>
                                 <div class="card-image">
                                     <img src="/images/<%= image_name %>" class="responsive-img"/>
@@ -85,10 +89,11 @@
                                 <span class="card-title"><%= interiors[i].name %></span>
                             </div>
                             <ul class="card-action-buttons">
+                                <li><a id="favBtn<%= interiors[i].id %>" onclick="changeFavourite(<%= interiors[i].id %>, <%= !interiors[i].favourite %>, '<%= favButtonClass %>', '<%= defButtonClass %>')" class="btn-floating waves-effect waves-light <%= interiors[i].favourite?favButtonClass:defButtonClass %> lighten-1"><i class="material-icons">grade</i></a></li>
                                 <li><a href="/admin/projects/<%= interiors[i].id %>"
                                        class="btn-floating waves-effect waves-light light-blue accent-2"><i class="material-icons">more_horiz</i></a></li>
-                                <li><a onclick="deleteProject(<%= interiors[i].id %>, '<%= interiors[i].mark %>')"
-                                       class="btn-floating waves-effect waves-light red"><i class="material-icons">close</i></a></li>
+                                <li><a onclick="deleteProject(<%= interiors[i].id %>)" class="btn-floating waves-effect waves-light red">
+                                    <i class="material-icons">close</i></a></li>
                             </ul>
                             <div class="card-content">
                                 <div><b>Маркировка: </b> <%= interiors[i].mark %> </div>
@@ -118,10 +123,11 @@
                                 <span class="card-title"><%= landscape[i].name %></span>
                             </div>
                             <ul class="card-action-buttons">
+                                <li><a id="favBtn<%= landscape[i].id %>" onclick="changeFavourite(<%= landscape[i].id %>, <%= !landscape[i].favourite %>, '<%= favButtonClass %>', '<%= defButtonClass %>')" class="btn-floating waves-effect waves-light <%= landscape[i].favourite?favButtonClass:defButtonClass %> lighten-1"><i class="material-icons">grade</i></a></li>
                                 <li><a href="/admin/projects/<%= landscape[i].id %>"
                                        class="btn-floating waves-effect waves-light light-blue accent-2"><i class="material-icons">more_horiz</i></a></li>
-                                <li><a onclick="deleteProject(<%= landscape[i].id %>, '<%= landscape[i].mark %>')"
-                                       class="btn-floating waves-effect waves-light red"><i class="material-icons">close</i></a></li>
+                                <li><a onclick="deleteProject(<%= landscape[i].id %>)" class="btn-floating waves-effect waves-light red">
+                                    <i class="material-icons">close</i></a></li>
                             </ul>
                             <div class="card-content">
                                 <div><b>Маркировка: </b> <%= landscape[i].mark %> </div>

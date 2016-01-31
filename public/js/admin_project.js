@@ -28,7 +28,23 @@ function getProject (projectID, projectName){
     deleteProject();
 }
 
-function deleteProject(id, type) {
+
+// изменение Избранности проекта
+function changeFavourite(id, checked, checkedClass, uncheckedClass) {
+    $.ajax({
+        type:"POST",
+        url:'/admin/projects/changeFavourite',
+        data: "id="+id+"&checked="+(+checked),
+        success: function(data){
+            $("#favBtn"+id).removeClass(checked?uncheckedClass:checkedClass);
+            $("#favBtn"+id).addClass(checked?checkedClass:uncheckedClass);
+            $("#favBtn"+id).attr("onclick", "changeFavourite(" + id +", "+ !checked +", '"+ checkedClass +"', '"+ uncheckedClass + "')");
+            console.log($("#favBtn"+id).attr('class'));
+        }
+    });
+}
+
+function deleteProject(id) {
     $.ajax({
         type:"DELETE",
         url:'/admin/projects/delete',
@@ -183,7 +199,12 @@ function addProject() {
     });
 }
 
+var allInteriorsAreLoaded = false;
+var allProjectsAreLoaded = false;
+var allLandscapesAreLoaded = false;
+
 function loadInteriors(){
+<<<<<<< HEAD
     $.ajax({
         type:"GET",
         url: '/admin/projects/load_interiors/',
@@ -191,12 +212,25 @@ function loadInteriors(){
             if (!interiors){ Materialize.toast('Ошибка', 1000);}
             else {
                 addDivs(interiors.loaded, 'design', interiors.images);
+=======
+    if (!allInteriorsAreLoaded){
+        $.ajax({
+            type:"GET",
+            url: '/admin/projects/load_interiors/',
+            success: function (interiors) {
+                if (!interiors){ Materialize.toast('Ошибка', 1000);}
+                else {
+                    allInteriorsAreLoaded = interiors.loaded.length == 0;
+                    addDivs(interiors.loaded, 'design', interiors.images);
+                }
+>>>>>>> kirill
             }
-        }
-    });
+        }); 
+    }
 }
 
 function loadProjects(){
+<<<<<<< HEAD
     $.ajax({
         type:"GET",
         url: '/admin/projects/load_projects/',
@@ -204,12 +238,25 @@ function loadProjects(){
             if (!projects){ Materialize.toast('Невозможно загрузить проекты', 1000);}
             else {
                 addDivs(projects.loaded, 'projects', projects.images);
+=======
+    if (!allProjectsAreLoaded){
+        $.ajax({
+            type:"GET",
+            url: '/admin/projects/load_projects/',
+            success: function (projects) {
+                if (!projects){ Materialize.toast('Невозможно загрузить проекты', 1000);}
+                else {
+                    allProjectsAreLoaded = projects.loaded.length == 0;
+                    addDivs(projects.loaded, 'projects', projects.images);
+                }
+>>>>>>> kirill
             }
-        }
-    });
+        });
+    }
 }
 
 function loadLandscape(){
+<<<<<<< HEAD
     $.ajax({
         type:"GET",
         url: '/admin/projects/load_landscape/',
@@ -217,7 +264,19 @@ function loadLandscape(){
             if (!landscape){ Materialize.toast('Невозможно загрузить проекты', 1000);}
             else {
                 addDivs(landscape.loaded, 'landscape', landscape.images);
+=======
+    if (!allLandscapesAreLoaded){
+        $.ajax({
+            type:"GET",
+            url: '/admin/projects/load_landscape/',
+            success: function (landscape) {
+                if (!landscape){ Materialize.toast('Невозможно загрузить проекты', 1000);}
+                else {
+                    allLandscapesAreLoaded = landscape.loaded.length == 0;
+                    addDivs(landscape.loaded, 'landscape', landscape.images);
+                }
+>>>>>>> kirill
             }
-        }
-    });
+        });
+    }
 }
