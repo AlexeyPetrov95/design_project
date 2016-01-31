@@ -39,6 +39,7 @@ router.get('/projects', function(req, res){
             .andWhere({type: "projects"})
             .limit(25)
             .offset(projectOffset)
+            .orderBy('favourite', 'desc')
             .then(function (project) {
                 projectOffset += count;
                 res.render('user/project.ejs', {title: 'Art Object', projects: project});
@@ -56,6 +57,7 @@ router.get('/design', function(req, res){
             .andWhere({type: "design"})
             .limit(25)
             .offset(interiorsOffset)
+            .orderBy('favourite', 'desc')
             .then(function (project) {
                 interiorsOffset += count;
                 res.render('user/project.ejs', {title: 'Art Object', projects: project});
@@ -69,10 +71,12 @@ router.get('/landscapes', function(req, res){
             .join('images', 'projects.id', 'images.projects_id')
             .join('type', 'type.id', 'projects.type_id').as('ignored_alias1')
             .where({type_images_id: type_images[0].id})
-            .andWhere({type: "landscapes"})
+            .andWhere({type: "landscape"})
             .limit(25)
             .offset(landscapeOffset)
+            .orderBy('favourite', 'desc')
             .then(function (project) {
+                console.log(project);
                 landscapeOffset += count
                 res.render('user/project.ejs', {title: 'Art Object', projects: project});
             })
@@ -88,6 +92,7 @@ router.get('/projects_ajax', function(req, res){
             .andWhere({type: "projects"})
             .limit(25)
             .offset(projectOffset)
+            .orderBy('favourite', 'desc')
             .then(function (project) {
                 projectOffset += count;
                 res.send(project);
@@ -105,6 +110,7 @@ router.get('/design_ajax', function(req, res){
             .andWhere({type: "design"})
             .limit(25)
             .offset(interiorsOffset)
+            .orderBy('favourite', 'desc')
             .then(function (project) {
                 interiorsOffset += count;
                 res.send(project);
@@ -118,9 +124,10 @@ router.get('/landscapes_ajax', function(req, res){
             .join('images', 'projects.id', 'images.projects_id')
             .join('type', 'type.id', 'projects.type_id').as('ignored_alias1')
             .where({type_images_id: type_images[0].id})
-            .andWhere({type: "landscapes"})
+            .andWhere({type: "landscape"})
             .limit(25)
             .offset(landscapeOffset)
+            .orderBy('favourite', 'desc')
             .then(function (project) {
                 landscapeOffset += count
                 res.send(project);

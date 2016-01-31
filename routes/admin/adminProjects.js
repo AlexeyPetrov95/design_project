@@ -93,7 +93,7 @@ router.get('/admin/projects/', function (req, res) {
                 
 
                 knexSQL('type').select()
-                    .where({type: 'landscapes'})
+                    .where({type: 'landscape'})
                     .then(function(type) {
                         var landscapeType = type[0];
                         knexSQL('projects').select()

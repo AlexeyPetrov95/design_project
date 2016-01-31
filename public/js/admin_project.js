@@ -204,15 +204,7 @@ var allProjectsAreLoaded = false;
 var allLandscapesAreLoaded = false;
 
 function loadInteriors(){
-<<<<<<< HEAD
-    $.ajax({
-        type:"GET",
-        url: '/admin/projects/load_interiors/',
-        success: function (interiors) {
-            if (!interiors){ Materialize.toast('Ошибка', 1000);}
-            else {
-                addDivs(interiors.loaded, 'design', interiors.images);
-=======
+
     if (!allInteriorsAreLoaded){
         $.ajax({
             type:"GET",
@@ -223,22 +215,12 @@ function loadInteriors(){
                     allInteriorsAreLoaded = interiors.loaded.length == 0;
                     addDivs(interiors.loaded, 'design', interiors.images);
                 }
->>>>>>> kirill
             }
         }); 
     }
 }
 
 function loadProjects(){
-<<<<<<< HEAD
-    $.ajax({
-        type:"GET",
-        url: '/admin/projects/load_projects/',
-        success: function (projects) {
-            if (!projects){ Materialize.toast('Невозможно загрузить проекты', 1000);}
-            else {
-                addDivs(projects.loaded, 'projects', projects.images);
-=======
     if (!allProjectsAreLoaded){
         $.ajax({
             type:"GET",
@@ -249,22 +231,12 @@ function loadProjects(){
                     allProjectsAreLoaded = projects.loaded.length == 0;
                     addDivs(projects.loaded, 'projects', projects.images);
                 }
->>>>>>> kirill
             }
         });
     }
 }
 
 function loadLandscape(){
-<<<<<<< HEAD
-    $.ajax({
-        type:"GET",
-        url: '/admin/projects/load_landscape/',
-        success: function (landscape) {
-            if (!landscape){ Materialize.toast('Невозможно загрузить проекты', 1000);}
-            else {
-                addDivs(landscape.loaded, 'landscape', landscape.images);
-=======
     if (!allLandscapesAreLoaded){
         $.ajax({
             type:"GET",
@@ -275,7 +247,6 @@ function loadLandscape(){
                     allLandscapesAreLoaded = landscape.loaded.length == 0;
                     addDivs(landscape.loaded, 'landscape', landscape.images);
                 }
->>>>>>> kirill
             }
         });
     }
