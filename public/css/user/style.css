@@ -115,14 +115,18 @@ nav ul li a.activeCustom{
 }
 
 .path {
-  stroke-dasharray: 1000;
-  stroke-dashoffset: 1000;
-  animation: dash 5s linear forwards;
+  stroke-dasharray: 300;
+  stroke-dashoffset: 300;
+  animation: dash 4s ease-out forwards;
+
 }
 
 @keyframes dash {
   to {
-    stroke-dashoffset: 0;
+    stroke-dashoffset: 50;
+    opacity: 0.8;
+    fill: white;
+    stroke: transparent;
   }
 }
 
@@ -245,6 +249,8 @@ footer.page-footer{
   margin-top: 0;
   background: url(/images/footer.jpg);
   background-size: cover;
+  background-position: center;
+  height: 700px;
 }
 
 .parallax-container {
@@ -267,7 +273,10 @@ footer.page-footer{
   text-transform: uppercase;
 }
 
-.margin-60 { margin-top: 60px; margin-bottom: 60px }
+.margin-60 { margin-bottom: 60px;
+  margin-top: 176px;
+  height: 394px;
+}
 .padding-20{ padding-top: 20px;  padding-bottom: 20px; margin: 0 !important;}
 .padding-left-15{  padding-left:15px;  }
 .padding-left-30 { padding-left: 30px; }

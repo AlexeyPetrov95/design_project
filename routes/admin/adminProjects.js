@@ -93,7 +93,7 @@ router.get('/admin/projects/', function (req, res) {
                 
 
                 knexSQL('type').select()
-                    .where({type: 'landscape'})
+                    .where({type: 'landscapes'})
                     .then(function(type) {
                         var landscapeType = type[0];
                         knexSQL('projects').select()
@@ -176,6 +176,7 @@ router.post('/admin/projects/new_project', function (req, res) {
     });
 });
 
+//---ajax--- Изменение проекта
 router.post('/admin/projects/replaceProject', function(req, res) {
     knexSQL('projects').select()
         .where({id: req.body.id})
@@ -216,11 +217,31 @@ router.delete('/admin/projects/delete', function(req, res){
             
             knexSQL('projects')
                 .where('id', req.body.id)
-                .del()
-                .then(function (check) {
-                    if (!check) { res.send(false); }
-                    else { res.send(true); }
+                .then(function(project) {
+                
+                // id типа удаляемого проекта
+                var projectTypeId = project[0].type_id;
+                knexSQL('type')
+                    .where('id', projectTypeId)
+                    .then(function(projectType){
+                    
+                    // тип удаляемого проекта
+                    var projectTypeName = projectType[0].type;
+                    knexSQL('projects')
+                        .where('id', req.body.id)
+                        .del()
+                        .then(function (success) {
 
+                            if (!success) { res.send(false); }
+                            else {                                 
+                                // декремент смещения выбора проектов
+                                if (projectTypeName == "design"){ interiorsOffset--; }
+                                else if (projectTypeName == "landscape"){ landscapeOffset--; }
+                                else { projectOffset--; }
+                                res.send(true); 
+                            }
+                    });
+                });
             });
         });
     });
@@ -246,8 +267,31 @@ router.get('/admin/projects/load_projects', function (req, res) {
                
            } else {
                
+                var loadedId = [];
+                for (var i in loaded) { loadedId.push(loaded[i].id) }
+               
                projectOffset += count;
-               res.send(loaded);
+               
+               // выгрузка главных фотографий выгруженных проектов
+               knexSQL('type_images').select()
+                    .where({type: 'main'})
+                    .then(function(mainType){
+
+                    knexSQL('images').select()
+                        .where({type_images_id: mainType[0].id})
+                        .whereIn('projects_id', loadedId)
+                        .then(function(photos) {
+
+                        if (!photos) {
+
+                            res.send(500);
+
+                        } else {
+
+                            res.send({loaded: loaded, images: photos});
+                        }
+                    });
+               });  
            }
        });
    });
@@ -272,9 +316,32 @@ router.get('/admin/projects/load_landscape', function (req, res) {
                res.send(500); 
 
            } else {
-
+               
+               var loadedId = [];
+               for (var i in loaded) { loadedId.push(loaded[i].id) }
+               
                landscapeOffset += count;
-               res.send(loaded);
+               
+               // выгрузка главных фотографий выгруженных проектов
+               knexSQL('type_images').select()
+                    .where({type: 'main'})
+                    .then(function(mainType){
+
+                    knexSQL('images').select()
+                        .where({type_images_id: mainType[0].id})
+                        .whereIn('projects_id', loadedId)
+                        .then(function(photos) {
+
+                        if (!photos) {
+
+                            res.send(500);
+
+                        } else {
+
+                            res.send({loaded: loaded, images: photos});
+                        }
+                    });
+               });               
            }
        });
     });
@@ -282,8 +349,7 @@ router.get('/admin/projects/load_landscape', function (req, res) {
 
 //---ajax--- Подгрузка следующей пачки интерьеров
 router.get('/admin/projects/load_interiors', function (req, res) {
-    knexSQL().select()
-        .from('type')
+    knexSQL('type').select()
         .where({type: 'design'})
         .then(function (types) {
         
@@ -300,8 +366,31 @@ router.get('/admin/projects/load_interiors', function (req, res) {
                 
             } else {
                 
-                interiorsOffset += count;
-                res.send(loaded);
+                var loadedId = [];
+                for (var i in loaded) { loadedId.push(loaded[i].id) }
+               
+               interiorsOffset += count;
+               
+               // выгрузка главных фотографий выгруженных проектов
+               knexSQL('type_images').select()
+                    .where({type: 'main'})
+                    .then(function(mainType){
+
+                    knexSQL('images').select()
+                        .where({type_images_id: mainType[0].id})
+                        .whereIn('projects_id', loadedId)
+                        .then(function(photos) {
+
+                        if (!photos) {
+
+                            res.send(500);
+
+                        } else {
+
+                            res.send({loaded: loaded, images: photos});
+                        }
+                    });
+               });  
             }
         });
     })
