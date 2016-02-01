@@ -27,7 +27,7 @@ router.get('/admin/projects/', function (req, res) {
                     var projectType = type[0];
                     knexSQL('projects').select()
                         .where({type_id:  projectType.id})
-                        .limit(count)
+                        .limit(count*2)
                         .offset(projectOffset)
                         .then(function (projects) {
                         
@@ -53,7 +53,7 @@ router.get('/admin/projects/', function (req, res) {
                     var interiorType = type[0];
                     knexSQL('projects').select()
                         .where({type_id: interiorType.id})
-                        .limit(count)
+                        .limit(count*2)
                         .offset(interiorsOffset)
                         .then(function (interiors) {
                         
@@ -98,7 +98,7 @@ router.get('/admin/projects/', function (req, res) {
                         var landscapeType = type[0];
                         knexSQL('projects').select()
                             .where({type_id: landscapeType.id})
-                            .limit(count)
+                            .limit(count*2)
                             .offset(landscapeOffset)
                             .then(function(landscape){
 
@@ -205,13 +205,12 @@ router.post('/admin/projects/changeFavourite', function (req, res){
         .update({ favourite: checked })
         .then(function(result) { 
         
-        console.log(id + ": changed favourite to " + checked);
         res.send(200); 
     });
 });
 
 //---ajax--- Удаление проекта
-router.delete('/admin/projects/delete', function(req, res){
+router.delete('/admin/projects/delete', function(req, res) {
     
     // путь к фотографиям проектов
     var uploadDir = 'public/images/uploaded_files/';

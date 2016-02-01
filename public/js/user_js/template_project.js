@@ -1,30 +1,4 @@
-$(document).ready(function(){
-
-     $('select').material_select();
-
-      var slider = document.getElementById('test5');
-      noUiSlider.create(slider, {
-       start: [20, 80],
-       connect: true,
-       step: 1,
-       range: {
-         'min': 0,
-         'max': 100
-       },
-      });
-    var slider = document.getElementById('test6');
-      noUiSlider.create(slider, {
-       start: [20, 80],
-       connect: true,
-       step: 1,
-       range: {
-         'min': 0,
-         'max': 100
-       },
-      });
-    });
-
-    function mathForDivPositionAndTraingle (i, length){
+function mathForDivPositionAndTraingle (i, length){
     var objectPostition = {row: undefined, offsetTrinagle: undefined}
     if ($(window).width() <= 600) {
         objectPostition.row = i + 1;
@@ -51,7 +25,6 @@ function imageCompare(a, b){
 }
 
 // сортировка
-
 function moreInfo(projectId, i, length) {
     var objectPostion = mathForDivPositionAndTraingle(i,length);
     $.ajax({
@@ -83,6 +56,7 @@ function moreInfo(projectId, i, length) {
                         miniPhotoSection +
                         '</div> ' +
                         '</div> ' +
+                        '<div class="center"><a id="btnMail" class="waves-effect waves-light btn modal-trigger myBlue" href="#modal1">Оформить проект</a></div>'+
                         '</div> ' +
                         '</div>');
                 }
@@ -96,39 +70,39 @@ function moreInfo(projectId, i, length) {
         });
     }
 
-    function removeBlock(){
-        $("#moreInfoSection").remove();
-    }
+function removeBlock(){
+    $("#moreInfoSection").remove();
+}
 
-    function setSize(size){
-        var loadPhoto = 0;
-        $(".miniImg").load(function () {
-            loadPhoto++;
-            if (loadPhoto == size) {
-                var height = $("#moreInfoAbsoluteSection").height();
-                $('#moreInfoSection').css("height", height + 20 + 'px');
-            }
-        });
-    }
-
-    function activateSlider(){
-        $('.popup-gallery').magnificPopup({
-            delegate: 'a',
-            type: 'image',
-            tLoading: 'Загрузка изображения #%curr%...',
-            mainClass: 'mfp-img-mobile',
-            gallery: {
-                enabled: true,
-                navigateByImgClick: true,
-                preload: [0, 1] // Will preload 0 - before current, and 1 after the current image
-            },
-            image: {
-                tError: '<a href="%url%">Изображение #%curr%</a> не может быть загружено.',
-            }
-        });
-    }
-        
-    $(window).resize(function () {
-        var height = $("#moreInfoAbsoluteSection").height();
-        $('#moreInfoSection').css("height", height + 'px');
+function setSize(size){
+    var loadPhoto = 0;
+    $(".miniImg").load(function () {
+        loadPhoto++;
+        if (loadPhoto == size) {
+            var height = $("#moreInfoAbsoluteSection").height();
+            $('#moreInfoSection').css("height", height + 20 + 'px');
+        }
     });
+}
+
+function activateSlider(){
+    $('.popup-gallery').magnificPopup({
+        delegate: 'a',
+        type: 'image',
+        tLoading: 'Загрузка изображения #%curr%...',
+        mainClass: 'mfp-img-mobile',
+        gallery: {
+            enabled: true,
+            navigateByImgClick: true,
+            preload: [0, 1] // Will preload 0 - before current, and 1 after the current image
+        },
+        image: {
+            tError: '<a href="%url%">Изображение #%curr%</a> не может быть загружено.',
+        }
+    });
+}
+        
+$(window).resize(function () {
+    var height = $("#moreInfoAbsoluteSection").height();
+    $('#moreInfoSection').css("height", height + 'px');
+});
