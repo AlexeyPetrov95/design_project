@@ -1,11 +1,3 @@
-
-$(document).ready(function(){
-    $('ul.tabs').tabs();
-    $('.modal-trigger').leanModal();
-    $('select').material_select();
-    $(".button-collapse").sideNav();
-});
-
 function tryLoad(){
     var scrollBottom = $(document).height() - $(window).height() - $(window).scrollTop();
     if (Math.floor(scrollBottom) == 0){
@@ -17,7 +9,15 @@ function tryLoad(){
             loadLandscape();
         }
     }
-}
+};
+
+$(document).ready(function(){
+    $('ul.tabs').tabs();
+    $('.modal-trigger').leanModal();
+    $('select').material_select();
+    $(".button-collapse").sideNav();
+});
+
 // подгрузка по скроллу
 window.onscroll = tryLoad;
 
@@ -27,7 +27,6 @@ function getProject (projectID, projectName){
     project.name = projectName;
     deleteProject();
 }
-
 
 // изменение Избранности проекта
 function changeFavourite(id, checked, checkedClass, uncheckedClass) {
@@ -39,10 +38,9 @@ function changeFavourite(id, checked, checkedClass, uncheckedClass) {
             $("#favBtn"+id).removeClass(checked?uncheckedClass:checkedClass);
             $("#favBtn"+id).addClass(checked?checkedClass:uncheckedClass);
             $("#favBtn"+id).attr("onclick", "changeFavourite(" + id +", "+ !checked +", '"+ checkedClass +"', '"+ uncheckedClass + "')");
-            console.log($("#favBtn"+id).attr('class'));
         }
     });
-}
+};
 
 function deleteProject(id) {
     $.ajax({
@@ -76,7 +74,7 @@ function avaliable() {
     }
 }
 
-
+// Валидация формы добавления проекта
 function validate (material, type, name, mark, price, space, number_room){
     if (!type){
         Materialize.toast('Выберите тип', 4000);
@@ -112,6 +110,9 @@ function isInt(n){
     return Number(n) === n && n % 1 === 0;
 }
 
+var favButtonClass = "light-green";
+var defButtonClass = "grey";
+
 function addDivs(data, type, images){
     var cardplace, materialDiv, spaceDiv, numberRoomDiv;
     var newcard = "";  // создать новый тег div
@@ -146,6 +147,7 @@ function addDivs(data, type, images){
         newcard += '<span class="card-title">'+ data[i].name +'</span>';
         newcard += '</div>';
         newcard += '<ul class="card-action-buttons">';
+        newcard += '<li><a id="favBtn' + data[i].id + '" onclick="changeFavourite(' + data[i].id + ', ' +  !data[i].favourite + ", '" + favButtonClass + "', '" + defButtonClass + "'" + ')" class="btn-floating waves-effect waves-light ' + (data[i].favourite ? favButtonClass : defButtonClass) + ' lighten-1"><i class="material-icons">grade</i></a></li>';
         newcard += '<li><a href="/admin/projects/' + data[i].id + '" class="btn-floating waves-effect waves-light light-blue accent-2"><i class="material-icons">more_horiz</i></a></li>';
         newcard += '<li><a onclick="deleteProject(' + data[i].id + ')" class="btn-floating waves-effect waves-light red"><i class="material-icons">close</i></a></li>';
         newcard += '</ul>';        

@@ -9,10 +9,10 @@
         <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
         <link href='https://fonts.googleapis.com/css?family=Bad+Script&subset=latin,cyrillic' rel='stylesheet' type='text/css'>
         <link href="http://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
-        <link href="css/nouislider.min.css" rel="stylesheet"/>
-        <link type="text/css" rel="stylesheet" href="css/materialize.min.css" media="screen,projection"/>
-        <link rel='stylesheet' href='/css/user/project.css'/>
-        <link rel="stylesheet" href="css/magnific-popup.css"/>
+        <link href="../css/nouislider.min.css" rel="stylesheet"/>
+        <link type="text/css" rel="stylesheet" href="../css/materialize.min.css" media="screen,projection"/>
+        <link rel='stylesheet' href='../css/user/project.css'/>
+        <link rel="stylesheet" href="../css/magnific-popup.css"/>
     </head>
 
     <body class= "grey lighten-3">
@@ -24,11 +24,11 @@
                         <a href="#" data-activates="mobile-demo" class="button-collapse padding-left-15"><i class="material-icons">menu</i></a>
                         <div class="right">
                             <ul class="hide-on-med-and-down">
-                                   <li><a class="waves-effect waves-light activeCustom" href="/">ГЛАВНАЯ</a></li>
-                                    <li><a class="waves-effect waves-light" href="/projects">ПРОЕКТЫ</a></li>
-                                    <li><a class="waves-effect waves-light"href="/design">ИНТЕРЬЕРЫ</a></li>
-                                    <li><a class="waves-effect waves-light"href="/landscapes">ЛАНДШАФТЫ</a></li>
-                                    <li><a class="waves-effect waves-light" href="#">ЦЕНЫ</a></li>
+                                <li><a class="waves-effect waves-light activeCustom" href="/">ГЛАВНАЯ</a></li>
+                                <li><a class="waves-effect waves-light" href="/view/projects">ПРОЕКТЫ</a></li>
+                                <li><a class="waves-effect waves-light" href="/view/design">ИНТЕРЬЕРЫ</a></li>
+                                <li><a class="waves-effect waves-light" href="/view/landscape">ЛАНДШАФТЫ</a></li>
+                                <li><a class="waves-effect waves-light" href="#">ЦЕНЫ</a></li>
                             </ul>
                         </div>
                         <ul class="side-nav" id="mobile-demo">
@@ -67,45 +67,42 @@
                          <div class="row">
                              <div class="col s6"> 
                                  <span>Площадь:</span>
-                                <div id="test5" class="col s12 m12 l12">
+                                <div id="space" class="col s12 m12 l12">
                                 </div>     
                              </div> 
 
 
                              <div class="col s6"> 
                                 <span>Цена:</span>
-                                <div id="test6" class="col s12 m12 l12">
+                                <div id="price" class="col s12 m12 l12">
                                 </div>     
                              </div> 
                          </div>
 
                          <div class="row padding-top-40">
                               <div class="input-field col s6">
-                                <select>
-                                  <option value="" disabled selected>Выберите кол-во комнат</option>
-                                  <option value="1">1</option>
-                                  <option value="2">2</option>
-                                  <option value="3">3</option>
+                                <select id="rooms">
+                                  <option value="" selected>Любой вариант</option>
                                 </select>
-                                <label>Количество комнат:</label>
+                                <label for="rooms">Количество комнат:</label>
                               </div>
-
                               <div class="input-field col s6">
-                                  <input placeholder="Материалы" id="first_name" type="text" class="validate">
-                                  <label for="first_name">Материалы</label>
-                             </div>
+                                <select id="mats">
+                                  <option value="" selected>Любой вариант</option>
+                                </select>
+                                <label for="mats">Материалы:</label>
+                              </div>
                          </div>
                          <div class="col s4">
-                            <a class="waves-effect waves-light btn-flat right">Отменить</a>
-                            <a class="waves-effect waves-light btn-flat right">Применить</a>
+                            <a class="waves-effect waves-light btn-flat right" onclick="filterSwitch(false)">Отменить</a>
+                            <a class="waves-effect waves-light btn-flat right" onclick="filterSwitch(true)">Применить</a>
                          </div>
                         
                       </form>
                 </div>
 
                  <section id="section">
-                   
-                        <div class="row">
+                        <div id="cards_container" class="row">
                             <% for (var i = 0; i < projects.length; i++) { %>
                             <div id="<%= i + 1 %>" class="col s12 m4 l4">
                                 <div class="card waves-light waves-effect waves-block" onclick="moreInfo(<%= projects[i].id %>, <%= i %>, <%= projects.length %>)">
@@ -130,85 +127,18 @@
                                 </div>
                             </div>
                             <% } %>
-                        </div>
-                
+                        </div>     
                 </section>
             </div>
-            
-          
-        </main>
-        
+        </main>    
     </body>
     
-    
     <script type="text/javascript" src="https://code.jquery.com/jquery-2.1.4.min.js"></script>
-    <script src="js/nouislider.min.js"></script>
-    <script type="text/javascript" src="js/materialize.min.js"></script>
-    <script src="js/jquery.magnific-popup.min.js"></script>
-    <script src="js/user_js/template_project.js"></script>
-    
-    <script>
-        function tryLoad(){
-            var scrollBottom = $(document).height() - $(window).height() - $(window).scrollTop();
-            if (Math.floor(scrollBottom) == 0){
-               var type = window.location.pathname.replace("/", "");
-               if (type == "projects"){
-                   loadProjects();
-               } else if (type == "design"){
-                   loadInteriors();
-               } else if (type == "landscapes"){
-                   loadLandscape();
-               }
-            }
-        }
-        
-        
-        function loadInteriors(){
-            $.ajax({
-                type:"GET",
-                url: '/design_ajax',
-                success: function (interiors) {
-                    if (!interiors){ Materialize.toast('Ошибка', 1000);}
-                    else {
-                        addDivs(interiors.loaded, 'design', interiors.images);
-                    }
-                }
-            });
-        }
-
-        function loadProjects(){
-            $.ajax({
-                type:"GET",
-                url: '/projects_ajax',
-                success: function (projects) {
-                    if (!projects){ Materialize.toast('Невозможно загрузить проекты', 1000);}
-                    else {
-                        //console.log(projects);
-                        addDivs(projects, 'projects', projects);
-                    }
-                }
-            });
-        }
-
-        function loadLandscape(){
-            $.ajax({
-                type:"GET",
-                url: '/landscapes_ajax',
-                success: function (landscape) {
-                    if (!landscape){ Materialize.toast('Невозможно загрузить проекты', 1000);}
-                    else {
-                        addDivs(landscape.loaded, 'landscape', landscape.images);
-                    }
-                }
-            });
-        }
-        
-        function addDivs(data) { //допилить
-            
-        } 
-
-        window.onscroll = tryLoad;
-    </script>
+    <script src="../js/nouislider.min.js"></script>
+    <script src="../js/materialize.min.js"></script>
+    <script src="../js/jquery.magnific-popup.min.js"></script>
+    <script src="../js/user_js/project.js"></script>
+    <script src="../js/user_js/template_project.js"></script> 
     
 </html>
         
