@@ -42,6 +42,7 @@ nav ul li a:after {
 }
 
 main {
+    margin-top: 20px;
     height: 100%;
 }
 
@@ -102,6 +103,11 @@ ul.card-action-buttons{
   position: absolute;
   right: 0;
 }
+
+.card:hover {
+  box-shadow: 0 5px 11px 0 rgba(0, 0, 0, 0.18), 0 4px 15px 0 rgba(0, 0, 0, 0.15) !important;
+}
+
 
 .card-content {
   overflow-y: auto !important;

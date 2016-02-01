@@ -161,12 +161,21 @@ ul.card-action-buttons{
   right: 0;
 }
 
+
+.myBlue{
+   background: #45B6E8;
+}
+
 .card-content {
   overflow-y: auto !important;
   height: 135px;
 }
 .card{
   overflow: hidden !important;
+}
+
+.card:hover {
+ box-shadow: 0 5px 11px 0 rgba(0, 0, 0, 0.18), 0 4px 15px 0 rgba(0, 0, 0, 0.15) !important;
 }
 
 .mfp-title{
@@ -211,6 +220,15 @@ ul.card-action-buttons{
   border: 20px solid transparent;
   border-bottom: 20px solid #212121 ;
   left: -10px;
+}
+
+
+#moreInfoAbsoluteSection{
+    background: #212121;
+}
+
+#btnMail {
+    margin: 20px;
 }
 
 #moreImg {
