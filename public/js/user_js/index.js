@@ -67,13 +67,15 @@ function moreInfo(projectId, i, length) {
                     '<div class="col s1 offset-l' + objectPostion.offsetTrinagle + ' offset-m' + objectPostion.offsetTrinagle + ' offset-s'+ objectPostion.offsetTrinagle+ ' triangle" id="triangleSection"> </div>  ' +
                     '<div id="moreInfoAbsoluteSection" class="z-depth-1" style="position: absolute; left: 0; right: 0px;"> ' +
                     '<div id="moreImg" class="right-align"> ' +
-                     '<a class="btn-floating right brown lighten-2" onclick="removeBlock()"> <i class="material-icons white-text">close</i> </a>' +
+                     '<a class="btn-floating right myBlue" onclick="removeBlock()"> <i class="material-icons white-text">close</i> </a>' +
                     '<div class="container" id="containerDiv">' +
                     miniPhotoSection +
                     '</div> ' +
                     '</div> ' +
                     '</div> ' +
+                    '<div class="center"><a id="btnMail" class="waves-effect waves-light btn modal-trigger myBlue" href="#modal1">Оформить проект</a></div>'+
                     '</div>');
+                $('.modal-trigger').leanModal();
             }
 
            // $("#moreInfoSection").fadeIn();
