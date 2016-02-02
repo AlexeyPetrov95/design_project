@@ -88,10 +88,33 @@
                                 <label for="rooms">Количество комнат:</label>
                               </div>
                               <div class="input-field col s6">
-                                <select id="mats">
-                                  <option value="" selected>Любой вариант</option>
+                                <!--<select multiple class="browser-default js-example-disabled-results" id="mats">
+                                  <option value="one">First</option>
+                                  <option value="two" disabled="disabled">Second (disabled)</option>
+                                  <option value="three">Third</option>
+                                </select>!-->
+                                  <select name="skills" multiple="" class="ui fluid dropdown">
+                                        <option value="">Skills</option>
+                                        <option value="angular">Angular</option>
+                                        <option value="css">CSS</option>
+                                        <option value="design">Graphic Design</option>
+                                        <option value="ember">Ember</option>
+                                        <option value="html">HTML</option>
+                                        <option value="ia">Information Architecture</option>
+                                        <option value="javascript">Javascript</option>
+                                        <option value="mech">Mechanical Engineering</option>
+                                        <option value="meteor">Meteor</option>
+                                        <option value="node">NodeJS</option>
+                                        <option value="plumbing">Plumbing</option>
+                                        <option value="python">Python</option>
+                                        <option value="rails">Rails</option>
+                                        <option value="react">React</option>
+                                        <option value="repair">Kitchen Repair</option>
+                                        <option value="ruby">Ruby</option>
+                                        <option value="ui">UI Design</option>
+                                        <option value="ux">User Experience</option>
                                 </select>
-                                <label for="mats">Материалы:</label>
+                                <!--<label for="mats">Материалы:</label>!-->
                               </div>
                          </div>
                          <div class="col s4">
@@ -108,7 +131,7 @@
                         <div id="cards_container" class="row">
                             <% for (var i = 0; i < projects.length; i++) { %>
                             <div id="<%= i + 1 %>" class="col s12 m4 l4">
-                                <div class="card waves-light waves-effect waves-block" onclick="moreInfo(<%= projects[i].id %>, <%= i %>, <%= projects.length %>)">
+                                <div id="<%=projects[i].id%>card" class="card waves-light waves-effect waves-block" onclick="moreInfo(<%= projects[i].id %>, <%= i %>, <%= projects.length %>)">
                                     <div class="card-image">
                                         <img src="/images/uploaded_files/<%= projects[i].mini_name %>" class="responsive-img"/>
                                         <span class="card-title"><%= projects[i].name %></span>
@@ -142,6 +165,7 @@
     <script src="../js/jquery.magnific-popup.min.js"></script>
     <script src="../js/user_js/project.js"></script>
     <script src="../js/user_js/template_project.js"></script> 
+    
     
 </html>
         

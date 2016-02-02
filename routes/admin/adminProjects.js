@@ -117,9 +117,9 @@ router.get('/admin/projects/', function (req, res) {
             
         ], function (err, photos, projects, interiors, landscape) {
             
-            interiorsOffset += count;
-            projectOffset += count;
-            landscapeOffset += count;
+            interiorsOffset += 2 * count;
+            projectOffset += 2 * count;
+            landscapeOffset += 2 * count;
             
             knexSQL('type').select()
                 .then (function (type) {
@@ -230,10 +230,11 @@ router.delete('/admin/projects/delete', function(req, res) {
             .del()
             .then(function(){
             
+            console.log(req.body.id);
             knexSQL('projects')
                 .where('id', req.body.id)
                 .then(function(project) {
-                
+                console.log(project);
                 // id типа удаляемого проекта
                 var projectTypeId = project[0].type_id;
                 knexSQL('type')

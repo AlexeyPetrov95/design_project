@@ -35,7 +35,7 @@ function moreInfo(projectId, i, length) {
             data.sort(imageCompare);
             var miniPhotoSection = '<div id="preview" > <div class="popup-gallery">'
             for (var i = 0; i < data.length; i++) {
-                miniPhotoSection += '<div class="divMiniPhoto"> <a href="images/uploaded_files/' + data[i].image_name + '" title="'+ data[i].type_name +'"> <img src="images/uploaded_files/' + data[i].mini_name + '" alt="'+ data[i].type_name +'" style="height: 100px;" class="responsive-img miniImg"/> </a> </div>'
+                miniPhotoSection += '<div class="divMiniPhoto"> <a href="/images/uploaded_files/' + data[i].image_name + '" title="'+ data[i].type_name +'"> <img src="/images/uploaded_files/' + data[i].mini_name + '" alt="'+ data[i].type_name +'" style="height: 100px;" class="responsive-img miniImg"/> </a> </div>'
             }
             miniPhotoSection += '</div>';
 
@@ -56,9 +56,10 @@ function moreInfo(projectId, i, length) {
                         miniPhotoSection +
                         '</div> ' +
                         '</div> ' +
-                        '<div class="center"><a id="btnMail" class="waves-effect waves-light btn modal-trigger myBlue" href="#modal1">Оформить проект</a></div>'+
                         '</div> ' +
+                        '<div class="center"><a id="btnMail" class="waves-effect waves-light btn modal-trigger myBlue" href="#modal1">Оформить проект</a></div>'+
                         '</div>');
+                       $('.modal-trigger').leanModal();
                 }
 
                // $("#moreInfoSection").fadeIn();

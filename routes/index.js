@@ -1,6 +1,14 @@
 var express = require('express');
 var router = express.Router();
 
+var email   = require("emailjs");
+var server  = email.server.connect({
+   user:    "artobject-spb", 
+   password:"89117799173", 
+   host:    "smtp.yandex.ru", 
+   ssl:     true
+});
+
 /* ======= index.ejs (Главная) ======= */
 router.get('/', function(req, res, next) {
     knexSQL('type_images').select().where({type: 'main'}).then(function (type_images) {
@@ -17,7 +25,7 @@ router.get('/', function(req, res, next) {
 });
 
 // Get photo info
-router.post('/get_project_information', function(req, res){
+router.get('/get_project_information', function(req, res){
    knexSQL('images').select().where({projects_id:  req.query.id})
        .join('type_images', 'type_images.id', 'images.type_images_id')
        .then(function(images){
@@ -25,6 +33,10 @@ router.post('/get_project_information', function(req, res){
    });
 });
 
+
+router.get("/f41d3fdf504e.html", function(req,res){
+   res.render("user/f41d3fdf504e.html"); 
+});
 
 
 /* ===== Project.ejs (Проекты/Ландшафты/Интерьеры) ===== */
@@ -224,5 +236,17 @@ router.post('/view/loadNext', function(req, res){
         filterOff(req, res, sendData);
     }
 });
+
+router.post('/sendEmail', function(req, res) {
+    var email = req.body.email;
+    var message = req.body.message;
+    var name = req.body.name;
+    server.send({
+       text:    message + "\n\n Мой email:" + email + "\nС уважением " +  name +".", 
+       from:    "you <artobject-spb@yandex.ru>", 
+       to:      "someone <mail@artobject-spb.ru>",
+       subject: "Вопросы от пользователей."
+    }, function(err, message) { console.log(err || message); res.redirect('/');});
+})
 
 module.exports = router;
