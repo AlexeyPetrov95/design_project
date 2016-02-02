@@ -17,7 +17,7 @@ router.get('/', function(req, res, next) {
 });
 
 // Get photo info
-router.post('/get_project_information', function(req, res){
+router.get('/get_project_information', function(req, res){
    knexSQL('images').select().where({projects_id:  req.query.id})
        .join('type_images', 'type_images.id', 'images.type_images_id')
        .then(function(images){
@@ -28,87 +28,86 @@ router.post('/get_project_information', function(req, res){
 
 
 /* ===== Project.ejs (Проекты/Ландшафты/Интерьеры) ===== */
+var allProjects; // массив выгруженных объектов
+var filtered; // массив выгруженных объектов
 var projType; // тип выгружамых проектов
 var offset; // индекс первого проекта, необходимого для следующей выгрузки
 var count; // количество проектов/интерьеров, выгружаемых из базы за один запрос.
-var filtered; // флаг активности фильтра  
-var sMinFilter; // критерии фильтра
-var sMaxFilter;
-var pMinFilter;
-var pMaxFilter;
-var roomsFilter;
-var materialFilter;
+
+// выгрузка очередной пачки проектов 
+// (с учетом последнего фильтра)
+function nextPack(){
+    
+    var begin = offset;
+    var end = offset + count;
+    var pack = filtered.slice(begin, end);
+    offset += count;
+    return pack;
+}
 
 // выгрузка с фильтром
-function filterOn(req, res, callback) {
+function useFilter(name, price, space, rooms, material) {
     
-    filtered = true;    
-    console.log('mat='+materialFilter);
-    console.log('rooms='+roomsFilter);
-    knexSQL('type_images').select().where({type: 'main'}).then(function (type_images) {
-        knexSQL('projects').select('projects.id as id', 'projects.material','projects.name','projects.price', 'projects.space','projects.number_room','projects.description','images.mini_name','images.image_name', 'type.type', 'images.orient', 'projects.name')
-            .join('images', 'projects.id', 'images.projects_id')
-            .join('type', 'type.id', 'projects.type_id').as('ignored_alias1')
-            .where({type_images_id: type_images[0].id})
-            .andWhere({type: projType})
-            .andWhere('number_room', (typeof(roomsFilter) == 'undefined' ? 'not in' : '='), (typeof(roomsFilter) == 'undefined' ? [-1] : roomsFilter))
-            .andWhere('material', (typeof(materialFilter) == 'undefined' ? 'not in' : '='), (typeof(materialFilter) == 'undefined' ? [-1] : materialFilter))
-            .andWhere('price', '>', pMinFilter - 1)
-            .andWhere('price', '<', pMaxFilter + 1)
-            .andWhere('space', '>', sMinFilter - 1)
-            .andWhere('space', '<', sMaxFilter + 1)
-            .limit(count)
-            .offset(offset)
-            .orderBy('favourite', 'desc')
-            .then(function (project) {
-                offset += count;
-                callback(req, res, project);
+    filtered = allProjects;
+    if (!!name) {
+        filtered = filtered.filter(function (item){ 
+            return item.name.toLowerCase().indexOf(name.toLowerCase()) > -1; 
         });
-    });
-}
-
-// выгрузка без фильтра
-function filterOff(req, res, callback) {
-    
-    filtered = false;
-    knexSQL('type_images').select().where({type: 'main'}).then(function (type_images) {
-        knexSQL('projects').select('projects.id as id', 'projects.material','projects.name','projects.price', 'projects.space','projects.number_room','projects.description','images.mini_name','images.image_name', 'type.type', 'images.orient', 'projects.name')
-            .join('images', 'projects.id', 'images.projects_id')
-            .join('type', 'type.id', 'projects.type_id').as('ignored_alias1')
-            .where({type_images_id: type_images[0].id})
-            .andWhere({type: projType})
-            .limit(count)
-            .offset(offset)
-            .orderBy('favourite', 'desc')
-            .then(function (project) {
-                offset += count;
-                callback(req, res, project);
+    }
+    if (!!rooms) {
+        var items = rooms.split(',');
+        filtered = filtered.filter(function (item){ 
+            return items.indexOf(item.number_room + "") > -1; 
         });
-    });
+    }
+    if (!!material) {
+        var items = material.split(',');
+        filtered = filtered.filter(function (item){ 
+            return items.indexOf(item.material) > -1; 
+        });
+    }
+    if (!!price) {
+        filtered = filtered.filter(function (item){ 
+            return item.price >= price.min && item.price <= price.max; 
+        });
+    }
+    if (!!space) {
+        filtered = filtered.filter(function (item){ 
+            return item.space >= space.min && item.space <= space.max; 
+        });
+    }
+    offset = 0; // смещение выгружаемых проектов
+    count = 12; // кол-во выгружаемых за раз проектов 
 }
-
-// function for callback which sending response with first argument
-function sendData(req, res, data){ res.send(data); };
 
 // render to 'user/project.ejs'
 router.get('/view/:projectType', function(req, res){
     
     // Тип выгружаемых проектов
     projType = req.params.projectType;
-    if (["projects", "design", "landscape"].indexOf(projType) < 0) { res.render(404); }
+    if (["projects", "design", "landscape"].indexOf(projType) == -1) { res.send(404); }
     
-    offset = 0; // смещение выгружаемых проектов
-    count = 12; // кол-во выгружаемых за раз проектов 
-    
-    filterOff(req, res, function(req, res, projects){
-        res.render('user/project.ejs', {
-            title: "Art object",
-            projects: projects
+    knexSQL('type_images').select().where({type: 'main'}).then(function (type_images) {
+        knexSQL('projects').select('projects.id as id', 'projects.material','projects.name','projects.price', 'projects.space','projects.number_room','projects.description','images.mini_name','images.image_name', 'type.type', 'images.orient', 'projects.name')
+            .join('images', 'projects.id', 'images.projects_id')
+            .join('type', 'type.id', 'projects.type_id').as('ignored_alias1')
+            .where({type_images_id: type_images[0].id})
+            .andWhere({type: projType})
+            .orderBy('favourite', 'desc')
+            .then(function (projects) {
+
+                allProjects = projects;
+                useFilter(); // применяем пустой фильтр
+
+                res.render('user/project.ejs', {
+                    title: "Art object",
+                    projects: nextPack()
+                });
         });
     });
 });
 
-// get price and space bounds
+// ---ajax--- get price and space bounds & all distinct number_rooms and materials
 router.post('/view/getBounds', function(req, res){
             
     var pMin, pMax, sMin, sMax;
@@ -162,10 +161,6 @@ router.post('/view/getBounds', function(req, res){
 
                             var mats = materials.map(function(item){ return item['material']; });
                             
-                            console.log("rooms");
-                            console.log(rooms);
-                            console.log("mats");
-                            console.log(mats);
                             res.send({
                                 minSpace: sMin,
                                 maxSpace: sMax,
@@ -182,47 +177,36 @@ router.post('/view/getBounds', function(req, res){
     }); 
 });
 
-
-// enable filter
-router.post('/view/filterEnable', function(req, res){
+// ---ajax--- use filter
+router.post('/view/useFilter', function(req, res){
     
-    offset = 0; // смещение выгружаемых проектов
-    count = 12; // кол-во выгружаемых за раз проектов 
-    
-    // установка критериев фильтра
-    sMinFilter = req.body.sMin;
-    sMaxFilter = req.body.sMax;
-    pMinFilter = req.body.pMin;
-    pMaxFilter = req.body.pMax;
-    roomsFilter = req.body.rooms;
-    materialFilter = req.body.mat;
-    
-    console.log('sMin=' + sMinFilter + '&sMax=' + sMaxFilter + '&pMin=' + pMinFilter + '&pMax=' + pMaxFilter);
-
-    // выгрузка с фильтром
-    filterOn(req, res, sendData);
-});
-
-// disable filter
-router.post('/view/filterDisable', function(req, res){
-    
-    offset = 0; // смещение выгружаемых проектов
-    count = 12; // кол-во выгружаемых за раз проектов 
-    
-    // выгрузка без фильтра
-    filterOff(req, res, sendData);
-});
-
-// load next project pack
-router.post('/view/loadNext', function(req, res){
-    
-    if (filtered) {
+    var use = +req.body.use;
+    if (!use) {
         // выгрузка без фильтра
-        filterOn(req, res, sendData);
+        useFilter();
     } else {
-        // выгрузка без фильтра
-        filterOff(req, res, sendData);
+        // установка критериев фильтра
+        var namekey = req.body.key;
+        var space = { 
+            min: req.body.sMin, 
+            max: req.body.sMax
+        };
+        var price = { 
+            min: req.body.pMin, 
+            max: req.body.pMax
+        };
+        var rooms = req.body.rooms;
+        var material = req.body.mat;
+
+        // выгрузка с фильтром
+        useFilter(namekey, price, space, rooms, material);
     }
+    res.send(nextPack());
+});
+
+// ---ajax--- load next project pack
+router.post('/view/loadNext', function(req, res){
+    res.send(nextPack());
 });
 
 module.exports = router;

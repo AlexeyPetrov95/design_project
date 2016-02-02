@@ -81,20 +81,20 @@
 
                          <div class="row padding-top-40">
                               <div class="input-field col s6">
-                                <select id="rooms">
-                                  <option value="" selected>Любой вариант</option>
+                                <select id="rooms" multiple>
+                                  <option value="" disabled>Любой вариант</option>
                                 </select>
                                 <label for="rooms">Количество комнат:</label>
                               </div>
                               <div class="input-field col s6">
-                                <select id="mats">
-                                  <option value="" selected>Любой вариант</option>
+                                <select id="mats" multiple>
+                                  <option value="" disabled>Любой вариант</option>
                                 </select>
                                 <label for="mats">Материалы:</label>
                               </div>
                          </div>
                          <div class="col s4">
-                            <a class="waves-effect waves-light btn-flat right" onclick="filterSwitch(false)">Отменить</a>
+                            <a class="waves-effect waves-light btn-flat right" onclick="filterSwitch(false); resetFilter()">Сброс</a>
                             <a class="waves-effect waves-light btn-flat right" onclick="filterSwitch(true)">Применить</a>
                          </div>
                         

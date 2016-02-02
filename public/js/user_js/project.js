@@ -1,17 +1,19 @@
 var sMin, sMax, pMin, pMax;
+var defsmin, defsmax, defpmin, defpmax;
+var rooms, materials;
 var currentIndex = 0;
 var allProjectsAreLoaded = false;
 
 // Слайдер по площади
-function initSpaceSlider(){
+function initSpaceSlider(smin, smax){
 
     var spaceSlider = document.getElementById('space');
     noUiSlider.create(spaceSlider, {
         range: {
-            'min': sMin,
-            'max': sMax
+            'min': smin,
+            'max': smax
         },
-        start: [sMin, sMax],
+        start: [smin, smax],
         connect: true,
         step: 1
     });
@@ -22,15 +24,15 @@ function initSpaceSlider(){
 }
 
 // Слайдер для цены
-function initPriceSlider(){
+function initPriceSlider(pmin, pmax){
     
     var priceSlider = document.getElementById('price');
     noUiSlider.create(priceSlider, {
         range: {
-            'min': pMin,
-            'max': pMax
+            'min': pmin,
+            'max': pmax
         },
-        start: [pMin, pMax],
+        start: [pmin, pmax],
         connect: true,
         step: 1
     });
@@ -47,20 +49,23 @@ $(document).ready(function(){
         url: '/view/getBounds/',
         success: function (bounds) {
             
-            sMin = bounds.minSpace;
-            sMax = bounds.maxSpace;
-            pMin = bounds.minPrice;
-            pMax = bounds.maxPrice;
+            defsmin = bounds.minSpace;
+            defsmax = bounds.maxSpace;
+            defpmin = bounds.minPrice;
+            defpmax = bounds.maxPrice;
             
-            initPriceSlider(); // установка priceSlider с диапазоном [pMin; pMax]
-            initSpaceSlider(); // установка spaceSlider с диапазоном [sMin; sMax]
+            initPriceSlider(defpmin, defpmax); // установка priceSlider с диапазоном [pMin; pMax]
+            initSpaceSlider(defsmin, defsmax); // установка spaceSlider с диапазоном [sMin; sMax]
 
-            // Заполнение combobox с кол-вом комнат 
-            bounds.rooms.sort(function (a, b){
+            rooms = bounds.rooms.sort(function (a, b){
                 if (+a < +b) { return -1; }
                 else if (+a > +b) { return 1; }
                 else { return 0; }
-            }).forEach(function(item, i, arr){
+            });
+            materials = bounds.materials.sort();
+
+            // Заполнение combobox с кол-вом комнат 
+            rooms.forEach(function(item, i, arr){
                 $('#rooms')
                     .append($("<option></option>")
                     .attr("value",item)
@@ -68,7 +73,7 @@ $(document).ready(function(){
             });
 
             // Заполнение combobox с материалами
-            bounds.materials.sort().forEach(function(item, i, arr){
+            materials.forEach(function(item, i, arr){
                 $('#mats').append(
                     $("<option></option>").attr("value",item).text(item)
                 ); 
@@ -80,9 +85,52 @@ $(document).ready(function(){
 });
 
 // очистить блок с проектами
-function Reset(){
+function ClearBox(){
     $("#cards_container").empty();
     currentIndex = 0;
+}
+
+// Сбсросить фильтр
+function resetFilter(){
+    // reset search
+    $(".search>input").val("");
+
+    // reset price and space sliders
+    var priceSlider = document.getElementById('price');
+    priceSlider.noUiSlider.set([defpmin, defpmax]);
+    var spaceSlider = document.getElementById('space');
+    spaceSlider.noUiSlider.set([defsmin, defsmax]);
+
+    $('select').material_select("destroy");
+
+    // reset number rooms
+    $('#rooms').empty();
+    $('#rooms')
+        .append($("<option></option>")
+        .attr("value", "")
+        .attr("disabled", "")
+        .text("Любой вариант"));   
+    rooms.forEach(function(item, i, arr){
+        $('#rooms')
+            .append($("<option></option>")
+            .attr("value",item)
+            .text(item)); 
+    });
+
+    // reset materials
+    $('#mats').empty();
+    $('#mats')
+        .append($("<option></option>")
+        .attr("value", "")
+        .attr("disabled", "")
+        .text("Любой вариант")); 
+    materials.forEach(function(item, i, arr){
+        $('#mats').append(
+            $("<option></option>").attr("value",item).text(item)
+        ); 
+    });
+
+    $('select').material_select();
 }
 
 // добавить новые проекты в блок
@@ -115,7 +163,6 @@ function addDivs(projects){
         newCard.innerHTML = newCardHTML;
         document.getElementById("cards_container").appendChild(newCard);
     }
-    search();
 }
 
 // подгрузка по скроллу
@@ -140,27 +187,34 @@ function tryLoad(){
 
 // Применение/отмена фильтра
 function filterSwitch(switchOn){
-    var rooms = $("#rooms").val();
-    var mat = $("#mats").val();
-
-    //var foo = []; 
-    //$('#mats :selected').each(function(i, selected){ 
-    //  foo[i] = $(selected).text();  <-- возвращает лишние пункты!
-    //});
-    //console.log(foo);
-
+    var key = $(".search>input").val();
+    var rooms = []; 
+    var mats = []; 
+    if (switchOn) {
+        $('#rooms')
+            .prev()
+                .find("li.active")
+                .each(function(i, selected){ 
+                    rooms[i] = $(selected).text(); 
+                });
+        $('#mats')
+            .prev()
+                .find("li.active")
+                .each(function(i, selected){ 
+                    mats[i] = $(selected).text(); 
+                });
+    }
     $.ajax({
         type: "POST",
-        url: '/view/filter' + (switchOn ? 'Enable' : 'Disable'),
-        data: (switchOn ? ('sMin=' + sMin + '&sMax=' + sMax + '&pMin=' + pMin + '&pMax=' + pMax 
-            + (rooms != "" ? '&rooms=' + rooms : "") + (mat != "" ? '&mat=' + mat : "")) : ''),
+        url: '/view/useFilter',
+        data: 'use=' + (+switchOn) + (switchOn ? ('&sMin=' + sMin + '&sMax=' + sMax + '&pMin=' + pMin + '&pMax=' + pMax 
+            + (rooms != "" ? '&rooms=' + rooms : "") + (mats != "" ? '&mat=' + mats : "") + '&key=' + key) : ''),
         success: function (projects) {
             
-            alert(projects.length);
             if (!projects){ Materialize.toast('Ошибка', 1000);}
             else {
                 allProjectsAreLoaded = projects.length == 0;
-                Reset();
+                ClearBox();
                 addDivs(projects);
             }
         }
@@ -168,7 +222,6 @@ function filterSwitch(switchOn){
 };
 
 function search(){
-    var key = $(".search>input").val();
     $("#cards_container>div").each(function(i, item){
         var name = $(item).children().children().children(".card-title").text();
         var acceptable = name.indexOf(key) > -1;
@@ -176,5 +229,5 @@ function search(){
     });
 }
 
-$(".search>input").on('keyup', search);
+//$(".search>input").change(filterSwitch(true));
 window.onscroll = tryLoad;
