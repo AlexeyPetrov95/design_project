@@ -6,7 +6,6 @@ var cookieParser = require('cookie-parser');
 var bodyParser = require('body-parser');
 var session = require('express-session');
 var KnexSessionStore = require('connect-session-knex')(session);
-var winston = require('winston')
 
 var routes = require('./routes/index');
 var login = require('./routes/login');
@@ -18,7 +17,6 @@ var adminViewList = require('./routes/admin/adminViewList');
 
 var app = express();
 
-winston.add(winston.transports.File, { filename: 'somefile.log' });
 
 knexSQL = require('knex')({
   client: 'mysql',

@@ -1,13 +1,6 @@
 var express = require('express');
 var router = express.Router();
 
-var email   = require("emailjs");
-var server  = email.server.connect({
-   user:    "artobject-spb", 
-   password:"89117799173", 
-   host:    "smtp.yandex.ru", 
-   ssl:     true
-});
 
 /* ======= index.ejs (Главная) ======= */
 router.get('/', function(req, res, next) {
@@ -237,16 +230,5 @@ router.post('/view/loadNext', function(req, res){
     }
 });
 
-router.post('/sendEmail', function(req, res) {
-    var email = req.body.email;
-    var message = req.body.message;
-    var name = req.body.name;
-    server.send({
-       text:    message + "\n\n Мой email:" + email + "\nС уважением " +  name +".", 
-       from:    "you <artobject-spb@yandex.ru>", 
-       to:      "someone <mail@artobject-spb.ru>",
-       subject: "Вопросы от пользователей."
-    }, function(err, message) { console.log(err || message); res.redirect('/');});
-})
 
 module.exports = router;
